@@ -22,3 +22,11 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
+/.idea/
+
+# Gradle and local F0 inspection artifacts
+.gradle/
+.gradle-user-home/
+**/build/
+.f0/
+!gradle/wrapper/gradle-wrapper.jar

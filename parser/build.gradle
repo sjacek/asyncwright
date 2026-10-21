@@ -1,0 +1,30 @@
+// F0 dependencies belong only to the spike source set, not the public parser API.
+sourceSets {
+    f0 {
+        java.srcDir 'src/f0/java'
+    }
+}
+
+dependencies {
+    f0Implementation 'com.asyncapi:asyncapi-core:1.0.0-RC4'
+    f0Implementation enforcedPlatform("com.fasterxml.jackson:jackson-bom:${providers.gradleProperty('f0JacksonVersion').getOrElse('2.22.4')}")
+    f0Implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml'
+}
+
+def contractsPath = providers.gradleProperty('contractsDir')
+        .getOrElse('../../asyncapi-contracts/modules/asyncapi/src/main/asyncapi')
+def contractsDirectory = rootProject.layout.projectDirectory.dir(contractsPath)
+
+tasks.register('f0', JavaExec) {
+    description = 'Measure asyncapi-core RC4 against the five real contracts and P1 probes.'
+    group = 'verification'
+    classpath = sourceSets.f0.runtimeClasspath
+    mainClass = 'io.github.sjacek.asyncwright.f0.F0Probe'
+    inputs.dir(contractsDirectory).withPropertyName('contracts').withPathSensitivity(PathSensitivity.RELATIVE)
+    def reportDirectory = layout.buildDirectory.dir('reports/f0')
+    outputs.dir(reportDirectory)
+    setArgs([contractsDirectory.asFile.absolutePath, reportDirectory.get().asFile.absolutePath])
+}
+
+// Compile the experiment on normal builds; running it requires the external contract corpus.
+tasks.named('check') { dependsOn tasks.named('f0Classes') }

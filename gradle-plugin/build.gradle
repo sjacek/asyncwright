@@ -1,0 +1,9 @@
+plugins {
+    id 'java-gradle-plugin'
+}
+
+// F2 will register io.github.sjacek.asyncwright when its implementation exists.
+// F0 deliberately does not publish a placeholder plugin.
+dependencies {
+    implementation project(':parser')
+}
