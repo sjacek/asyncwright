@@ -1,24 +1,114 @@
 # Asyncwright
 
 Gradle tooling for contract-first AsyncAPI validation and model-based rules and generators.
-The project currently contains the Gradle scaffold and the F0 experiment, not the F1 parser
-or the F2 plugin implementation. Java bytecode targets 17; the Wrapper uses Gradle 9.8.1.
+The project contains an initial Gradle-independent Java parser, the Gradle plugin scaffold
+and a separate compatibility experiment. Java bytecode targets 17; the Wrapper uses Gradle 9.8.1.
 
 Notable changes are recorded in the [changelog](CHANGELOG.md).
 
 Modules:
 
-- `parser`: future Gradle-independent parser; F0 has its own source set and dependency graph.
+- `parser`: document loading, structural validation, local reference resolution and diagnostics;
+  F0 has its own source set and dependency graph.
 - `gradle-plugin`: `java-gradle-plugin` scaffold depending on `parser`. Plugin ID registration,
   publication and the consumer DSL will be added in F2, after the model decision.
 
 ## Build
 
-Use JDK 17 or newer supported by the selected Gradle runtime:
+Use JDK 17 or newer supported by the selected Gradle runtime. The model fork currently
+requires an explicit file repository. In a checkout of the fork's distribution branch,
+run `tools/install-local.ps1 -Repository C:/path/to/model-repository` (JDK 21 with Maven
+Toolchains is required for the fork's tests). Then build Asyncwright:
 
 ```powershell
-.\gradlew.bat check assemble --configuration-cache-problems=fail
+.\gradlew.bat check assemble --configuration-cache-problems=fail `
+  '-PasyncwrightModelRepository=C:/path/to/model-repository'
 ```
+
+For IDE imports and builds without command-line parameters, copy
+`gradle/local.properties.example` to `gradle/local.properties` and set
+`asyncwrightModelRepository` to the same repository path. Use forward slashes in Windows
+paths. This local file is ignored by Git; the `-P` option overrides its value.
+Reload the Gradle project in the IDE after configuring the repository.
+
+## Parser dependency baseline
+
+Dependency versions are pinned in `gradle/libs.versions.toml`:
+
+| Dependency | Version |
+| --- | --- |
+| Jackson BOM | 2.22.4 |
+| NetworkNT JSON Schema Validator (Jackson 2 line) | 2.0.8 |
+| Joni regular expressions | 2.2.6 |
+| Official AsyncAPI schema package | v6.11.1, commit `e609fc2341007395d75df5756fc6fccf662c2087` |
+
+Only the AsyncAPI **3.0.0** schema is bundled. The schema package release does not expand
+the supported document versions. The schema and its internal `$id` references are loaded
+from local resources; remote schema fetching is disabled in the dependency checks.
+Schema validation alone does not implement the semantic validation or document `$ref` resolver.
+Source checksums and licenses are recorded in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+
+The bundled schema is an unchanged upstream resource with a checksum regression check.
+In IntelliJ IDEA, exclude this file from the `JsonSchemaRefReference` and
+`RegExpRedundantEscape` inspections using a file scope if they report unresolved example
+references or redundant escapes. Keep these IDE preferences local rather than editing the schema.
+
+The selected coordinates for the separately maintained model fork are
+`io.github.sjacek.jasyncapi:asyncapi-core:1.0.0-RC4-asyncwright.2`, based on
+[`sjacek/jasyncapi` at `05116f0d`](https://github.com/sjacek/jasyncapi/commit/05116f0d99f9e3f3c1b7d1aa8491f120364acf91).
+The parser resolves this artifact from `asyncwrightModelRepository`, restricted to the fork
+group. The file repository contains the parent POM, model POM and model jar; `mavenLocal()`
+is not consulted. Distribution changes are separate from the upstream bug-fix branch.
+A public distribution must be available before releasing Asyncwright.
+
+## Initial Java API
+
+```java
+import com.asyncapi.v3._0_0.model.channel.Channel;
+import io.github.sjacek.asyncwright.parser.AsyncApiParser;
+import java.io.IOException;
+import java.nio.file.Path;
+
+public class ParseExample {
+    public static String parse(Path projectRoot, Path file) throws IOException {
+        var result = new AsyncApiParser().parse(projectRoot, file);
+        if (result.successful()) {
+            var document = result.document().orElseThrow();
+            var model = document.model(); // AsyncAPI document, retaining $ref values
+            var channel = document.references()
+                .resolve("/operations/send/channel", Channel.class);
+        }
+        return result.diagnosticsJson();
+    }
+}
+```
+
+`AsyncApiParser` is in `io.github.sjacek.asyncwright.parser`; diagnostics and source locations
+are in `io.github.sjacek.asyncwright.api`. The parser loads the bundled schema without network
+retrieval, reports project-relative paths with one-based positions, and stops after syntax
+or structural errors. It checks reference targets, unresolved cycles, operation message
+membership and channel address parameters. Schema recursion is allowed; pure reference
+cycles are errors. The resolver returns target copies without expanding the document graph.
+Before returning a typed model, the parser checks that its serialization preserves source
+values. Added model defaults are allowed; silent omissions or changed values are errors.
+
+Ignored reference siblings produce warnings and remain available in the source tree. Example
+data and extension values are not treated as document references. YAML aliases, external
+references, traits and non-default schema formats are currently unsupported. Broader parser
+conformance and the Gradle DSL, worker integration and publication remain under development.
+Schema-valid constructs that the typed model cannot preserve are rejected with
+`model.preservation` diagnostics; custom binding extensions are one such current limitation.
+
+The external five-document corpus has a separate opt-in check:
+
+```powershell
+.\gradlew.bat :parser:contractCorpusTest --configuration-cache-problems=fail `
+  '-PasyncwrightModelRepository=C:/path/to/model-repository' `
+  '-PcontractsDir=C:/path/to/corrected/contracts'
+```
+
+Its JSON report is written to `parser/build/reports/asyncapi-corpus/result.json` and includes
+source checksums and diagnostics. Ordinary `check` does not require the external documents.
 
 ## Reproduce F0
 
@@ -56,6 +146,7 @@ P1 failed on RC4: swallowed mapping errors lose schemas, inlined operation refer
 operations, and recursive schema references use `AsyncAPISchema` rather than `Reference`.
 Typed AMQP bindings work. The user selected a separate fork of
 [asyncapi/jasyncapi](https://github.com/asyncapi/jasyncapi), preserving upstream history and
-license; the eventual fork artifact has not yet been selected or wired into this scaffold.
+license; the selected fork coordinates above are integrated through an explicitly configured
+repository and have not yet been published publicly.
 Full interpretation and the D1 consequence are maintained in the workspace wiki:
 `wiki/docs/architecture/background/analysis-asyncapi-gradle-plugin.md`, section 10.

@@ -6,8 +6,22 @@ sourceSets {
 }
 
 dependencies {
+    // platform(...) is valid Gradle notation; IDEA cannot infer its type here.
+    //noinspection DependencyNotationArgument
+    api(platform(libs.jackson.bom))
+    api(libs.jackson.databind)
+    api(libs.jasyncapi.fork)
+    implementation(libs.jackson.yaml)
+    implementation(libs.json.schema.validator)
+    implementation(libs.joni)
+
+    //noinspection DependencyNotationArgument
+    testImplementation(platform(libs.junit.bom))
+    testImplementation(libs.junit.jupiter)
+    testRuntimeOnly(libs.junit.platform.launcher)
+
     f0Implementation 'com.asyncapi:asyncapi-core:1.0.0-RC4'
-    f0Implementation enforcedPlatform("com.fasterxml.jackson:jackson-bom:${providers.gradleProperty('f0JacksonVersion').getOrElse('2.22.4')}")
+    f0Implementation enforcedPlatform("com.fasterxml.jackson:jackson-bom:${providers.gradleProperty('f0JacksonVersion').getOrElse(libs.versions.jackson.get())}")
     f0Implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml'
 }
 
@@ -28,3 +42,20 @@ tasks.register('f0', JavaExec) {
 
 // Compile the experiment on normal builds; running it requires the external contract corpus.
 tasks.named('check') { dependsOn tasks.named('f0Classes') }
+
+tasks.named('test') {
+    useJUnitPlatform { excludeTags 'external-corpus' }
+}
+
+tasks.register('contractCorpusTest', Test) {
+    description = 'Validate and resolve the five external AsyncAPI contracts with the production parser.'
+    group = 'verification'
+    testClassesDirs = sourceSets.test.output.classesDirs
+    classpath = sourceSets.test.runtimeClasspath
+    useJUnitPlatform { includeTags 'external-corpus' }
+    inputs.dir(contractsDirectory).withPropertyName('contracts').withPathSensitivity(PathSensitivity.RELATIVE)
+    systemProperty 'asyncwright.contractsDir', contractsDirectory.asFile.absolutePath
+    def report = layout.buildDirectory.file('reports/asyncapi-corpus/result.json')
+    outputs.file(report)
+    systemProperty 'asyncwright.corpusReport', report.get().asFile.absolutePath
+}

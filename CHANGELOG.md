@@ -15,6 +15,14 @@ been published. The current development version is `0.1.0-SNAPSHOT`.
 - JSON compatibility reports with input checksums, data differences and mapping errors.
   Contributors can select an external contract directory and compare Jackson versions.
 - Development setup and build instructions, MIT licensing and third-party notices.
+- Pinned JSON Schema validation dependencies and the official AsyncAPI 3.0.0 schema,
+  including upstream license notices and checks for offline loading and validation.
+- Regression checks distinguishing optional properties, explicit null values and the
+  nonstandard `nullable` keyword under JSON Schema draft-07.
+- Initial Java parsing API with source positions, offline schema validation, structured
+  diagnostics and a separate resolver retaining document references.
+- Reference target and cycle checks, operation message membership and channel parameter rules.
+- Opt-in integration checks for an external contract corpus and explicit local fork resolution.
 
 ### Changed
 
@@ -25,8 +33,10 @@ been published. The current development version is `0.1.0-SNAPSHOT`.
 
 - Resolve the contract directory relative to the project root using Gradle's directory API.
 - Report missing mapped values explicitly and close the captured diagnostic stream automatically.
+- Support a Git-ignored local model repository configuration for IDE imports and CLI builds.
+- Provide a complete, compilable Java usage example.
 
 ### Development status
 
-- This initial development snapshot provides project setup and compatibility experiments.
-  AsyncAPI validation and a usable Gradle plugin API are not available yet.
+- The Java parser has initial validation and reference coverage. The Gradle plugin API,
+  complete conformance checks and public artifact distribution remain under development.

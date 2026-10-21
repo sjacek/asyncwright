@@ -1,0 +1,18 @@
+[versions]
+jackson = "2.22.4"
+json-schema-validator = "2.0.8"
+joni = "2.2.6"
+junit = "5.11.3"
+# Separate fork distribution, available from an explicitly configured repository.
+jasyncapi-fork = "1.0.0-RC4-asyncwright.2"
+
+[libraries]
+jackson-bom = { module = "com.fasterxml.jackson:jackson-bom", version.ref = "jackson" }
+jackson-yaml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml" }
+jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind" }
+json-schema-validator = { module = "com.networknt:json-schema-validator", version.ref = "json-schema-validator" }
+joni = { module = "org.jruby.joni:joni", version.ref = "joni" }
+junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter" }
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
+jasyncapi-fork = { module = "io.github.sjacek.jasyncapi:asyncapi-core", version.ref = "jasyncapi-fork" }

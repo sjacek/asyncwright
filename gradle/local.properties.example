@@ -1,0 +1,3 @@
+# Copy to local.properties to use this repository during IDE imports and CLI builds.
+# Use forward slashes for Windows paths. Relative paths start at the project root.
+asyncwrightModelRepository=C:/path/to/model-repository

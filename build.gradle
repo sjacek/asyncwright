@@ -2,10 +2,30 @@ plugins {
     id 'base'
 }
 
+// Keep machine-specific repository paths out of version control, including IDE imports.
+def localProperties = new Properties()
+localProperties.load(new StringReader(providers.fileContents(
+        layout.projectDirectory.file('gradle/local.properties')).asText.getOrElse('')))
+def modelRepository = providers.gradleProperty('asyncwrightModelRepository')
+        .getOrElse(localProperties.getProperty('asyncwrightModelRepository', ''))
+
 allprojects {
     group = 'io.github.sjacek.asyncwright'
     version = '0.1.0-SNAPSHOT'
-    repositories { mavenCentral() }
+    repositories {
+        if (!modelRepository.isBlank()) {
+            exclusiveContent {
+                forRepository {
+                    maven {
+                        name = 'asyncwrightModel'
+                        url = rootProject.uri(modelRepository)
+                    }
+                }
+                filter { includeGroup 'io.github.sjacek.jasyncapi' }
+            }
+        }
+        mavenCentral()
+    }
 }
 
 subprojects {

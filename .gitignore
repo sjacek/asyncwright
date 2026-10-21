@@ -29,4 +29,5 @@ replay_pid*
 .gradle-user-home/
 **/build/
 .f0/
+/gradle/local.properties
 !gradle/wrapper/gradle-wrapper.jar
