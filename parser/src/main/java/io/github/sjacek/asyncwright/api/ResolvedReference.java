@@ -11,6 +11,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 public record ResolvedReference(String pointer, JsonNode node) {
     /**
      * Snapshots the target source value.
+     * @param pointer decoded JSON Pointer of the concrete target
+     * @param node source value to copy
      */
     public ResolvedReference { node = node.deepCopy(); }
     /**

@@ -12,6 +12,8 @@ import java.util.Objects;
 public record ExtensionSpec(String className, Map<String, String> parameters) {
     /**
      * Creates a portable extension declaration.
+     * @param className binary class name, using {@code $} for nested classes
+     * @param parameters explicit text parameters to copy
      * @throws IllegalArgumentException if the class name is blank
      * @throws NullPointerException if the class name, map, a key or a value is null
      */

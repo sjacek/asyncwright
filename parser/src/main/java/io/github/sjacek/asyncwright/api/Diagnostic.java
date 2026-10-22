@@ -21,6 +21,14 @@ public record Diagnostic(String ruleId, Severity severity, String message, Strin
                          int line, int column, String pointer, List<SourceLocation> related) {
     /**
      * Copies related locations; field validity is checked when an extension returns diagnostics.
+     * @param ruleId stable built-in or project rule identifier
+     * @param severity whether the finding prevents generation
+     * @param message human-readable explanation
+     * @param file project-relative file name using forward slashes
+     * @param line one-based line number
+     * @param column one-based column number
+     * @param pointer document JSON Pointer; empty for the root
+     * @param related reference usage locations to copy
      */
     public Diagnostic {
         related = List.copyOf(related);

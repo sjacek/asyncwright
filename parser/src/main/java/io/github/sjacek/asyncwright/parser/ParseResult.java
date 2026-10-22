@@ -18,6 +18,8 @@ import java.util.Optional;
 public record ParseResult(Optional<AsyncApiDocument> document, List<Diagnostic> diagnostics) {
     /**
      * Normalizes diagnostic order without discarding warnings.
+     * @param document validated document, absent when an error prevents model creation
+     * @param diagnostics parser findings to normalize
      */
     public ParseResult {
         diagnostics = Diagnostic.sorted(diagnostics);

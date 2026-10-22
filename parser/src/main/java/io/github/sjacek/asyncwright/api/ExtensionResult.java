@@ -13,6 +13,8 @@ import java.util.List;
 public record ExtensionResult(List<Diagnostic> diagnostics, List<String> generatedFiles) {
     /**
      * Sorts and deduplicates both result collections into immutable snapshots.
+     * @param diagnostics parser and extension findings to normalize
+     * @param generatedFiles output-relative paths to normalize
      */
     public ExtensionResult {
         diagnostics = Diagnostic.sorted(diagnostics);
