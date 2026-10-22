@@ -30,6 +30,11 @@ import java.util.TreeMap;
 
 /** Reproducible F0 experiment, deliberately separate from the future production parser. */
 public final class F0Probe {
+    private static final String REF = "$ref";
+    private static final String MAPPED = "mapped";
+    private static final String LOSSLESS = "lossless";
+    private static final String INTERNAL_EXCEPTIONS = "internalExceptions";
+    private static final String AMQP_BINDING = "amqp";
     private static final ObjectMapper JSON = JsonMapper.builder()
             .defaultPropertyInclusion(JsonInclude.Value.construct(
                     JsonInclude.Include.NON_NULL, JsonInclude.Include.NON_NULL)).build();
@@ -72,31 +77,31 @@ public final class F0Probe {
             Map<String, Object> expanded = mapDocument(resolved);
             result.put("raw", raw);
             result.put("resolved", expanded);
-            if (Boolean.TRUE.equals(raw.get("mapped"))) rawMapped++;
-            if (Boolean.TRUE.equals(raw.get("mapped")) && ((List<?>) raw.get("internalExceptions")).isEmpty()) rawClean++;
-            if (Boolean.TRUE.equals(raw.get("lossless"))) rawPass++;
-            if (Boolean.TRUE.equals(expanded.get("lossless"))) resolvedPass++;
+            if (Boolean.TRUE.equals(raw.get(MAPPED))) rawMapped++;
+            if (Boolean.TRUE.equals(raw.get(MAPPED)) && ((List<?>) raw.get(INTERNAL_EXCEPTIONS)).isEmpty()) rawClean++;
+            if (Boolean.TRUE.equals(raw.get(LOSSLESS))) rawPass++;
+            if (Boolean.TRUE.equals(expanded.get(LOSSLESS))) resolvedPass++;
 
             // Isolate channel bindings so a failure in schemas/operations cannot hide their result.
             List<Map<String, Object>> bindings = new ArrayList<>();
             for (var entry : original.path("channels").properties()) {
-                JsonNode binding = entry.getValue().path("bindings").path("amqp");
+                JsonNode binding = entry.getValue().path("bindings").path(AMQP_BINDING);
                 if (binding.isMissingNode()) continue;
                 Map<String, Object> item = new TreeMap<>();
                 item.put("channel", entry.getKey());
                 try {
                     Channel channel = Objects.requireNonNull(JSON.treeToValue(entry.getValue(), Channel.class),
                             "Channel mapping returned null");
-                    Object typed = requiredEntry(channel.getBindings(), "amqp");
+                    Object typed = requiredEntry(channel.getBindings(), AMQP_BINDING);
                     item.put("type", typed.getClass().getName());
                     item.put("typed", typed instanceof AMQPChannelBinding);
                     List<String> differences = differences(binding, JSON.valueToTree(typed));
                     item.put("differences", differences);
-                    item.put("lossless", differences.isEmpty());
+                    item.put(LOSSLESS, differences.isEmpty());
                 } catch (Exception exception) {
                     item.put("error", error(exception));
                     item.put("typed", false);
-                    item.put("lossless", false);
+                    item.put(LOSSLESS, false);
                 }
                 bindings.add(item);
             }
@@ -122,11 +127,11 @@ public final class F0Probe {
                 else if (node.isObject() && node.elements().hasNext()) injectExtension(node.elements().next());
             }
             JsonNode firstChannel = extended.path("channels").elements().next();
-            injectExtension(firstChannel.path("bindings").path("amqp"));
+            injectExtension(firstChannel.path("bindings").path(AMQP_BINDING));
             result.put("diagnosticExtensionsWithoutNullable", mapDocument(extended));
             results.add(result);
             System.out.printf("%s: raw=%s, resolved=%s, typed AMQP=%s, refs=%d%n", name,
-                    raw.get("lossless"), expanded.get("lossless"), allBindings, refs);
+                    raw.get(LOSSLESS), expanded.get(LOSSLESS), allBindings, refs);
         }
         Map<String, Object> controls = controls();
         boolean cycleReference = Boolean.TRUE.equals(controls.get("cyclePropertyIsReference"));
@@ -153,21 +158,21 @@ public final class F0Probe {
         try (PrintStream redirect = new PrintStream(captured, true, StandardCharsets.UTF_8)) {
             System.setErr(redirect);
             AsyncAPI document = JSON.treeToValue(input, AsyncAPI.class);
-            result.put("mapped", true);
+            result.put(MAPPED, true);
             JsonNode serialized = JSON.valueToTree(document);
             List<String> differences = differences(input, serialized);
             result.put("differences", differences);
-            result.put("lossless", differences.isEmpty());
+            result.put(LOSSLESS, differences.isEmpty());
             result.put("losslessIgnoringAmqpVhostDefault", differences.stream().allMatch(
                     difference -> difference.contains("/bindings/amqp/exchange/vhost: added \"/\"")));
         } catch (Exception exception) {
-            result.putIfAbsent("mapped", false);
-            result.put("lossless", false);
+            result.putIfAbsent(MAPPED, false);
+            result.put(LOSSLESS, false);
             result.put("error", error(exception));
         } finally {
             System.setErr(previous);
             String stderr = captured.toString(StandardCharsets.UTF_8);
-            result.put("internalExceptions", stderr.lines().filter(line -> line.startsWith("com.fasterxml.")
+            result.put(INTERNAL_EXCEPTIONS, stderr.lines().filter(line -> line.startsWith("com.fasterxml.")
                     && line.contains("Exception:")).toList());
             UPSTREAM_STDERR.append(stderr);
         }
@@ -180,7 +185,7 @@ public final class F0Probe {
         JsonNode recursive = JSON.readTree("""
                 {"asyncapi":"3.0.0","info":{"title":"Cycle probe","version":"1"},
                  "components":{"schemas":{"Node":{"type":"object","properties":{
-                   "child":{"$ref":"#/components/schemas/Node"}}}}}}
+                   "child":{REF:"#/components/schemas/Node"}}}}}}
                 """);
         JsonNode expanded = resolve(recursive, recursive, new LinkedHashSet<>());
         result.put("recursiveDocument", mapDocument(expanded));
@@ -202,7 +207,7 @@ public final class F0Probe {
         JsonNode channelDocument = JSON.readTree("""
                 {"asyncapi":"3.0.0","info":{"title":"Reference probe","version":"1"},
                  "channels":{"c":{"address":"a"}},
-                 "operations":{"send":{"action":"send","channel":{"$ref":"#/channels/c"}}}}
+                 "operations":{"send":{"action":"send","channel":{REF:"#/channels/c"}}}}
                 """);
         result.put("operationReferenceRaw", mapDocument(channelDocument));
         result.put("operationReferenceResolved", mapDocument(resolve(channelDocument, channelDocument, new LinkedHashSet<>())));
@@ -211,7 +216,7 @@ public final class F0Probe {
         result.put("missingRequiredInfo", mapDocument(JSON.readTree("{\"asyncapi\":\"3.0.0\"}")));
         result.put("danglingReference", mapDocument(JSON.readTree("""
                 {"asyncapi":"3.0.0","info":{"title":"Invalid","version":"1"},
-                 "operations":{"send":{"action":"send","channel":{"$ref":"#/channels/missing"}}}}
+                 "operations":{"send":{"action":"send","channel":{REF:"#/channels/missing"}}}}
                 """)));
         JsonNode escaped = JSON.readTree("{\"a/b~c\":{\"value\":7},\"use\":{\"$ref\":\"#/a~1b~0c\"}}");
         if (resolve(escaped, escaped, new LinkedHashSet<>()).at("/use/value").intValue() != 7)
@@ -234,13 +239,13 @@ public final class F0Probe {
 
     /** Only a spike dereferencer for this corpus; not the production, context-aware P4 resolver. */
     private static JsonNode resolve(JsonNode node, JsonNode root, Set<String> active) {
-        if (node.isObject() && node.has("$ref")) {
-            String ref = node.path("$ref").asText();
+        if (node.isObject() && node.has(REF)) {
+            String ref = node.path(REF).asText();
             if (!ref.startsWith("#/")) throw new IllegalArgumentException("Non-local reference: " + ref);
             JsonNode target = root.at(ref.substring(1));
             if (target.isMissingNode()) throw new IllegalArgumentException("Missing reference: " + ref);
             if (active.contains(ref)) {
-                if (target.has("$ref")) throw new IllegalArgumentException("Pure reference loop: " + ref);
+                if (target.has(REF)) throw new IllegalArgumentException("Pure reference loop: " + ref);
                 return node.deepCopy();
             }
             Set<String> next = new LinkedHashSet<>(active);
@@ -261,7 +266,7 @@ public final class F0Probe {
     }
 
     private static int countRefs(JsonNode node) {
-        int count = node.isObject() && node.has("$ref") ? 1 : 0;
+        int count = node.isObject() && node.has(REF) ? 1 : 0;
         for (JsonNode child : node) count += countRefs(child);
         return count;
     }

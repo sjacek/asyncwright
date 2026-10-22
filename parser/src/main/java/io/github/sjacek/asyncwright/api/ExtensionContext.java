@@ -17,4 +17,8 @@ public interface ExtensionContext {
     default Diagnostic diagnostic(String ruleId, Severity severity, String message, String pointer) {
         return Diagnostic.at(ruleId, severity, message, document().location(pointer), document().references().related(pointer));
     }
+
+    default Diagnostic diagnostic(BuiltinRuleId rule, Severity severity, String message, String pointer) {
+        return diagnostic(rule.id(), severity, message, pointer);
+    }
 }

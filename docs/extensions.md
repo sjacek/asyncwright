@@ -9,6 +9,10 @@ the normal build. It is separate from the two production modules.
 | --- | --- |
 | `AsyncApiRule` | `validate(ExtensionContext)` returns project diagnostics. |
 | `AsyncApiGenerator` | `generate(GeneratorContext)` writes outputs and returns diagnostics. |
+| `BuiltinRuleId` | Stable IDs for built-in diagnostics; `.id()` returns the existing wire value. Diagnostic factories accept the enum or a custom string ID. |
+| `AsyncApi30` | Pinned version/schema metadata and the supported `SchemaFormat` enum. |
+| `AsyncApiFields` | Exact AsyncAPI/JSON Schema field names, also usable in annotations and switch labels. |
+| `JsonPointers` | `escape` and `append` construct document pointers; URI fragment encoding is a separate concern. |
 | `ExtensionSpec` | Binary class name and an immutable `Map<String, String>` of parameters. |
 | `ExtensionContext` | Document view, text parameters, required-parameter lookup and diagnostic factory. |
 | `GeneratorContext` | The same input plus `GeneratedFiles` output access. |
@@ -37,9 +41,9 @@ Its execution steps are:
 4. The supplied loader is temporarily the thread context loader, including construction,
    and the previous loader is restored after success or failure.
 
-This execution host does not create Gradle workers, tasks or a consumer DSL. A separate jar
-compiled against public API types is tested with a supplied `URLClassLoader`; this does not
-establish isolation from conflicting Gradle dependencies. That verification belongs to F2.
+This library execution host does not create Gradle workers, tasks or a consumer DSL.
+A separate JAR compiled against public API types is tested with a supplied `URLClassLoader`.
+The [Gradle host](gradle-plugin.md) additionally verifies worker isolation through TestKit.
 
 ## Input and parameter ownership
 
@@ -112,17 +116,19 @@ as a collision on every host, so two generators cannot silently overwrite each o
 
 No output directory is created when parsing or project validation fails. If a generator
 fails after writing files, those files may remain; reported error results include already
-written paths. Staging, stale-output cleanup and failing the Gradle task belong to the F2 host.
+written paths. The [Gradle host](gradle-plugin.md) adds staging, stale-output cleanup and
+task failure handling; direct library callers provide their own lifecycle management.
 
 Extensions are trusted Java code. These checks apply to writes through `GeneratedFiles`;
 they do not sandbox arbitrary Java filesystem access. The host must supply a dedicated
 output directory, and generators must put their outputs there.
 
-## F2 boundary
+## Gradle host
 
 P6's `asyncwrightExtensions` configuration, project/included-build resolution, worker
 classpath (`API/parser + extension dependencies`), `@Classpath` input tracking,
-configuration/build cache integration, generator tasks and TestKit checks remain F2 work.
+configuration/build cache integration, generator tasks and TestKit checks are implemented
+in the development Gradle plugin. See the [DSL and task documentation](gradle-plugin.md).
 `buildSrc` is outside the agreed 0.1 extension mechanism. The parser/API and development
 example module do not publish artifacts or modify consumer builds.
 

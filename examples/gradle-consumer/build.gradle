@@ -1,0 +1,14 @@
+plugins { id 'io.github.sjacek.asyncwright' }
+
+asyncwright {
+    specs {
+        events { spec ->
+            spec.file.set(layout.projectDirectory.file('contracts/events.yaml'))
+            spec.rules { rules ->
+                rules.channelAddress(~/^events[.].+$/)
+                rules.requireDefaultContentType('application/json')
+                rules.requireProtocol('amqp')
+            }
+        }
+    }
+}

@@ -2,8 +2,47 @@ plugins {
     id 'java-gradle-plugin'
 }
 
-// F2 will register io.github.sjacek.asyncwright when its implementation exists.
-// F0 deliberately does not publish a placeholder plugin.
+gradlePlugin {
+    plugins {
+        asyncwright { PluginDeclaration plugin ->
+            plugin.setId('io.github.sjacek.asyncwright')
+            plugin.setImplementationClass('io.github.sjacek.asyncwright.gradle.AsyncwrightPlugin')
+            plugin.setDisplayName('Asyncwright')
+            plugin.setDescription('AsyncAPI validation and model-based generators in isolated Gradle workers.')
+        }
+    }
+}
 dependencies {
-    implementation project(':parser')
+    // Parser/API classes ship in the plugin JAR, without a separate parser publication.
+    compileOnly project(':parser')
+    // Valid platform notation; IDEA cannot infer the dependency type here.
+    //noinspection DependencyNotationArgument
+    api(platform(libs.jackson.bom))
+    api(libs.jackson.databind)
+    api(libs.jasyncapi.fork)
+    implementation(libs.jackson.yaml)
+    implementation(libs.json.schema.validator)
+    implementation(libs.joni)
+    //noinspection DependencyNotationArgument
+    testImplementation(platform(libs.junit.bom))
+    testImplementation(libs.junit.jupiter)
+    testImplementation gradleTestKit()
+    testImplementation project(':parser')
+    // Host-only fixture proves that Jackson 3 does not leak into the isolated worker.
+    testImplementation 'tools.jackson.core:jackson-databind:3.2.3'
+    testRuntimeOnly(libs.junit.platform.launcher)
+}
+
+tasks.named('jar') { from project(':parser').sourceSets.main.output }
+tasks.named('sourcesJar') { from project(':parser').sourceSets.main.allSource }
+tasks.named('pluginUnderTestMetadata') {
+    pluginClasspath.from(project(':parser').sourceSets.main.output)
+}
+tasks.named('test') {
+    maxHeapSize = '512m'
+    systemProperty 'asyncwright.testGradleHome', gradle.gradleHomeDir.absolutePath
+    systemProperty 'asyncwright.testKitDir', rootProject.layout.projectDirectory.dir('.gradle-user-home/testkit').asFile.absolutePath
+    systemProperty 'asyncwright.testGradleVersion', providers.gradleProperty('testGradleVersion').getOrElse('')
+    dependsOn tasks.named('jar')
+    systemProperty 'asyncwright.pluginJar', tasks.named('jar').flatMap { it.archiveFile }.get().asFile.absolutePath
 }

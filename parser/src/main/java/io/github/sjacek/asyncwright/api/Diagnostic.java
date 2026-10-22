@@ -16,6 +16,11 @@ public record Diagnostic(String ruleId, Severity severity, String message, Strin
                 location.column(), location.pointer(), related);
     }
 
+    public static Diagnostic at(BuiltinRuleId rule, Severity severity, String message,
+                                SourceLocation location, List<SourceLocation> related) {
+        return at(rule.id(), severity, message, location, related);
+    }
+
     public static List<Diagnostic> sorted(Collection<Diagnostic> diagnostics) {
         return diagnostics.stream().distinct().sorted(Comparator.comparing(Diagnostic::file)
                 .thenComparingInt(Diagnostic::line).thenComparingInt(Diagnostic::column)

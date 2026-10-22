@@ -1,5 +1,9 @@
 package io.github.sjacek.asyncwright.parser;
 
+import io.github.sjacek.asyncwright.api.AsyncApi30;
+import io.github.sjacek.asyncwright.api.BuiltinRuleId;
+import static io.github.sjacek.asyncwright.api.AsyncApiFields.*;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.sjacek.asyncwright.api.Diagnostic;
@@ -28,18 +32,18 @@ public final class ReferenceResolver implements AsyncApiReferences {
     List<Diagnostic> validate() {
         List<Diagnostic> errors = new ArrayList<>();
         for (var use : index.references) {
-            String ref = source.root.at(use.pointer()).path("$ref").asText();
+            String ref = source.root.at(use.pointer()).path(REF).asText();
             try {
                 String target = pointerOf(ref);
                 if (source.root.at(target).isMissingNode()) {
-                    fail(errors, use.pointer(), "reference.missing", "Reference target does not exist: " + ref);
+                    fail(errors, use.pointer(), BuiltinRuleId.REFERENCE_MISSING, "Reference target does not exist: " + ref);
                 } else if (use.kind() != DocumentIndex.Kind.OTHER && index.kinds.get(target) != use.kind()) {
-                    fail(errors, use.pointer(), "reference.type", "Reference must target a "
+                    fail(errors, use.pointer(), BuiltinRuleId.REFERENCE_TYPE, "Reference must target a "
                             + use.kind().name().toLowerCase(Locale.ROOT) + " object");
                 } else targets.put(use.pointer(), target);
             } catch (IllegalArgumentException exception) {
                 fail(errors, use.pointer(), ref.startsWith("#") || ref.isEmpty()
-                        ? "reference.pointer" : "unsupported.reference", exception.getMessage());
+                        ? BuiltinRuleId.REFERENCE_POINTER : BuiltinRuleId.UNSUPPORTED_REFERENCE, exception.getMessage());
             }
         }
         Map<String, Integer> states = new HashMap<>();
@@ -57,13 +61,13 @@ public final class ReferenceResolver implements AsyncApiReferences {
             if (states.getOrDefault(target, 0) == 1) {
                 List<String> cycle = stack.subList(stack.indexOf(target), stack.size());
                 boolean recursiveSchema = cycle.stream().allMatch(p -> index.kinds.get(p) == DocumentIndex.Kind.SCHEMA)
-                        && cycle.stream().anyMatch(p -> !source.root.at(p).has("$ref"));
+                        && cycle.stream().anyMatch(p -> !source.root.at(p).has(REF));
                 if (!recursiveSchema) {
-                    for (String member : cycle) if (source.root.at(member).has("$ref")) invalid.add(member);
-                    String location = source.root.at(pointer).has("$ref") ? pointer : target;
-                    errors.add(Diagnostic.at("reference.cycle", Severity.ERROR,
+                    for (String member : cycle) if (source.root.at(member).has(REF)) invalid.add(member);
+                    String location = source.root.at(pointer).has(REF) ? pointer : target;
+                    errors.add(Diagnostic.at(BuiltinRuleId.REFERENCE_CYCLE, Severity.ERROR,
                             "Unresolvable reference cycle outside a recursive schema",
-                            source.location(location + "/$ref"), cycle.stream().map(source::location).toList()));
+                            source.location(location + "/" + REF), cycle.stream().map(source::location).toList()));
                 }
             } else visit(target, states, stack, errors);
         }
@@ -71,9 +75,9 @@ public final class ReferenceResolver implements AsyncApiReferences {
         states.put(pointer, 2);
     }
 
-    private void fail(List<Diagnostic> errors, String pointer, String rule, String message) {
+    private void fail(List<Diagnostic> errors, String pointer, BuiltinRuleId rule, String message) {
         invalid.add(pointer);
-        errors.add(Diagnostic.at(rule, Severity.ERROR, message, source.location(pointer + "/$ref"), List.of()));
+        errors.add(Diagnostic.at(rule, Severity.ERROR, message, source.location(pointer + "/" + REF), List.of()));
     }
 
     static String pointerOf(String reference) {
@@ -102,7 +106,7 @@ public final class ReferenceResolver implements AsyncApiReferences {
             current = targets.get(current);
         }
         JsonNode value = source.root.at(current);
-        if (invalid.contains(current) || value.isMissingNode() || value.has("$ref")) return Optional.empty();
+        if (invalid.contains(current) || value.isMissingNode() || value.has(REF)) return Optional.empty();
         return Optional.of(new ResolvedReference(current, value));
     }
 
@@ -119,16 +123,16 @@ public final class ReferenceResolver implements AsyncApiReferences {
                     || !(entry.getKey().equals(base) || entry.getKey().startsWith(base + "/"))) continue;
             JsonNode value = mapping.at(entry.getKey().substring(base.length()));
             if (value instanceof com.fasterxml.jackson.databind.node.ObjectNode object
-                    && object.has("schema") && !object.has("schemaFormat") && !object.has("$ref"))
-                object.put("schemaFormat", "application/vnd.aai.asyncapi+json;version=3.0.0");
+                    && object.has(SCHEMA) && !object.has(SCHEMA_FORMAT) && !object.has(REF))
+                object.put(SCHEMA_FORMAT, AsyncApi30.SchemaFormat.JSON.mediaType());
         }
         for (var use : index.references) {
             if (!(use.pointer().equals(base) || use.pointer().startsWith(base + "/"))) continue;
             JsonNode value = mapping.at(use.pointer().substring(base.length()));
             if (value instanceof com.fasterxml.jackson.databind.node.ObjectNode object) {
-                JsonNode ref = object.get("$ref");
+                JsonNode ref = object.get(REF);
                 object.removeAll();
-                object.set("$ref", ref);
+                object.set(REF, ref);
             }
         }
         return mapping;
@@ -138,16 +142,16 @@ public final class ReferenceResolver implements AsyncApiReferences {
         Set<SourceLocation> locations = new LinkedHashSet<>();
         for (var use : index.references) {
             try {
-                String target = pointerOf(source.root.at(use.pointer()).path("$ref").asText());
+                String target = pointerOf(source.root.at(use.pointer()).path(REF).asText());
                 Set<String> visited = new HashSet<>();
                 while (visited.add(target)) {
                     if (pointer.equals(target) || pointer.startsWith(target + "/")) {
-                        locations.add(source.location(use.pointer() + "/$ref"));
+                        locations.add(source.location(use.pointer() + "/" + REF));
                         break;
                     }
                     JsonNode value = source.root.at(target);
-                    if (!value.has("$ref")) break;
-                    target = pointerOf(value.path("$ref").asText());
+                    if (!value.has(REF)) break;
+                    target = pointerOf(value.path(REF).asText());
                 }
             } catch (IllegalArgumentException ignored) { /* Reported in reference validation. */ }
         }

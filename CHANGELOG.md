@@ -5,8 +5,20 @@ been published. The current development version is `0.1.0-SNAPSHOT`.
 
 ## Unreleased
 
+### Changed
+
+- Centralized specification metadata, field names, built-in diagnostic IDs and Gradle
+  names; shared typed rule parameters and JSON Pointer construction. Diagnostic wire
+  values, report formats and validation behavior remain unchanged.
+
 ### Added
 
+- Optional class-based rule registration for rule types already available to the build
+  script, retaining binary class names for isolated worker execution.
+- Development Gradle plugin with a specification DSL, declarative/project rules, cacheable
+  validation and generator tasks, relative JSON/text reports and isolated Worker API execution.
+- TestKit coverage for consumer builds, caching and relocation, extension changes, Jackson
+  isolation and generator output cleanup; an eight-pair Gradle/JDK compatibility workflow.
 - F1 acceptance record for the documented parser and Java extension API scope, with a clean
   verification run, reviewed limitations and an unchanged 80-case JS comparison baseline.
 - Boolean schema support, with a public `BooleanSchema` leaf and regressions covering nested

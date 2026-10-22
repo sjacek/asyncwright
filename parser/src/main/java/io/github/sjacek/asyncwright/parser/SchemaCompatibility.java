@@ -1,5 +1,8 @@
 package io.github.sjacek.asyncwright.parser;
 
+import io.github.sjacek.asyncwright.api.AsyncApi30;
+import static io.github.sjacek.asyncwright.api.AsyncApiFields.*;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -12,12 +15,12 @@ final class SchemaCompatibility {
     private SchemaCompatibility() { }
 
     static JsonNode schema() {
-        try (var input = Objects.requireNonNull(SchemaCompatibility.class.getResourceAsStream("/schemas/asyncapi/3.0.0.json"))) {
+        try (var input = Objects.requireNonNull(SchemaCompatibility.class.getResourceAsStream(AsyncApi30.SCHEMA_RESOURCE))) {
             JsonNode schema = new ObjectMapper().readTree(input);
             // required alone also matches non-objects, incorrectly routing booleans to Multi Format Schema.
-            ObjectNode condition = (ObjectNode) schema.path("definitions")
-                    .path("http://asyncapi.com/definitions/3.0.0/anySchema.json").path("if");
-            condition.put("type", "object");
+            ObjectNode condition = (ObjectNode) schema.path(DEFINITIONS)
+                    .path(AsyncApi30.ANY_SCHEMA_DEFINITION).path(IF);
+            condition.put(TYPE, "object");
             return schema;
         } catch (IOException exception) {
             throw new IllegalStateException("Cannot load the bundled AsyncAPI schema", exception);

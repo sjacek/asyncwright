@@ -12,12 +12,12 @@ public final class ExampleMain {
     private ExampleMain() { }
 
     public static void main(String[] args) throws Exception {
-        if (args.length != 2) throw new IllegalArgumentException("Usage: ExampleMain <specification> <output-directory>");
+        if (args.length != 2) throw new IllegalArgumentException("Usage: " + ExampleMain.class.getSimpleName() + " <specification> <output-directory>");
         Path input = Path.of(args[0]).toAbsolutePath().normalize();
         var parsed = new AsyncApiParser().parse(input.getParent(), input.getFileName());
         var result = new ExtensionExecutor(ExampleMain.class.getClassLoader()).generate(parsed,
-                List.of(new ExtensionSpec(ChannelPrefixRule.class.getName(), Map.of("prefix", "events."))),
-                List.of(new ExtensionSpec(ChannelCatalogGenerator.class.getName(), Map.of("file", "catalog/channels.json"))),
+                List.of(new ExtensionSpec(ChannelPrefixRule.class.getName(), Map.of(ChannelPrefixRule.PREFIX_PARAMETER, "events."))),
+                List.of(new ExtensionSpec(ChannelCatalogGenerator.class.getName(), Map.of(ChannelCatalogGenerator.FILE_PARAMETER, "catalog/channels.json"))),
                 Path.of(args[1]));
         if (!result.successful()) throw new IllegalStateException(result.diagnosticsJson());
         System.out.println("Generated: " + String.join(", ", result.generatedFiles()));

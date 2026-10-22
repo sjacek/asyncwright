@@ -1,5 +1,7 @@
 package io.github.sjacek.asyncwright.parser;
 
+import static io.github.sjacek.asyncwright.api.AsyncApiFields.*;
+
 import com.asyncapi.schemas.asyncapi.AsyncAPISchema;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonParser;
@@ -25,7 +27,7 @@ final class ModelMapping {
     private ModelMapping() { }
 
     static ObjectMapper mapper() {
-        SimpleModule booleans = new SimpleModule("Asyncwright boolean schemas");
+        SimpleModule booleans = new SimpleModule(BooleanDeserializer.class.getName());
         booleans.setDeserializerModifier(new BeanDeserializerModifier() {
             @Serial private static final long serialVersionUID = 1L;
             @Override public JsonDeserializer<?> modifyDeserializer(DeserializationConfig config, BeanDescription bean,
@@ -54,11 +56,11 @@ final class ModelMapping {
 
     private abstract static class InstanceValues {
         // Upstream's generated setters also carry deserializer annotations.
-        @JsonProperty("const") @JsonDeserialize(using = InstanceValueDeserializer.class)
+        @JsonProperty(CONST) @JsonDeserialize(using = InstanceValueDeserializer.class)
         abstract void setConstValue(Object value);
-        @JsonProperty("default") @JsonDeserialize(using = InstanceValueDeserializer.class)
+        @JsonProperty(DEFAULT) @JsonDeserialize(using = InstanceValueDeserializer.class)
         abstract void setDefaultValue(Object value);
-        @JsonProperty("examples") @JsonDeserialize(contentUsing = InstanceValueDeserializer.class)
+        @JsonProperty(EXAMPLES) @JsonDeserialize(contentUsing = InstanceValueDeserializer.class)
         abstract void setExamples(List<Object> value);
     }
 

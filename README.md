@@ -2,8 +2,9 @@
 
 Gradle tooling for contract-first AsyncAPI validation and model-based rules and generators.
 The Gradle-independent Java parser and extension API completed F1 acceptance for the
-[documented 0.1 scope](docs/validation.md#f1-acceptance). Gradle plugin integration remains
-F2 work; the project also retains a separate compatibility experiment. Java bytecode
+[documented 0.1 scope](docs/validation.md#f1-acceptance). The development
+[Gradle plugin](docs/gradle-plugin.md) adds a specification DSL, validation and generator
+tasks, isolated workers and TestKit coverage. The project also retains a separate compatibility experiment. Java bytecode
 targets 17; the Wrapper uses Gradle 9.8.1.
 
 Notable changes are recorded in the [changelog](CHANGELOG.md).
@@ -12,8 +13,8 @@ Modules:
 
 - `parser`: document loading, structural validation, local reference resolution and diagnostics;
   F0 has its own source set and dependency graph.
-- `gradle-plugin`: `java-gradle-plugin` scaffold depending on `parser`. Plugin ID registration,
-  publication and the consumer DSL will be added in F2.
+- `gradle-plugin`: `io.github.sjacek.asyncwright`, with the parser/API included in its JAR;
+  DSL, cacheable tasks, Worker API and consumer TestKit tests. Publication is pending.
 - `extension-examples`: ordinary Java rule/generator examples with their own tests;
   this development module is not part of the plugin's dependency graph.
 

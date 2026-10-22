@@ -209,10 +209,12 @@ class ExtensionExecutorTest {
 
     @Test
     void loadsAnIndependentlyCompiledJarUsingOnlyPublicApiAndRestoresTheContextLoader() throws Exception {
+        String externalClass = "external.ExternalRule";
+        String classEntry = externalClass.replace('.', '/') + ".class";
         Path source = directory.resolve("ExternalRule.java");
         Files.writeString(source, """
                 package external;
-                import io.github.sjacek.asyncwright.api.*;
+                import %s.*;
                 import java.util.List;
                 public class ExternalRule implements AsyncApiRule {
                     public List<Diagnostic> validate(ExtensionContext context) {
@@ -223,7 +225,7 @@ class ExtensionExecutorTest {
                             context.requireParameter("message"), "/info/title"));
                     }
                 }
-                """);
+                """.formatted(AsyncApiRule.class.getPackageName()));
         Path classes = Files.createDirectories(directory.resolve("classes"));
         List<String> entries = new ArrayList<>();
         for (Class<?> type : List.of(AsyncApiRule.class, AsyncAPI.class, JsonNode.class, JsonValue.class, JsonProcessingException.class))
@@ -233,14 +235,14 @@ class ExtensionExecutorTest {
                 "-d", classes.toString(), source.toString()));
         Path jar = directory.resolve("extension.jar");
         try (var output = new JarOutputStream(Files.newOutputStream(jar))) {
-            output.putNextEntry(new JarEntry("external/ExternalRule.class"));
-            output.write(Files.readAllBytes(classes.resolve("external/ExternalRule.class")));
+            output.putNextEntry(new JarEntry(classEntry));
+            output.write(Files.readAllBytes(classes.resolve(classEntry)));
             output.closeEntry();
         }
-        assertThrows(ClassNotFoundException.class, () -> Class.forName("external.ExternalRule"));
+        assertThrows(ClassNotFoundException.class, () -> Class.forName(externalClass));
         ClassLoader previous = Thread.currentThread().getContextClassLoader();
         try (var loader = new URLClassLoader(new java.net.URL[] {jar.toUri().toURL()}, getClass().getClassLoader())) {
-            var result = new ExtensionExecutor(loader).validate(valid(), List.of(new ExtensionSpec("external.ExternalRule", Map.of("message", "Loaded"))));
+            var result = new ExtensionExecutor(loader).validate(valid(), List.of(new ExtensionSpec(externalClass, Map.of("message", "Loaded"))));
             assertEquals("Loaded", result.diagnostics().get(0).message());
             assertEquals("/info/title", result.diagnostics().get(0).pointer());
             assertSame(previous, Thread.currentThread().getContextClassLoader());

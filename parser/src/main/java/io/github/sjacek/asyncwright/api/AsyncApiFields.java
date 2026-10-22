@@ -1,0 +1,62 @@
+package io.github.sjacek.asyncwright.api;
+
+/** AsyncAPI and JSON Schema wire names. Keep explicit values stable when Java names change. */
+public final class AsyncApiFields {
+    public static final String ASYNCAPI = "asyncapi";
+    public static final String REF = "$ref";
+    public static final String SCHEMA_DIALECT = "$schema";
+    public static final String SCHEMA_ID = "$id";
+    public static final String SCHEMA_FORMAT = "schemaFormat";
+    public static final String SCHEMA = "schema";
+    public static final String COMPONENTS = "components";
+    public static final String CHANNEL = "channel";
+    public static final String CHANNELS = "channels";
+    public static final String OPERATIONS = "operations";
+    public static final String MESSAGES = "messages";
+    public static final String SERVERS = "servers";
+    public static final String PARAMETERS = "parameters";
+    public static final String ADDRESS = "address";
+    public static final String PROTOCOL = "protocol";
+    public static final String DEFAULT_CONTENT_TYPE = "defaultContentType";
+    public static final String SCHEMAS = "schemas";
+    public static final String SECURITY_SCHEMES = "securitySchemes";
+    public static final String CORRELATION_ID = "correlationId";
+    public static final String CORRELATION_IDS = "correlationIds";
+    public static final String TAGS = "tags";
+    public static final String REPLY = "reply";
+    public static final String BINDINGS = "bindings";
+    public static final String CHANNEL_BINDINGS = "channelBindings";
+    public static final String OPERATION_BINDINGS = "operationBindings";
+    public static final String MESSAGE_BINDINGS = "messageBindings";
+    public static final String SERVER_BINDINGS = "serverBindings";
+    public static final String OPERATION_TRAITS = "operationTraits";
+    public static final String MESSAGE_TRAITS = "messageTraits";
+    public static final String TRAITS = "traits";
+    public static final String PAYLOAD = "payload";
+    public static final String HEADERS = "headers";
+    public static final String PROPERTIES = "properties";
+    public static final String PATTERN_PROPERTIES = "patternProperties";
+    public static final String DEFINITIONS = "definitions";
+    public static final String DEFS = "$defs";
+    public static final String ALL_OF = "allOf";
+    public static final String ONE_OF = "oneOf";
+    public static final String ANY_OF = "anyOf";
+    public static final String ITEMS = "items";
+    public static final String ADDITIONAL_ITEMS = "additionalItems";
+    public static final String ADDITIONAL_PROPERTIES = "additionalProperties";
+    public static final String CONTAINS = "contains";
+    public static final String PROPERTY_NAMES = "propertyNames";
+    public static final String NOT = "not";
+    public static final String IF = "if";
+    public static final String THEN = "then";
+    public static final String ELSE = "else";
+    public static final String DEPENDENCIES = "dependencies";
+    public static final String EXAMPLES = "examples";
+    public static final String EXAMPLE = "example";
+    public static final String DEFAULT = "default";
+    public static final String CONST = "const";
+    public static final String ENUM = "enum";
+    public static final String TYPE = "type";
+    public static final String EXTENSION_PREFIX = "x-";
+    private AsyncApiFields() { }
+}

@@ -11,18 +11,20 @@ import java.util.TreeMap;
 
 /** Generates a deterministic UTF-8 catalog while preserving references in the input model. */
 public final class ChannelCatalogGenerator implements AsyncApiGenerator {
+    public static final String FILE_PARAMETER = "file";
+    public static final String DEFAULT_OUTPUT_FILE = "channels.json";
     @Override
     public List<Diagnostic> generate(GeneratorContext context) throws Exception {
         Map<String, String> catalog = new TreeMap<>();
         var channels = context.document().model().getChannels();
         if (channels != null) for (String name : channels.keySet()) {
-            String pointer = "/channels/" + name.replace("~", "~0").replace("/", "~1");
+            String pointer = JsonPointers.append("/" + AsyncApiFields.CHANNELS, name);
             Channel channel = context.document().references().resolve(pointer, Channel.class).orElseThrow();
             catalog.put(name, channel.getAddress());
         }
         var printer = new DefaultPrettyPrinter().withObjectIndenter(new DefaultIndenter("  ", "\n"));
         String json = new ObjectMapper().writer(printer).writeValueAsString(catalog) + "\n";
-        context.output().writeUtf8(context.parameters().getOrDefault("file", "channels.json"), json);
+        context.output().writeUtf8(context.parameters().getOrDefault(FILE_PARAMETER, DEFAULT_OUTPUT_FILE), json);
         return List.of();
     }
 }

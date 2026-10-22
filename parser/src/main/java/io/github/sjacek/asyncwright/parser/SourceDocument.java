@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLParser;
 import io.github.sjacek.asyncwright.api.SourceLocation;
+import io.github.sjacek.asyncwright.api.JsonPointers;
 
 import java.io.IOException;
 import java.io.Serial;
@@ -102,5 +103,5 @@ final class SourceDocument {
         return new SourceLocation(file, location.line(), location.column(), pointer);
     }
 
-    static String escape(String token) { return token.replace("~", "~0").replace("/", "~1"); }
+    static String escape(String token) { return JsonPointers.escape(token); }
 }

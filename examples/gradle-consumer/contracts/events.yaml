@@ -1,0 +1,16 @@
+asyncapi: 3.0.0
+info:
+  title: Asyncwright Gradle consumer example
+  version: 1.0.0
+defaultContentType: application/json
+servers:
+  broker:
+    host: localhost
+    protocol: amqp
+channels:
+  created:
+    $ref: '#/components/channels/created'
+components:
+  channels:
+    created:
+      address: events.demo.created

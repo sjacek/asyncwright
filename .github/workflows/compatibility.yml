@@ -1,0 +1,82 @@
+name: Gradle and JDK compatibility
+on:
+  push:
+    branches: ['**']
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: compatibility-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  model:
+    name: Build pinned model distribution
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: sjacek/jasyncapi
+          ref: 7ba1dc432b529e87c66fb10ae43d3c9729e3bb71
+          persist-credentials: false
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Configure fork test toolchain
+        shell: bash
+        run: |
+          mkdir -p "$HOME/.m2"
+          cat > "$HOME/.m2/toolchains.xml" <<EOF
+          <toolchains><toolchain><type>jdk</type><provides><version>21</version></provides><configuration><jdkHome>$JAVA_HOME</jdkHome></configuration></toolchain></toolchains>
+          EOF
+      - name: Build, test and install model into an isolated file repository
+        shell: bash
+        run: pwsh -File tools/install-local.ps1 -Repository "$RUNNER_TEMP/model-repository" -Maven mvn
+      - uses: actions/upload-artifact@v4
+        with:
+          name: model-repository
+          path: ${{ runner.temp }}/model-repository
+          retention-days: 7
+  compatibility:
+    needs: model
+    name: Gradle ${{ matrix.gradle }} / JDK ${{ matrix.java }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        gradle: ['9.0.0', '9.1.0', '9.8.1']
+        java: ['17', '21', '25']
+        exclude:
+          - gradle: '9.0.0'
+            java: '25'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ matrix.java }}
+      - uses: gradle/actions/setup-gradle@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: model-repository
+          path: ${{ runner.temp }}/model-repository
+      - name: Verify plugin and TestKit consumers
+        shell: bash
+        run: >-
+          bash ./gradlew check assemble
+          -PasyncwrightModelRepository="$RUNNER_TEMP/model-repository"
+          -PtestGradleVersion=${{ matrix.gradle }}
+          --configuration-cache-problems=fail --stacktrace
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reports-gradle-${{ matrix.gradle }}-jdk-${{ matrix.java }}
+          path: |
+            **/build/reports/
+            **/build/test-results/
+          retention-days: 14

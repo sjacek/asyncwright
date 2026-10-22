@@ -8,19 +8,21 @@ import java.util.TreeSet;
 
 /** Example project rule using typed channel targets and definition/use diagnostics. */
 public final class ChannelPrefixRule implements AsyncApiRule {
+    public static final String PREFIX_PARAMETER = "prefix";
+    public static final String RULE_ID = "example.channel-prefix";
     @Override
     public List<Diagnostic> validate(ExtensionContext context) throws Exception {
-        String prefix = context.requireParameter("prefix");
+        String prefix = context.requireParameter(PREFIX_PARAMETER);
         List<Diagnostic> diagnostics = new ArrayList<>();
         var channels = context.document().model().getChannels();
         if (channels == null) return diagnostics;
         for (String name : new TreeSet<>(channels.keySet())) {
-            String pointer = "/channels/" + name.replace("~", "~0").replace("/", "~1");
+            String pointer = JsonPointers.append("/" + AsyncApiFields.CHANNELS, name);
             var target = context.document().references().resolve(pointer).orElseThrow();
             Channel channel = context.document().references().resolve(pointer, Channel.class).orElseThrow();
             if (channel.getAddress() != null && !channel.getAddress().startsWith(prefix))
-                diagnostics.add(context.diagnostic("example.channel-prefix", Severity.ERROR,
-                        "Channel address must start with " + prefix, target.pointer() + "/address"));
+                diagnostics.add(context.diagnostic(RULE_ID, Severity.ERROR,
+                        "Channel address must start with " + prefix, JsonPointers.append(target.pointer(), AsyncApiFields.ADDRESS)));
         }
         return diagnostics;
     }

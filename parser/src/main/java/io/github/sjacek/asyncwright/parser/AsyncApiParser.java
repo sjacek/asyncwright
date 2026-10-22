@@ -1,5 +1,9 @@
 package io.github.sjacek.asyncwright.parser;
 
+import io.github.sjacek.asyncwright.api.AsyncApi30;
+import io.github.sjacek.asyncwright.api.BuiltinRuleId;
+import static io.github.sjacek.asyncwright.api.AsyncApiFields.*;
+
 import com.asyncapi.v3._0_0.model.AsyncAPI;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -24,11 +28,11 @@ public final class AsyncApiParser {
     private static final Schema SCHEMA = schema();
 
     private static Schema schema() {
-        String id = "http://asyncapi.com/definitions/3.0.0/asyncapi.json";
+        String id = AsyncApi30.SCHEMA_ID;
         SchemaRegistry registry = SchemaRegistry.withDefaultDialect(SpecificationVersion.DRAFT_7, builder -> builder
                 .schemaRegistryConfig(SchemaRegistryConfig.builder().locale(Locale.ENGLISH)
                         .formatAssertionsEnabled(true).regularExpressionFactory(JoniRegularExpressionFactory.getInstance()).build())
-                .schemaIdResolvers(r -> r.mappings(Map.of(id, "classpath:schemas/asyncapi/3.0.0.json")))
+                .schemaIdResolvers(r -> r.mappings(Map.of(id, "classpath:" + AsyncApi30.SCHEMA_RESOURCE.substring(1))))
                 .schemaLoader(loader -> loader.fetchRemoteResources(false)));
         Schema schema = registry.getSchema(SchemaLocation.of(id), SchemaCompatibility.schema());
         schema.initializeValidators();
@@ -49,7 +53,7 @@ public final class AsyncApiParser {
         SourceDocument source;
         try { source = SourceDocument.read(file, input); }
         catch (SourceDocument.UnsupportedAlias exception) {
-            return failed(List.of(Diagnostic.at("unsupported.yaml-alias", Severity.ERROR,
+            return failed(List.of(Diagnostic.at(BuiltinRuleId.UNSUPPORTED_YAML_ALIAS, Severity.ERROR,
                     exception.getMessage(), exception.location, List.of())));
         }
         catch (IOException exception) {
@@ -62,19 +66,19 @@ public final class AsyncApiParser {
                     column = Math.max(1, json.getLocation().getColumnNr());
                 }
             }
-            return failed(List.of(Diagnostic.at("syntax", Severity.ERROR, message,
+            return failed(List.of(Diagnostic.at(BuiltinRuleId.SYNTAX, Severity.ERROR, message,
                     new SourceLocation(file, line, column, ""), List.of())));
         }
         DocumentIndex index = new DocumentIndex(source);
         ReferenceResolver references = new ReferenceResolver(source, index);
         List<Diagnostic> diagnostics = new ArrayList<>();
-        JsonNode version = source.root.path("asyncapi");
-        if (version.isTextual() && !version.asText().equals("3.0.0"))
-            return failed(List.of(Diagnostic.at("unsupported.version", Severity.ERROR,
-                    "Only AsyncAPI 3.0.0 is supported in 0.1", source.location("/asyncapi"), List.of())));
+        JsonNode version = source.root.path(ASYNCAPI);
+        if (version.isTextual() && !version.asText().equals(AsyncApi30.VERSION))
+            return failed(List.of(Diagnostic.at(BuiltinRuleId.UNSUPPORTED_VERSION, Severity.ERROR,
+                    "Only AsyncAPI " + AsyncApi30.VERSION + " is supported in 0.1", source.location("/" + ASYNCAPI), List.of())));
         for (var error : SCHEMA.validate(source.root)) {
             String pointer = error.getInstanceLocation().toString();
-            diagnostics.add(Diagnostic.at("schema." + error.getKeyword(), Severity.ERROR, error.getMessage(),
+            diagnostics.add(Diagnostic.at(BuiltinRuleId.schemaKeyword(error.getKeyword()), Severity.ERROR, error.getMessage(),
                     source.location(pointer), references.related(pointer)));
         }
         if (hasErrors(diagnostics)) return failed(diagnostics);
@@ -92,7 +96,7 @@ public final class AsyncApiParser {
             List<String> losses = new ArrayList<>();
             checkPreservation(mapping, MAPPER.valueToTree(model), "", losses);
             if (!losses.isEmpty()) {
-                for (String pointer : losses) diagnostics.add(Diagnostic.at("model.preservation", Severity.ERROR,
+                for (String pointer : losses) diagnostics.add(Diagnostic.at(BuiltinRuleId.MODEL_PRESERVATION, Severity.ERROR,
                         "The typed model cannot preserve this source value", source.location(pointer), references.related(pointer)));
                 return failed(diagnostics);
             }
@@ -103,7 +107,7 @@ public final class AsyncApiParser {
                 mappingPath.append('/').append(element.getFieldName() == null
                         ? Integer.toString(element.getIndex()) : SourceDocument.escape(element.getFieldName()));
             String pointer = mappingPath.toString();
-            diagnostics.add(Diagnostic.at("model.mapping", Severity.ERROR, exception.getOriginalMessage(),
+            diagnostics.add(Diagnostic.at(BuiltinRuleId.MODEL_MAPPING, Severity.ERROR, exception.getOriginalMessage(),
                     source.location(pointer), references.related(pointer)));
             return failed(diagnostics);
         }
@@ -125,48 +129,48 @@ public final class AsyncApiParser {
         for (var entry : index.kinds.entrySet()) {
             String pointer = entry.getKey();
             JsonNode node = source.root.at(pointer);
-            if (node.has("$ref")) continue;
+            if (node.has(REF)) continue;
             if (entry.getValue() == DocumentIndex.Kind.CHANNEL) {
                 Set<String> parameters = new LinkedHashSet<>();
-                var matcher = PARAMETER.matcher(node.path("address").asText(""));
+                var matcher = PARAMETER.matcher(node.path(ADDRESS).asText(""));
                 while (matcher.find()) parameters.add(matcher.group(1));
-                for (String parameter : parameters) if (!node.path("parameters").has(parameter))
-                    diagnostics.add(Diagnostic.at("channel.parameter", Severity.ERROR,
+                for (String parameter : parameters) if (!node.path(PARAMETERS).has(parameter))
+                    diagnostics.add(Diagnostic.at(BuiltinRuleId.CHANNEL_PARAMETER, Severity.ERROR,
                             "Undefined channel address parameter: " + parameter,
-                            source.location(pointer + "/address"), references.related(pointer + "/address")));
-                for (var parameter : node.path("parameters").properties()) if (!parameters.contains(parameter.getKey())) {
-                    String definition = pointer + "/parameters/" + SourceDocument.escape(parameter.getKey());
-                    diagnostics.add(Diagnostic.at("channel.parameter", Severity.ERROR,
+                            source.location(pointer + "/" + ADDRESS), references.related(pointer + "/" + ADDRESS)));
+                for (var parameter : node.path(PARAMETERS).properties()) if (!parameters.contains(parameter.getKey())) {
+                    String definition = pointer + "/" + PARAMETERS + "/" + SourceDocument.escape(parameter.getKey());
+                    diagnostics.add(Diagnostic.at(BuiltinRuleId.CHANNEL_PARAMETER, Severity.ERROR,
                             "Channel parameter is absent from the address: " + parameter.getKey(),
                             source.location(definition), references.related(definition)));
                 }
-                if (isRootMember(pointer, "channels")) {
-                    for (int i = 0; i < node.path("servers").size(); i++)
-                        validateRootReference(source, references, pointer + "/servers/" + i, "servers", "channel.server",
+                if (isRootMember(pointer, CHANNELS)) {
+                    for (int i = 0; i < node.path(SERVERS).size(); i++)
+                        validateRootReference(source, references, pointer + "/" + SERVERS + "/" + i, SERVERS, BuiltinRuleId.CHANNEL_SERVER,
                                 "Root channels must reference servers under /servers", diagnostics);
                 }
             }
             if (entry.getValue() != DocumentIndex.Kind.OPERATION) continue;
-            if (isRootMember(pointer, "operations"))
-                validateRootReference(source, references, pointer + "/channel", "channels", "operation.channel",
+            if (isRootMember(pointer, OPERATIONS))
+                validateRootReference(source, references, pointer + "/" + CHANNEL, CHANNELS, BuiltinRuleId.OPERATION_CHANNEL,
                         "Root operations must reference channels under /channels", diagnostics);
-            var channel = references.resolve(pointer + "/channel");
+            var channel = references.resolve(pointer + "/" + CHANNEL);
             if (channel.isEmpty()) continue;
             Set<String> messages = new HashSet<>();
             boolean completeMessages = true;
-            for (var message : channel.get().node().path("messages").properties()) {
-                var target = references.resolve(channel.get().pointer() + "/messages/" + SourceDocument.escape(message.getKey()));
+            for (var message : channel.get().node().path(MESSAGES).properties()) {
+                var target = references.resolve(channel.get().pointer() + "/" + MESSAGES + "/" + SourceDocument.escape(message.getKey()));
                 if (target.isPresent()) messages.add(target.get().pointer());
                 else completeMessages = false;
             }
             // An unresolved member makes the channel's message set unknown, not empty.
             if (!completeMessages) continue;
-            JsonNode operationMessages = node.path("messages");
+            JsonNode operationMessages = node.path(MESSAGES);
             for (int i = 0; i < operationMessages.size(); i++) {
-                String use = pointer + "/messages/" + i;
+                String use = pointer + "/" + MESSAGES + "/" + i;
                 references.resolve(use).ifPresent(message -> {
-                    if (!messages.contains(message.pointer())) diagnostics.add(Diagnostic.at("operation.message", Severity.ERROR,
-                            "Operation message does not belong to its channel", source.location(use + "/$ref"),
+                    if (!messages.contains(message.pointer())) diagnostics.add(Diagnostic.at(BuiltinRuleId.OPERATION_MESSAGE, Severity.ERROR,
+                            "Operation message does not belong to its channel", source.location(use + "/" + REF),
                             List.of(source.location(channel.get().pointer()))));
                 });
             }
@@ -179,9 +183,9 @@ public final class AsyncApiParser {
     }
 
     private static void validateRootReference(SourceDocument source, ReferenceResolver references, String use,
-                                              String collection, String rule, String message, List<Diagnostic> diagnostics) {
+                                              String collection, BuiltinRuleId rule, String message, List<Diagnostic> diagnostics) {
         references.directTarget(use).filter(target -> !isRootMember(target, collection)).ifPresent(target ->
-                diagnostics.add(Diagnostic.at(rule, Severity.ERROR, message, source.location(use + "/$ref"),
+                diagnostics.add(Diagnostic.at(rule, Severity.ERROR, message, source.location(use + "/" + REF),
                         List.of(source.location(target)))));
     }
 

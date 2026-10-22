@@ -1,0 +1,19 @@
+pluginManagement {
+    includeBuild('../..')
+    // Consumer plugin dependencies use pluginManagement repositories, not repositories of the included build.
+    def localProperties = new Properties()
+    localProperties.load(new StringReader(providers.fileContents(
+            layout.settingsDirectory.file('../../gradle/local.properties')).asText.getOrElse('')))
+    def modelRepository = providers.gradleProperty('asyncwrightModelRepository')
+            .getOrElse(localProperties.getProperty('asyncwrightModelRepository', ''))
+    repositories {
+        if (!modelRepository.isBlank()) {
+            maven {
+                url = new File(modelRepository).toURI()
+                content { includeGroup 'io.github.sjacek.jasyncapi' }
+            }
+        }
+        mavenCentral()
+    }
+}
+rootProject.name = 'asyncwright-gradle-consumer'
