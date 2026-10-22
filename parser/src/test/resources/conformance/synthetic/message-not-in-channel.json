@@ -1,0 +1,41 @@
+{
+  "asyncapi": "3.0.0",
+  "info": {
+    "title": "Public regression fixture",
+    "version": "1.0.0"
+  },
+  "channels": {
+    "events": {
+      "address": "events",
+      "messages": {
+        "First": {
+          "payload": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "messages": {
+      "Other": {
+        "payload": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "operations": {
+    "send": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/events"
+      },
+      "messages": [
+        {
+          "$ref": "#/components/messages/Other"
+        }
+      ]
+    }
+  }
+}

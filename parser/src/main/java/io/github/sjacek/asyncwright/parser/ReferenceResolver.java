@@ -86,6 +86,11 @@ public final class ReferenceResolver {
         return pointer;
     }
 
+    /** The first validated hop, before following aliases, for rules about reference locations. */
+    Optional<String> directTarget(String pointer) {
+        return invalid.contains(pointer) ? Optional.empty() : Optional.ofNullable(targets.get(pointer));
+    }
+
     /** Accepts the pointer of a Reference Object (not the literal contents of $ref). */
     public Optional<ResolvedReference> resolve(String pointer) {
         Set<String> visited = new HashSet<>();

@@ -53,3 +53,18 @@ AsyncAPI Initiative (http://www.asyncapi.com/).
 
 Dependency notices for the eventual plugin distribution must also cover its packaged
 transitive dependencies. Preparing the dependency baseline does not publish a plugin or fork artifact.
+
+## Public test corpus
+
+The 12 YAML files in `parser/src/test/resources/conformance/official/` are unmodified
+examples from `asyncapi/spec`, release tag `v3.0.0`, commit
+`d78dcea70c9b094a3df72f9a4e811828cec778cc`:
+https://github.com/asyncapi/spec/tree/d78dcea70c9b094a3df72f9a4e811828cec778cc/examples.
+They remain Apache-2.0 licensed. That directory includes the original LICENSE and NOTICE
+from the same commit. The corpus manifest records per-file SHA-256 checksums, source
+paths and upstream Git blob hashes. Test fixtures are not included in the parser jar.
+Synthetic fixtures are authored for Asyncwright and covered by this project's MIT license.
+
+The optional development comparison resolves `@asyncapi/parser:3.6.6` (Apache-2.0),
+https://github.com/asyncapi/parser-js. Its dependency tree is pinned by the separate
+`tools/conformance/package-lock.json`; it is not a runtime dependency of the Java parser.

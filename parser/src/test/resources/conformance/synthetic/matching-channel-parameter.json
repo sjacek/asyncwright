@@ -1,0 +1,15 @@
+{
+  "asyncapi": "3.0.0",
+  "info": {
+    "title": "Semantic regression fixture",
+    "version": "1.0.0"
+  },
+  "channels": {
+    "events": {
+      "address": "events/{tenant}/{tenant}",
+      "parameters": {
+        "tenant": {}
+      }
+    }
+  }
+}

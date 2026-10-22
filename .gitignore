@@ -30,4 +30,5 @@ replay_pid*
 **/build/
 .f0/
 /gradle/local.properties
+**/node_modules/
 !gradle/wrapper/gradle-wrapper.jar

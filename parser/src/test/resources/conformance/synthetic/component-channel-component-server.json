@@ -1,0 +1,25 @@
+{
+  "asyncapi": "3.0.0",
+  "info": {
+    "title": "Semantic regression fixture",
+    "version": "1.0.0"
+  },
+  "components": {
+    "servers": {
+      "broker": {
+        "host": "localhost",
+        "protocol": "kafka"
+      }
+    },
+    "channels": {
+      "events": {
+        "address": "events",
+        "servers": [
+          {
+            "$ref": "#/components/servers/broker"
+          }
+        ]
+      }
+    }
+  }
+}

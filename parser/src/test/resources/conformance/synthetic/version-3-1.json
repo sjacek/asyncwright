@@ -1,0 +1,7 @@
+{
+  "asyncapi": "3.1.0",
+  "info": {
+    "title": "Public regression fixture",
+    "version": "1.0.0"
+  }
+}

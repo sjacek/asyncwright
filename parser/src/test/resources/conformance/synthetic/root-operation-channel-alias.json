@@ -1,0 +1,27 @@
+{
+  "asyncapi": "3.0.0",
+  "info": {
+    "title": "Semantic regression fixture",
+    "version": "1.0.0"
+  },
+  "channels": {
+    "events": {
+      "$ref": "#/components/channels/events"
+    }
+  },
+  "components": {
+    "channels": {
+      "events": {
+        "address": "events"
+      }
+    }
+  },
+  "operations": {
+    "send": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/events"
+      }
+    }
+  }
+}

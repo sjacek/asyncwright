@@ -1,0 +1,1175 @@
+{
+  "formatVersion": 1,
+  "upstream": {
+    "repository": "https://github.com/asyncapi/spec",
+    "tag": "v3.0.0",
+    "commit": "d78dcea70c9b094a3df72f9a4e811828cec778cc",
+    "license": "Apache-2.0"
+  },
+  "cases": [
+    {
+      "id": "official-anyof",
+      "file": "official/anyof-asyncapi.yml",
+      "group": "official",
+      "sha256": "87bdc8f0fadc6836bf0e9ebb3c8e8afc138d8066a6481079024a76e632ae287c",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      },
+      "upstreamPath": "examples/anyof-asyncapi.yml",
+      "upstreamGitBlob": "6492902f87b8b29c4bdcc47b4479b068571b6d64"
+    },
+    {
+      "id": "official-application-headers",
+      "file": "official/application-headers-asyncapi.yml",
+      "group": "official",
+      "sha256": "c7ac43f9cf2cd18e84dc48a026833ae51f3b7f4212aa49230c5f3bdbd011ef3a",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      },
+      "upstreamPath": "examples/application-headers-asyncapi.yml",
+      "upstreamGitBlob": "6edd83ae3d07a3a0e58e93bb9239b00d7fdd5278"
+    },
+    {
+      "id": "official-correlation-id",
+      "file": "official/correlation-id-asyncapi.yml",
+      "group": "official",
+      "sha256": "20c572de645a9491b0b6671c0760065af2e9d8d137e2df93f879743a1d395850",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      },
+      "upstreamPath": "examples/correlation-id-asyncapi.yml",
+      "upstreamGitBlob": "e25a6a70e3532866c4cfc927ba2fb3f7374297f9"
+    },
+    {
+      "id": "official-mercure",
+      "file": "official/mercure-asyncapi.yml",
+      "group": "official",
+      "sha256": "6cc97a6c5d5d07ca72b9f02d62c2bf89dc3d85c5681c4897bf4d6eec443f6730",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      },
+      "upstreamPath": "examples/mercure-asyncapi.yml",
+      "upstreamGitBlob": "2fc1238cc341d3cdb48d79d38e56d475724b313e"
+    },
+    {
+      "id": "official-not",
+      "file": "official/not-asyncapi.yml",
+      "group": "official",
+      "sha256": "e7867f36f57cf9e6e6f833cec54650631655a6398b1a36e6e66f7e49c902083c",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      },
+      "upstreamPath": "examples/not-asyncapi.yml",
+      "upstreamGitBlob": "ecd465044bf976169e9c3cfd10066888d7c734fe"
+    },
+    {
+      "id": "official-oneof",
+      "file": "official/oneof-asyncapi.yml",
+      "group": "official",
+      "sha256": "06b19ef31ebd0a7acb0033e45399c458ad29cd798b43b0d1083bdb78442a1514",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      },
+      "upstreamPath": "examples/oneof-asyncapi.yml",
+      "upstreamGitBlob": "8e9879c6e7649b305a74d1137a53ab8c10dee0fb"
+    },
+    {
+      "id": "official-operation-security",
+      "file": "official/operation-security-asyncapi.yml",
+      "group": "official",
+      "sha256": "325ce1727240b88d089ab7d6bcec58908d23f554c30ef3cc5b5b6838c78113ee",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      },
+      "upstreamPath": "examples/operation-security-asyncapi.yml",
+      "upstreamGitBlob": "e7ec544c9e390d7ca10bfe8e8081a2f1361d4d9a"
+    },
+    {
+      "id": "official-rpc-client",
+      "file": "official/rpc-client-asyncapi.yml",
+      "group": "official",
+      "sha256": "c00c642b4edc913e204b185e17a2fb2d29a22e981032c97270b188e24810f885",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      },
+      "upstreamPath": "examples/rpc-client-asyncapi.yml",
+      "upstreamGitBlob": "58602be3a58b64b97365817ac9f51f021bab6493"
+    },
+    {
+      "id": "official-rpc-server",
+      "file": "official/rpc-server-asyncapi.yml",
+      "group": "official",
+      "sha256": "c35827ac4b2b68f9ebff473d78c260d4c6c01ff81335200d587a86ed090f8f46",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      },
+      "upstreamPath": "examples/rpc-server-asyncapi.yml",
+      "upstreamGitBlob": "3d93776c8f02b697e8ddc7835d9c3cad19a5e50a"
+    },
+    {
+      "id": "official-simple",
+      "file": "official/simple-asyncapi.yml",
+      "group": "official",
+      "sha256": "26c1ecf8056da840b9ea158dfb49653cccef95e27645b6d7d9ad995dae8c7e70",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      },
+      "upstreamPath": "examples/simple-asyncapi.yml",
+      "upstreamGitBlob": "75572baf41d1d55b0914d43e4beba235388b6971"
+    },
+    {
+      "id": "official-streetlights-kafka",
+      "file": "official/streetlights-kafka-asyncapi.yml",
+      "group": "official",
+      "sha256": "11b9d8f92be745ea8ea8a1b9e5c23708669de0ce4f7ad32dff444899f4bf073f",
+      "classification": "unsupported",
+      "reason": "The official example uses operation and message traits; Asyncwright 0.1 explicitly rejects traits.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "unsupported.construct"
+        ],
+        "firstErrorPointer": "/operations/receiveLightMeasurement/traits"
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      },
+      "upstreamPath": "examples/streetlights-kafka-asyncapi.yml",
+      "upstreamGitBlob": "45eecd653ad5e8c67ea3e72e805b302785e8bd65"
+    },
+    {
+      "id": "official-streetlights-mqtt",
+      "file": "official/streetlights-mqtt-asyncapi.yml",
+      "group": "official",
+      "sha256": "bacd790787ba5775f6d9e46194727222e9d8fb23243ca85d4a5e865980701dce",
+      "classification": "unsupported",
+      "reason": "The official example uses operation and message traits; Asyncwright 0.1 explicitly rejects traits.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "unsupported.construct"
+        ],
+        "firstErrorPointer": "/operations/receiveLightMeasurement/traits"
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      },
+      "upstreamPath": "examples/streetlights-mqtt-asyncapi.yml",
+      "upstreamGitBlob": "ce6550907b510a04373fc05b65fb9d3fd3a6ebcb"
+    },
+    {
+      "id": "minimal-json",
+      "file": "synthetic/minimal-json.json",
+      "group": "valid",
+      "sha256": "92bd68e35b6dc36fe80c98d07d9962c394afa0f880838c8a724dc6916cd1d687",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "minimal-yaml",
+      "file": "synthetic/minimal-yaml.yaml",
+      "group": "valid",
+      "sha256": "42ceeec5013b0127f9180d131b6a6b0e6fbdd19414a95e834cec354254301a03",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "reference-chain",
+      "file": "synthetic/reference-chain.json",
+      "group": "valid",
+      "sha256": "4ed119b4da78f5cd8fb590046a8866325b84d431443cee91490925fca0fd4a0f",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "recursive-schema",
+      "file": "synthetic/recursive-schema.json",
+      "group": "valid",
+      "sha256": "4dcfa7a865cc351cc343764e50fec8a1e34f6650a76f11e0faf2b4258d4e264d",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "escaped-reference",
+      "file": "synthetic/escaped-reference.json",
+      "group": "valid",
+      "sha256": "92d7b22baca42dadfeab5b196fc51b9d6abab6a51fb3dce2a0ed8a83ab43b546",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "reference-like-example",
+      "file": "synthetic/reference-like-example.json",
+      "group": "valid",
+      "sha256": "e709e57e0bb8f251e592ed9bbd38fcf1f3d3731c00adb04d51179df6354c73c0",
+      "classification": "reference-parser-difference",
+      "reason": "Asyncwright ignores reference-like application data; JavaScript attempts to dereference the x-data value and reports invalid-ref.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": false,
+        "errorCodes": [
+          "invalid-ref"
+        ]
+      }
+    },
+    {
+      "id": "nullable-union",
+      "file": "synthetic/nullable-union.json",
+      "group": "valid",
+      "sha256": "c71e9cb069c4fcea913b277e385e18a24092f219f96e7774527d84850db0f1de",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "default-schema-format",
+      "file": "synthetic/default-schema-format.json",
+      "group": "valid",
+      "sha256": "eb6a2638a75a536ad18d5d5aa31edc40728021d9cc7f52222d1678bacb7c4a01",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "schema-boolean",
+      "file": "synthetic/schema-boolean.json",
+      "group": "invalid",
+      "sha256": "dd73525fa052b9f14c2172bc0c95b2846e376516b519c8f768a75e98e379d89b",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "schema.type"
+        ],
+        "firstErrorPointer": "/components/schemas/Any"
+      },
+      "javascript": {
+        "successful": false,
+        "errorCodes": [
+          "asyncapi-document-resolved"
+        ]
+      }
+    },
+    {
+      "id": "yaml-alias",
+      "file": "synthetic/yaml-alias.yaml",
+      "group": "capability",
+      "sha256": "f9b0a04beeab9d2e3f07fbca823aa176b23b370b88eb358d262d8155ad26483a",
+      "classification": "unsupported",
+      "reason": "YAML aliases are explicitly rejected by the current loader; JavaScript expands the alias.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "syntax"
+        ],
+        "firstErrorPointer": ""
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "message-trait",
+      "file": "synthetic/message-trait.json",
+      "group": "capability",
+      "sha256": "38c7d80ea40f703e90768741fd6ed07ca83fc2a0fab9880cc0cf1c272c15cf24",
+      "classification": "unsupported",
+      "reason": "Trait composition is outside the current Asyncwright 0.1 implementation.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "unsupported.construct"
+        ],
+        "firstErrorPointer": "/components/messageTraits"
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "nullable-keyword",
+      "file": "synthetic/nullable-keyword.json",
+      "group": "capability",
+      "sha256": "2639dd7d248e0bf483355dfad6e94c2405a3f4c118fb150ef2a9afcf3594a62e",
+      "classification": "model-limit",
+      "reason": "The schema permits the unknown nullable keyword, but the typed Java model cannot map it; nullable does not enable null under draft-07.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "model.mapping"
+        ],
+        "firstErrorPointer": "/components/schemas/Value/nullable"
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "custom-binding",
+      "file": "synthetic/custom-binding.json",
+      "group": "capability",
+      "sha256": "c61c64917f379b130a6fc3bd8ca514fdd8d5c3b65aa70882783318c267d66701",
+      "classification": "model-limit",
+      "reason": "The typed Java model drops custom binding extensions; the preservation guard rejects the incomplete model.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "model.preservation"
+        ],
+        "firstErrorPointer": "/channels/events/bindings/x-custom"
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "version-2-6",
+      "file": "synthetic/version-2-6.json",
+      "group": "capability",
+      "sha256": "a73351b3fdea66915553f2bea5058d404e93ccc9d6a8152ebf1ccd32afee6210",
+      "classification": "unsupported",
+      "reason": "Asyncwright deliberately supports only 3.0.0; the JavaScript parser also supports 2.6.0.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "unsupported.version"
+        ],
+        "firstErrorPointer": "/asyncapi"
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "version-3-1",
+      "file": "synthetic/version-3-1.json",
+      "group": "capability",
+      "sha256": "83063cbf00431c9c6bb71680fa7965efdd33aa984116d839a270bcd2988f4181",
+      "classification": "unsupported",
+      "reason": "Asyncwright deliberately supports only 3.0.0; the JavaScript parser also supports 3.1.0.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "unsupported.version"
+        ],
+        "firstErrorPointer": "/asyncapi"
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "external-file",
+      "file": "synthetic/external-file.json",
+      "group": "capability",
+      "sha256": "bedec6ccb1268cc77fc84caf3035459e10bc9b7fd0222ec4d26485f1cac64994",
+      "classification": "unsupported",
+      "reason": "Asyncwright supports local document pointers only; JavaScript reads the checked-in external schema helper.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "unsupported.reference"
+        ],
+        "firstErrorPointer": "/components/schemas/Text/$ref"
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "empty-document",
+      "file": "synthetic/empty-document.yaml",
+      "group": "invalid",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "syntax"
+        ],
+        "firstErrorPointer": ""
+      },
+      "javascript": {
+        "successful": false,
+        "errorCodes": [
+          "asyncapi-is-asyncapi"
+        ]
+      }
+    },
+    {
+      "id": "malformed-yaml",
+      "file": "synthetic/malformed-yaml.yaml",
+      "group": "invalid",
+      "sha256": "d800c5d1c059d8aaa5df3eda60e6fa9a6d3ee841c8517b2511e51f8835e7311c",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "syntax"
+        ],
+        "firstErrorPointer": ""
+      },
+      "javascript": {
+        "successful": false,
+        "errorCodes": [
+          "asyncapi-document-resolved",
+          "parser"
+        ]
+      }
+    },
+    {
+      "id": "duplicate-key",
+      "file": "synthetic/duplicate-key.yaml",
+      "group": "invalid",
+      "sha256": "6848ad7470ffb67fbd6bae8cf52cf9465e39a6f711627588f3c6f103008a5b48",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "syntax"
+        ],
+        "firstErrorPointer": ""
+      },
+      "javascript": {
+        "successful": false,
+        "errorCodes": [
+          "parser"
+        ]
+      }
+    },
+    {
+      "id": "missing-version",
+      "file": "synthetic/missing-version.json",
+      "group": "invalid",
+      "sha256": "d1a0bfc810fc2cbf868ce4d15549160f2412e0e9cf83f18739704750d550727b",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "schema.required"
+        ],
+        "firstErrorPointer": ""
+      },
+      "javascript": {
+        "successful": false,
+        "errorCodes": [
+          "asyncapi-is-asyncapi"
+        ]
+      }
+    },
+    {
+      "id": "missing-info",
+      "file": "synthetic/missing-info.json",
+      "group": "invalid",
+      "sha256": "d167413ce9b0eaaaf822acb67c2a4ec18e08500d9607a109c788cfb2451563d7",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "schema.required"
+        ],
+        "firstErrorPointer": ""
+      },
+      "javascript": {
+        "successful": false,
+        "errorCodes": [
+          "asyncapi-document-resolved"
+        ]
+      }
+    },
+    {
+      "id": "invalid-title",
+      "file": "synthetic/invalid-title.json",
+      "group": "invalid",
+      "sha256": "97309d2a7f1c611496ec158f9a96e67e23095c32a75bcf462f01feab36fd5936",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "schema.type"
+        ],
+        "firstErrorPointer": "/info/title"
+      },
+      "javascript": {
+        "successful": false,
+        "errorCodes": [
+          "asyncapi-document-resolved"
+        ]
+      }
+    },
+    {
+      "id": "unknown-root-property",
+      "file": "synthetic/unknown-root-property.json",
+      "group": "invalid",
+      "sha256": "cc0292501c72b1d6ebc36ed6f0a71ae46e83f1cd00d0fa000c29b04e453e88f4",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "schema.additionalProperties"
+        ],
+        "firstErrorPointer": ""
+      },
+      "javascript": {
+        "successful": false,
+        "errorCodes": [
+          "asyncapi-document-resolved"
+        ]
+      }
+    },
+    {
+      "id": "invalid-action",
+      "file": "synthetic/invalid-action.json",
+      "group": "invalid",
+      "sha256": "db6983631e4e7482c79f30233ba5cc9358b83e529fb4c660df384692f2d1e683",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "schema.enum",
+          "schema.oneOf",
+          "schema.required"
+        ],
+        "firstErrorPointer": "/operations/send"
+      },
+      "javascript": {
+        "successful": false,
+        "errorCodes": [
+          "asyncapi-document-resolved"
+        ]
+      }
+    },
+    {
+      "id": "operation-without-channel",
+      "file": "synthetic/operation-without-channel.json",
+      "group": "invalid",
+      "sha256": "c129b917e9fb220c24751f869dbc240110b5abc148b5918870333ec621176d41",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "schema.oneOf",
+          "schema.required"
+        ],
+        "firstErrorPointer": "/operations/send"
+      },
+      "javascript": {
+        "successful": false,
+        "errorCodes": [
+          "asyncapi-document-resolved"
+        ]
+      }
+    },
+    {
+      "id": "missing-reference",
+      "file": "synthetic/missing-reference.json",
+      "group": "invalid",
+      "sha256": "c2a97a1faea5175ae4c8981fd07c173a870b16d3c099ec2bac6f4e9715f7caa9",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "reference.missing"
+        ],
+        "firstErrorPointer": "/components/schemas/Alias/$ref"
+      },
+      "javascript": {
+        "successful": false,
+        "errorCodes": [
+          "invalid-ref"
+        ]
+      }
+    },
+    {
+      "id": "wrong-reference-kind",
+      "file": "synthetic/wrong-reference-kind.json",
+      "group": "invalid",
+      "sha256": "482a19ccd679a3a4110655572020168437b39aa47e4e17202d9e767e64c68330",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "reference.type"
+        ],
+        "firstErrorPointer": "/operations/send/channel/$ref"
+      },
+      "javascript": {
+        "successful": false,
+        "errorCodes": [
+          "asyncapi-document-resolved",
+          "asyncapi3-required-operation-channel-unambiguity"
+        ]
+      }
+    },
+    {
+      "id": "pure-reference-cycle",
+      "file": "synthetic/pure-reference-cycle.json",
+      "group": "invalid",
+      "sha256": "1378802a5d255b00cb377ab193e0815ec9a14d1ef7e1ac4520ac15b4a34c3eda",
+      "classification": "policy-difference",
+      "reason": "Asyncwright rejects reference cycles without a concrete schema body; JavaScript accepts this document.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "reference.cycle"
+        ],
+        "firstErrorPointer": "/components/schemas/B/$ref"
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "malformed-reference-escape",
+      "file": "synthetic/malformed-reference-escape.json",
+      "group": "invalid",
+      "sha256": "a8ac0b1425143ab362f58c9c20502eb65dd8312e482f42b5488deb95394ead1f",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "reference.pointer"
+        ],
+        "firstErrorPointer": "/components/schemas/Alias/$ref"
+      },
+      "javascript": {
+        "successful": false,
+        "errorCodes": [
+          "invalid-ref"
+        ]
+      }
+    },
+    {
+      "id": "message-not-in-channel",
+      "file": "synthetic/message-not-in-channel.json",
+      "group": "invalid",
+      "sha256": "dec75f2774e590c4c47c8631b5d06b7e956afdfb377f161e3f5392e0060b6c91",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "operation.message"
+        ],
+        "firstErrorPointer": "/operations/send/messages/0/$ref"
+      },
+      "javascript": {
+        "successful": false,
+        "errorCodes": [
+          "asyncapi3-operation-messages-from-referred-channel"
+        ]
+      }
+    },
+    {
+      "id": "undefined-channel-parameter",
+      "file": "synthetic/undefined-channel-parameter.json",
+      "group": "invalid",
+      "sha256": "26cec5940ee47336d60a1c1d1ad751d137adb851213f461787999b39fc540dd9",
+      "classification": "reference-parser-difference",
+      "reason": "Asyncwright requires definitions for address placeholders. JavaScript skips its parameter rule when the parameters object is absent.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "channel.parameter"
+        ],
+        "firstErrorPointer": "/channels/events/address"
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "invalid-schema-type",
+      "file": "synthetic/invalid-schema-type.json",
+      "group": "invalid",
+      "sha256": "bd3cd84d4a09ac5f939a51b97d518980e6d5ffc55d065836959336c65ddaf9b9",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "schema.enum",
+          "schema.type"
+        ],
+        "firstErrorPointer": "/components/schemas/Value/type"
+      },
+      "javascript": {
+        "successful": false,
+        "errorCodes": [
+          "asyncapi-document-resolved"
+        ]
+      }
+    },
+    {
+      "id": "invalid-security-type",
+      "file": "synthetic/invalid-security-type.json",
+      "group": "invalid",
+      "sha256": "8395f10fcb73803016d7e839f60788fe27a11667a7b2d2e858861c01df4b0481",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "schema.enum",
+          "schema.not",
+          "schema.oneOf",
+          "schema.required"
+        ],
+        "firstErrorPointer": "/components/securitySchemes/Auth"
+      },
+      "javascript": {
+        "successful": false,
+        "errorCodes": [
+          "asyncapi-document-resolved"
+        ]
+      }
+    },
+    {
+      "id": "example-instance-not-validated",
+      "file": "synthetic/example-instance-not-validated.json",
+      "group": "valid",
+      "sha256": "3147bc050b21dff4f5cfff4d8755c61db32a0f97a3b314d4d0176b8e4524a097",
+      "classification": "agreement",
+      "reason": "Both parsers accept the document without validating example payload instances against the payload schema; this is not instance-validation coverage.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "obsolete-message-id",
+      "file": "synthetic/obsolete-message-id.json",
+      "group": "invalid",
+      "sha256": "1bd208c8a6ba003454f867426186520196203c274cbe848e44f77b2d998f654d",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "schema.additionalProperties",
+          "schema.oneOf",
+          "schema.required"
+        ],
+        "firstErrorPointer": "/channels/events"
+      },
+      "javascript": {
+        "successful": false,
+        "errorCodes": [
+          "asyncapi-document-resolved"
+        ]
+      }
+    },
+    {
+      "id": "redundant-channel-parameter",
+      "file": "synthetic/redundant-channel-parameter.json",
+      "group": "invalid",
+      "sha256": "690c85e22b25a05ac043d2ed3c4ebe196f23a4f33321bd7d220a0b86d2c5b9d8",
+      "classification": "agreement",
+      "reason": "A channel parameter must occur in its address. Both parsers reject the unused parameter.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "channel.parameter"
+        ],
+        "firstErrorPointer": "/channels/events/parameters/unused"
+      },
+      "javascript": {
+        "successful": false,
+        "errorCodes": [
+          "asyncapi3-channel-parameters"
+        ]
+      }
+    },
+    {
+      "id": "root-operation-component-channel",
+      "file": "synthetic/root-operation-component-channel.json",
+      "group": "invalid",
+      "sha256": "4c8e8a55a596017348c99bd7ad59cc46cbd6c10c1df0323705239d8b56d2894b",
+      "classification": "agreement",
+      "reason": "A root operation must reference a root channel. Both parsers reject a direct reference to components.channels.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "operation.channel"
+        ],
+        "firstErrorPointer": "/operations/send/channel/$ref"
+      },
+      "javascript": {
+        "successful": false,
+        "errorCodes": [
+          "asyncapi3-required-operation-channel-unambiguity"
+        ]
+      }
+    },
+    {
+      "id": "root-channel-component-server",
+      "file": "synthetic/root-channel-component-server.json",
+      "group": "invalid",
+      "sha256": "debaa94b421f4985f188e177fe35ec8633dbcc003d49f0a7eea665ea806b8746",
+      "classification": "agreement",
+      "reason": "A root channel must reference root servers. Both parsers reject a direct reference to components.servers.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "channel.server"
+        ],
+        "firstErrorPointer": "/channels/events/servers/0/$ref"
+      },
+      "javascript": {
+        "successful": false,
+        "errorCodes": [
+          "asyncapi3-required-channel-servers-unambiguity"
+        ]
+      }
+    },
+    {
+      "id": "matching-channel-parameter",
+      "file": "synthetic/matching-channel-parameter.json",
+      "group": "valid",
+      "sha256": "d052e6d8b3448bc617a3a3a65705bcc142e50787c4d4c8ea0d2a5920f27e1192",
+      "classification": "agreement",
+      "reason": "A repeated address placeholder is satisfied by a single matching parameter definition.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "component-operation-component-channel",
+      "file": "synthetic/component-operation-component-channel.json",
+      "group": "valid",
+      "sha256": "c4115104abe160f1b7bf80abd5440ed0292c747b4d4e17ad1a34d2095eb089f2",
+      "classification": "agreement",
+      "reason": "An operation defined in components may directly reference a component channel.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "component-channel-component-server",
+      "file": "synthetic/component-channel-component-server.json",
+      "group": "valid",
+      "sha256": "fa14d6031b4898b26d4decf9b7418652dfd7f5c8b722fdf1034c2f741e38efb0",
+      "classification": "agreement",
+      "reason": "A channel defined in components may directly reference a component server.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "root-operation-channel-alias",
+      "file": "synthetic/root-operation-channel-alias.json",
+      "group": "valid",
+      "sha256": "6f5b89422861dee761ad93c5555910454baceac3ba7d5f1776fb1032b7f0408f",
+      "classification": "agreement",
+      "reason": "A root operation may refer to a root channel alias even when its resolved body is in components.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "root-channel-server-alias",
+      "file": "synthetic/root-channel-server-alias.json",
+      "group": "valid",
+      "sha256": "2383b1bfcaa6aa481e760e5b2785e49919e2bff77e8e8796f404fceea3386972",
+      "classification": "agreement",
+      "reason": "A root channel may refer to a root server alias even when its resolved body is in components.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "root-operation-encoded-channel-name",
+      "file": "synthetic/root-operation-encoded-channel-name.json",
+      "group": "valid",
+      "sha256": "9ddfed6a9bd21c5656decc4ec559d80c1a9ecb9049b7636c5011d265bd507179",
+      "classification": "agreement",
+      "reason": "A percent-encoded token resolves to a root channel and must remain valid.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "channel-server-list-second-invalid",
+      "file": "synthetic/channel-server-list-second-invalid.json",
+      "group": "invalid",
+      "sha256": "a42448c1449ce6cbe73e2a009d8387cfc50db2722e5c976ef7c066cef13b006c",
+      "classification": "agreement",
+      "reason": "Every root channel server reference must target a root server, including entries after a valid one.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "channel.server"
+        ],
+        "firstErrorPointer": "/channels/events/servers/1/$ref"
+      },
+      "javascript": {
+        "successful": false,
+        "errorCodes": [
+          "asyncapi3-required-channel-servers-unambiguity"
+        ]
+      }
+    },
+    {
+      "id": "component-redundant-channel-parameter",
+      "file": "synthetic/component-redundant-channel-parameter.json",
+      "group": "invalid",
+      "sha256": "70d1a2117228d0ec1da70d7bd2f9283923c60d17dde47969e2b49debc041276d",
+      "classification": "agreement",
+      "reason": "The address parameter matching constraint also applies to component channel definitions.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "channel.parameter"
+        ],
+        "firstErrorPointer": "/components/channels/events/parameters/unused"
+      },
+      "javascript": {
+        "successful": false,
+        "errorCodes": [
+          "asyncapi3-channel-parameters"
+        ]
+      }
+    },
+    {
+      "id": "root-operation-component-alias-to-root",
+      "file": "synthetic/root-operation-component-alias-to-root.json",
+      "group": "invalid",
+      "sha256": "61e686b79956bdcb1368de740d87694a68293609bf8749a6d042331b4843c2b4",
+      "classification": "agreement",
+      "reason": "The first reference target must be a root channel; resolving a component alias to a root body does not satisfy this constraint.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "operation.channel"
+        ],
+        "firstErrorPointer": "/operations/send/channel/$ref"
+      },
+      "javascript": {
+        "successful": false,
+        "errorCodes": [
+          "asyncapi3-required-operation-channel-unambiguity"
+        ]
+      }
+    },
+    {
+      "id": "root-channel-component-alias-to-root",
+      "file": "synthetic/root-channel-component-alias-to-root.json",
+      "group": "invalid",
+      "sha256": "7a88912580af7ec092f85c737be74639d0f503f95f09782645ffaf5485e9d926",
+      "classification": "agreement",
+      "reason": "The first reference target must be a root server; resolving a component alias to a root body does not satisfy this constraint.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "channel.server"
+        ],
+        "firstErrorPointer": "/channels/events/servers/0/$ref"
+      },
+      "javascript": {
+        "successful": false,
+        "errorCodes": [
+          "asyncapi3-required-channel-servers-unambiguity"
+        ]
+      }
+    }
+  ],
+  "assets": [
+    {
+      "file": "official/LICENSE",
+      "sha256": "58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd"
+    },
+    {
+      "file": "official/NOTICE",
+      "sha256": "fd8f94b87d4872f65fd01b631c6fbd2b60d018966e55c7a7dcfd9b6ccce49125"
+    },
+    {
+      "file": "synthetic/external.schema.json",
+      "sha256": "85803e087e684bdab3e5d6c2dd1af627da83382db625be9a42aea3d4d06539be"
+    }
+  ]
+}

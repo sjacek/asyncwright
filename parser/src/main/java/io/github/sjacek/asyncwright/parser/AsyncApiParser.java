@@ -122,13 +122,29 @@ public final class AsyncApiParser {
             JsonNode node = source.root.at(pointer);
             if (node.has("$ref")) continue;
             if (entry.getValue() == DocumentIndex.Kind.CHANNEL) {
+                Set<String> parameters = new LinkedHashSet<>();
                 var matcher = PARAMETER.matcher(node.path("address").asText(""));
-                while (matcher.find()) if (!node.path("parameters").has(matcher.group(1)))
+                while (matcher.find()) parameters.add(matcher.group(1));
+                for (String parameter : parameters) if (!node.path("parameters").has(parameter))
                     diagnostics.add(Diagnostic.at("channel.parameter", Severity.ERROR,
-                            "Undefined channel address parameter: " + matcher.group(1),
+                            "Undefined channel address parameter: " + parameter,
                             source.location(pointer + "/address"), List.of()));
+                for (var parameter : node.path("parameters").properties()) if (!parameters.contains(parameter.getKey())) {
+                    String definition = pointer + "/parameters/" + SourceDocument.escape(parameter.getKey());
+                    diagnostics.add(Diagnostic.at("channel.parameter", Severity.ERROR,
+                            "Channel parameter is absent from the address: " + parameter.getKey(),
+                            source.location(definition), references.related(definition)));
+                }
+                if (isRootMember(pointer, "channels")) {
+                    for (int i = 0; i < node.path("servers").size(); i++)
+                        validateRootReference(source, references, pointer + "/servers/" + i, "servers", "channel.server",
+                                "Root channels must reference servers under /servers", diagnostics);
+                }
             }
             if (entry.getValue() != DocumentIndex.Kind.OPERATION) continue;
+            if (isRootMember(pointer, "operations"))
+                validateRootReference(source, references, pointer + "/channel", "channels", "operation.channel",
+                        "Root operations must reference channels under /channels", diagnostics);
             var channel = references.resolve(pointer + "/channel");
             if (channel.isEmpty()) continue;
             Set<String> messages = new HashSet<>();
@@ -145,6 +161,18 @@ public final class AsyncApiParser {
                 });
             }
         }
+    }
+
+    private static boolean isRootMember(String pointer, String collection) {
+        String prefix = "/" + collection + "/";
+        return pointer.startsWith(prefix) && pointer.indexOf('/', prefix.length()) < 0;
+    }
+
+    private static void validateRootReference(SourceDocument source, ReferenceResolver references, String use,
+                                              String collection, String rule, String message, List<Diagnostic> diagnostics) {
+        references.directTarget(use).filter(target -> !isRootMember(target, collection)).ifPresent(target ->
+                diagnostics.add(Diagnostic.at(rule, Severity.ERROR, message, source.location(use + "/$ref"),
+                        List.of(source.location(target)))));
     }
 
     private static boolean hasErrors(List<Diagnostic> diagnostics) {

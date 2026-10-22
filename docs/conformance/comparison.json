@@ -1,0 +1,3047 @@
+{
+  "formatVersion": 1,
+  "parser": {
+    "name": "@asyncapi/parser",
+    "version": "3.6.6"
+  },
+  "node": "v26.4.0",
+  "ruleset": {
+    "core": true,
+    "recommended": false
+  },
+  "network": "disabled",
+  "manifestSha256": "00b57fdbf9f7553e42254c37b89e382d8870873ce162f050a25e2492ba64cc0a",
+  "lockSha256": "d30c1b2ce10f392ebe126e574ca373ba57e78b0776770db2fb34c73949ce791d",
+  "summary": {
+    "cases": 60,
+    "agreements": 48,
+    "differences": 12,
+    "classifications": {
+      "agreement": 48,
+      "unsupported": 7,
+      "reference-parser-difference": 2,
+      "model-limit": 2,
+      "policy-difference": 1
+    },
+    "openImplementationGaps": 0,
+    "unexpectedChanges": 0
+  },
+  "results": [
+    {
+      "id": "official-anyof",
+      "file": "official/anyof-asyncapi.yml",
+      "sha256": "87bdc8f0fadc6836bf0e9ebb3c8e8afc138d8066a6481079024a76e632ae287c",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "id": "official-anyof",
+        "file": "official/anyof-asyncapi.yml",
+        "sha256": "87bdc8f0fadc6836bf0e9ebb3c8e8afc138d8066a6481079024a76e632ae287c",
+        "successful": true,
+        "documentPresent": true,
+        "errorRules": [],
+        "diagnostics": []
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "official-application-headers",
+      "file": "official/application-headers-asyncapi.yml",
+      "sha256": "c7ac43f9cf2cd18e84dc48a026833ae51f3b7f4212aa49230c5f3bdbd011ef3a",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "id": "official-application-headers",
+        "file": "official/application-headers-asyncapi.yml",
+        "sha256": "c7ac43f9cf2cd18e84dc48a026833ae51f3b7f4212aa49230c5f3bdbd011ef3a",
+        "successful": true,
+        "documentPresent": true,
+        "errorRules": [],
+        "diagnostics": []
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "official-correlation-id",
+      "file": "official/correlation-id-asyncapi.yml",
+      "sha256": "20c572de645a9491b0b6671c0760065af2e9d8d137e2df93f879743a1d395850",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "id": "official-correlation-id",
+        "file": "official/correlation-id-asyncapi.yml",
+        "sha256": "20c572de645a9491b0b6671c0760065af2e9d8d137e2df93f879743a1d395850",
+        "successful": true,
+        "documentPresent": true,
+        "errorRules": [],
+        "diagnostics": []
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "official-mercure",
+      "file": "official/mercure-asyncapi.yml",
+      "sha256": "6cc97a6c5d5d07ca72b9f02d62c2bf89dc3d85c5681c4897bf4d6eec443f6730",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "id": "official-mercure",
+        "file": "official/mercure-asyncapi.yml",
+        "sha256": "6cc97a6c5d5d07ca72b9f02d62c2bf89dc3d85c5681c4897bf4d6eec443f6730",
+        "successful": true,
+        "documentPresent": true,
+        "errorRules": [],
+        "diagnostics": []
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "official-not",
+      "file": "official/not-asyncapi.yml",
+      "sha256": "e7867f36f57cf9e6e6f833cec54650631655a6398b1a36e6e66f7e49c902083c",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "id": "official-not",
+        "file": "official/not-asyncapi.yml",
+        "sha256": "e7867f36f57cf9e6e6f833cec54650631655a6398b1a36e6e66f7e49c902083c",
+        "successful": true,
+        "documentPresent": true,
+        "errorRules": [],
+        "diagnostics": []
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "official-oneof",
+      "file": "official/oneof-asyncapi.yml",
+      "sha256": "06b19ef31ebd0a7acb0033e45399c458ad29cd798b43b0d1083bdb78442a1514",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "id": "official-oneof",
+        "file": "official/oneof-asyncapi.yml",
+        "sha256": "06b19ef31ebd0a7acb0033e45399c458ad29cd798b43b0d1083bdb78442a1514",
+        "successful": true,
+        "documentPresent": true,
+        "errorRules": [],
+        "diagnostics": []
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "official-operation-security",
+      "file": "official/operation-security-asyncapi.yml",
+      "sha256": "325ce1727240b88d089ab7d6bcec58908d23f554c30ef3cc5b5b6838c78113ee",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "id": "official-operation-security",
+        "file": "official/operation-security-asyncapi.yml",
+        "sha256": "325ce1727240b88d089ab7d6bcec58908d23f554c30ef3cc5b5b6838c78113ee",
+        "successful": true,
+        "documentPresent": true,
+        "errorRules": [],
+        "diagnostics": []
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "official-rpc-client",
+      "file": "official/rpc-client-asyncapi.yml",
+      "sha256": "c00c642b4edc913e204b185e17a2fb2d29a22e981032c97270b188e24810f885",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "id": "official-rpc-client",
+        "file": "official/rpc-client-asyncapi.yml",
+        "sha256": "c00c642b4edc913e204b185e17a2fb2d29a22e981032c97270b188e24810f885",
+        "successful": true,
+        "documentPresent": true,
+        "errorRules": [],
+        "diagnostics": []
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "official-rpc-server",
+      "file": "official/rpc-server-asyncapi.yml",
+      "sha256": "c35827ac4b2b68f9ebff473d78c260d4c6c01ff81335200d587a86ed090f8f46",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "id": "official-rpc-server",
+        "file": "official/rpc-server-asyncapi.yml",
+        "sha256": "c35827ac4b2b68f9ebff473d78c260d4c6c01ff81335200d587a86ed090f8f46",
+        "successful": true,
+        "documentPresent": true,
+        "errorRules": [],
+        "diagnostics": []
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "official-simple",
+      "file": "official/simple-asyncapi.yml",
+      "sha256": "26c1ecf8056da840b9ea158dfb49653cccef95e27645b6d7d9ad995dae8c7e70",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "id": "official-simple",
+        "file": "official/simple-asyncapi.yml",
+        "sha256": "26c1ecf8056da840b9ea158dfb49653cccef95e27645b6d7d9ad995dae8c7e70",
+        "successful": true,
+        "documentPresent": true,
+        "errorRules": [],
+        "diagnostics": []
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "official-streetlights-kafka",
+      "file": "official/streetlights-kafka-asyncapi.yml",
+      "sha256": "11b9d8f92be745ea8ea8a1b9e5c23708669de0ce4f7ad32dff444899f4bf073f",
+      "classification": "unsupported",
+      "reason": "The official example uses operation and message traits; Asyncwright 0.1 explicitly rejects traits.",
+      "asyncwright": {
+        "id": "official-streetlights-kafka",
+        "file": "official/streetlights-kafka-asyncapi.yml",
+        "sha256": "11b9d8f92be745ea8ea8a1b9e5c23708669de0ce4f7ad32dff444899f4bf073f",
+        "successful": false,
+        "documentPresent": false,
+        "errorRules": [
+          "unsupported.construct"
+        ],
+        "diagnostics": [
+          {
+            "ruleId": "unsupported.construct",
+            "severity": "error",
+            "message": "Traits are not supported in 0.1",
+            "file": "official/streetlights-kafka-asyncapi.yml",
+            "line": 81,
+            "column": 5,
+            "pointer": "/operations/receiveLightMeasurement/traits",
+            "related": []
+          },
+          {
+            "ruleId": "unsupported.construct",
+            "severity": "error",
+            "message": "Traits are not supported in 0.1",
+            "file": "official/streetlights-kafka-asyncapi.yml",
+            "line": 89,
+            "column": 5,
+            "pointer": "/operations/turnOn/traits",
+            "related": []
+          },
+          {
+            "ruleId": "unsupported.construct",
+            "severity": "error",
+            "message": "Traits are not supported in 0.1",
+            "file": "official/streetlights-kafka-asyncapi.yml",
+            "line": 97,
+            "column": 5,
+            "pointer": "/operations/turnOff/traits",
+            "related": []
+          },
+          {
+            "ruleId": "unsupported.construct",
+            "severity": "error",
+            "message": "Traits are not supported in 0.1",
+            "file": "official/streetlights-kafka-asyncapi.yml",
+            "line": 105,
+            "column": 5,
+            "pointer": "/operations/dimLight/traits",
+            "related": []
+          },
+          {
+            "ruleId": "unsupported.construct",
+            "severity": "error",
+            "message": "Traits are not supported in 0.1",
+            "file": "official/streetlights-kafka-asyncapi.yml",
+            "line": 118,
+            "column": 7,
+            "pointer": "/components/messages/lightMeasured/traits",
+            "related": []
+          },
+          {
+            "ruleId": "unsupported.construct",
+            "severity": "error",
+            "message": "Traits are not supported in 0.1",
+            "file": "official/streetlights-kafka-asyncapi.yml",
+            "line": 126,
+            "column": 7,
+            "pointer": "/components/messages/turnOnOff/traits",
+            "related": []
+          },
+          {
+            "ruleId": "unsupported.construct",
+            "severity": "error",
+            "message": "Traits are not supported in 0.1",
+            "file": "official/streetlights-kafka-asyncapi.yml",
+            "line": 134,
+            "column": 7,
+            "pointer": "/components/messages/dimLight/traits",
+            "related": []
+          },
+          {
+            "ruleId": "unsupported.construct",
+            "severity": "error",
+            "message": "Traits are not supported in 0.1",
+            "file": "official/streetlights-kafka-asyncapi.yml",
+            "line": 183,
+            "column": 3,
+            "pointer": "/components/messageTraits",
+            "related": []
+          },
+          {
+            "ruleId": "unsupported.construct",
+            "severity": "error",
+            "message": "Traits are not supported in 0.1",
+            "file": "official/streetlights-kafka-asyncapi.yml",
+            "line": 192,
+            "column": 3,
+            "pointer": "/components/operationTraits",
+            "related": []
+          }
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "official-streetlights-mqtt",
+      "file": "official/streetlights-mqtt-asyncapi.yml",
+      "sha256": "bacd790787ba5775f6d9e46194727222e9d8fb23243ca85d4a5e865980701dce",
+      "classification": "unsupported",
+      "reason": "The official example uses operation and message traits; Asyncwright 0.1 explicitly rejects traits.",
+      "asyncwright": {
+        "id": "official-streetlights-mqtt",
+        "file": "official/streetlights-mqtt-asyncapi.yml",
+        "sha256": "bacd790787ba5775f6d9e46194727222e9d8fb23243ca85d4a5e865980701dce",
+        "successful": false,
+        "documentPresent": false,
+        "errorRules": [
+          "unsupported.construct"
+        ],
+        "diagnostics": [
+          {
+            "ruleId": "unsupported.construct",
+            "severity": "error",
+            "message": "Traits are not supported in 0.1",
+            "file": "official/streetlights-mqtt-asyncapi.yml",
+            "line": 107,
+            "column": 5,
+            "pointer": "/operations/receiveLightMeasurement/traits",
+            "related": []
+          },
+          {
+            "ruleId": "unsupported.construct",
+            "severity": "error",
+            "message": "Traits are not supported in 0.1",
+            "file": "official/streetlights-mqtt-asyncapi.yml",
+            "line": 115,
+            "column": 5,
+            "pointer": "/operations/turnOn/traits",
+            "related": []
+          },
+          {
+            "ruleId": "unsupported.construct",
+            "severity": "error",
+            "message": "Traits are not supported in 0.1",
+            "file": "official/streetlights-mqtt-asyncapi.yml",
+            "line": 123,
+            "column": 5,
+            "pointer": "/operations/turnOff/traits",
+            "related": []
+          },
+          {
+            "ruleId": "unsupported.construct",
+            "severity": "error",
+            "message": "Traits are not supported in 0.1",
+            "file": "official/streetlights-mqtt-asyncapi.yml",
+            "line": 131,
+            "column": 5,
+            "pointer": "/operations/dimLight/traits",
+            "related": []
+          },
+          {
+            "ruleId": "unsupported.construct",
+            "severity": "error",
+            "message": "Traits are not supported in 0.1",
+            "file": "official/streetlights-mqtt-asyncapi.yml",
+            "line": 144,
+            "column": 7,
+            "pointer": "/components/messages/lightMeasured/traits",
+            "related": []
+          },
+          {
+            "ruleId": "unsupported.construct",
+            "severity": "error",
+            "message": "Traits are not supported in 0.1",
+            "file": "official/streetlights-mqtt-asyncapi.yml",
+            "line": 152,
+            "column": 7,
+            "pointer": "/components/messages/turnOnOff/traits",
+            "related": []
+          },
+          {
+            "ruleId": "unsupported.construct",
+            "severity": "error",
+            "message": "Traits are not supported in 0.1",
+            "file": "official/streetlights-mqtt-asyncapi.yml",
+            "line": 160,
+            "column": 7,
+            "pointer": "/components/messages/dimLight/traits",
+            "related": []
+          },
+          {
+            "ruleId": "unsupported.construct",
+            "severity": "error",
+            "message": "Traits are not supported in 0.1",
+            "file": "official/streetlights-mqtt-asyncapi.yml",
+            "line": 240,
+            "column": 3,
+            "pointer": "/components/messageTraits",
+            "related": []
+          },
+          {
+            "ruleId": "unsupported.construct",
+            "severity": "error",
+            "message": "Traits are not supported in 0.1",
+            "file": "official/streetlights-mqtt-asyncapi.yml",
+            "line": 249,
+            "column": 3,
+            "pointer": "/components/operationTraits",
+            "related": []
+          }
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "minimal-json",
+      "file": "synthetic/minimal-json.json",
+      "sha256": "92bd68e35b6dc36fe80c98d07d9962c394afa0f880838c8a724dc6916cd1d687",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "id": "minimal-json",
+        "file": "synthetic/minimal-json.json",
+        "sha256": "92bd68e35b6dc36fe80c98d07d9962c394afa0f880838c8a724dc6916cd1d687",
+        "successful": true,
+        "documentPresent": true,
+        "errorRules": [],
+        "diagnostics": []
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "minimal-yaml",
+      "file": "synthetic/minimal-yaml.yaml",
+      "sha256": "42ceeec5013b0127f9180d131b6a6b0e6fbdd19414a95e834cec354254301a03",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "id": "minimal-yaml",
+        "file": "synthetic/minimal-yaml.yaml",
+        "sha256": "42ceeec5013b0127f9180d131b6a6b0e6fbdd19414a95e834cec354254301a03",
+        "successful": true,
+        "documentPresent": true,
+        "errorRules": [],
+        "diagnostics": []
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "reference-chain",
+      "file": "synthetic/reference-chain.json",
+      "sha256": "4ed119b4da78f5cd8fb590046a8866325b84d431443cee91490925fca0fd4a0f",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "id": "reference-chain",
+        "file": "synthetic/reference-chain.json",
+        "sha256": "4ed119b4da78f5cd8fb590046a8866325b84d431443cee91490925fca0fd4a0f",
+        "successful": true,
+        "documentPresent": true,
+        "errorRules": [],
+        "diagnostics": []
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "recursive-schema",
+      "file": "synthetic/recursive-schema.json",
+      "sha256": "4dcfa7a865cc351cc343764e50fec8a1e34f6650a76f11e0faf2b4258d4e264d",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "id": "recursive-schema",
+        "file": "synthetic/recursive-schema.json",
+        "sha256": "4dcfa7a865cc351cc343764e50fec8a1e34f6650a76f11e0faf2b4258d4e264d",
+        "successful": true,
+        "documentPresent": true,
+        "errorRules": [],
+        "diagnostics": []
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "escaped-reference",
+      "file": "synthetic/escaped-reference.json",
+      "sha256": "92d7b22baca42dadfeab5b196fc51b9d6abab6a51fb3dce2a0ed8a83ab43b546",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "id": "escaped-reference",
+        "file": "synthetic/escaped-reference.json",
+        "sha256": "92d7b22baca42dadfeab5b196fc51b9d6abab6a51fb3dce2a0ed8a83ab43b546",
+        "successful": true,
+        "documentPresent": true,
+        "errorRules": [],
+        "diagnostics": []
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "reference-like-example",
+      "file": "synthetic/reference-like-example.json",
+      "sha256": "e709e57e0bb8f251e592ed9bbd38fcf1f3d3731c00adb04d51179df6354c73c0",
+      "classification": "reference-parser-difference",
+      "reason": "Asyncwright ignores reference-like application data; JavaScript attempts to dereference the x-data value and reports invalid-ref.",
+      "asyncwright": {
+        "id": "reference-like-example",
+        "file": "synthetic/reference-like-example.json",
+        "sha256": "e709e57e0bb8f251e592ed9bbd38fcf1f3d3731c00adb04d51179df6354c73c0",
+        "successful": true,
+        "documentPresent": true,
+        "errorRules": [],
+        "diagnostics": []
+      },
+      "javascript": {
+        "successful": false,
+        "documentPresent": false,
+        "errorCodes": [
+          "invalid-ref"
+        ],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          },
+          {
+            "code": "invalid-ref",
+            "severity": 0,
+            "message": "ENOENT: no such file or directory, open '<project>\\parser\\src\\test\\resources\\conformance\\synthetic\\not-a-reference.json'",
+            "pointer": "/x-data/$ref"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "nullable-union",
+      "file": "synthetic/nullable-union.json",
+      "sha256": "c71e9cb069c4fcea913b277e385e18a24092f219f96e7774527d84850db0f1de",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "id": "nullable-union",
+        "file": "synthetic/nullable-union.json",
+        "sha256": "c71e9cb069c4fcea913b277e385e18a24092f219f96e7774527d84850db0f1de",
+        "successful": true,
+        "documentPresent": true,
+        "errorRules": [],
+        "diagnostics": []
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "default-schema-format",
+      "file": "synthetic/default-schema-format.json",
+      "sha256": "eb6a2638a75a536ad18d5d5aa31edc40728021d9cc7f52222d1678bacb7c4a01",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "id": "default-schema-format",
+        "file": "synthetic/default-schema-format.json",
+        "sha256": "eb6a2638a75a536ad18d5d5aa31edc40728021d9cc7f52222d1678bacb7c4a01",
+        "successful": true,
+        "documentPresent": true,
+        "errorRules": [],
+        "diagnostics": []
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "schema-boolean",
+      "file": "synthetic/schema-boolean.json",
+      "sha256": "dd73525fa052b9f14c2172bc0c95b2846e376516b519c8f768a75e98e379d89b",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "id": "schema-boolean",
+        "file": "synthetic/schema-boolean.json",
+        "sha256": "dd73525fa052b9f14c2172bc0c95b2846e376516b519c8f768a75e98e379d89b",
+        "successful": false,
+        "documentPresent": false,
+        "errorRules": [
+          "schema.type"
+        ],
+        "diagnostics": [
+          {
+            "ruleId": "schema.type",
+            "severity": "error",
+            "message": "boolean found, object expected",
+            "file": "synthetic/schema-boolean.json",
+            "line": 9,
+            "column": 7,
+            "pointer": "/components/schemas/Any",
+            "related": []
+          },
+          {
+            "ruleId": "schema.type",
+            "severity": "error",
+            "message": "boolean found, object expected",
+            "file": "synthetic/schema-boolean.json",
+            "line": 10,
+            "column": 7,
+            "pointer": "/components/schemas/None",
+            "related": []
+          }
+        ]
+      },
+      "javascript": {
+        "successful": false,
+        "documentPresent": false,
+        "errorCodes": [
+          "asyncapi-document-resolved"
+        ],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          },
+          {
+            "code": "asyncapi-document-resolved",
+            "severity": 0,
+            "message": "\"Any\" property type must be object",
+            "pointer": "/components/schemas/Any"
+          },
+          {
+            "code": "asyncapi-document-resolved",
+            "severity": 0,
+            "message": "\"None\" property type must be object",
+            "pointer": "/components/schemas/None"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "yaml-alias",
+      "file": "synthetic/yaml-alias.yaml",
+      "sha256": "f9b0a04beeab9d2e3f07fbca823aa176b23b370b88eb358d262d8155ad26483a",
+      "classification": "unsupported",
+      "reason": "YAML aliases are explicitly rejected by the current loader; JavaScript expands the alias.",
+      "asyncwright": {
+        "id": "yaml-alias",
+        "file": "synthetic/yaml-alias.yaml",
+        "sha256": "f9b0a04beeab9d2e3f07fbca823aa176b23b370b88eb358d262d8155ad26483a",
+        "successful": false,
+        "documentPresent": false,
+        "errorRules": [
+          "syntax"
+        ],
+        "diagnostics": [
+          {
+            "ruleId": "syntax",
+            "severity": "error",
+            "message": "YAML aliases are not supported by this parser version",
+            "file": "synthetic/yaml-alias.yaml",
+            "line": 2,
+            "column": 43,
+            "pointer": "",
+            "related": []
+          }
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "message-trait",
+      "file": "synthetic/message-trait.json",
+      "sha256": "38c7d80ea40f703e90768741fd6ed07ca83fc2a0fab9880cc0cf1c272c15cf24",
+      "classification": "unsupported",
+      "reason": "Trait composition is outside the current Asyncwright 0.1 implementation.",
+      "asyncwright": {
+        "id": "message-trait",
+        "file": "synthetic/message-trait.json",
+        "sha256": "38c7d80ea40f703e90768741fd6ed07ca83fc2a0fab9880cc0cf1c272c15cf24",
+        "successful": false,
+        "documentPresent": false,
+        "errorRules": [
+          "unsupported.construct"
+        ],
+        "diagnostics": [
+          {
+            "ruleId": "unsupported.construct",
+            "severity": "error",
+            "message": "Traits are not supported in 0.1",
+            "file": "synthetic/message-trait.json",
+            "line": 8,
+            "column": 5,
+            "pointer": "/components/messageTraits",
+            "related": []
+          },
+          {
+            "ruleId": "unsupported.construct",
+            "severity": "error",
+            "message": "Traits are not supported in 0.1",
+            "file": "synthetic/message-trait.json",
+            "line": 15,
+            "column": 9,
+            "pointer": "/components/messages/Event/traits",
+            "related": []
+          }
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "nullable-keyword",
+      "file": "synthetic/nullable-keyword.json",
+      "sha256": "2639dd7d248e0bf483355dfad6e94c2405a3f4c118fb150ef2a9afcf3594a62e",
+      "classification": "model-limit",
+      "reason": "The schema permits the unknown nullable keyword, but the typed Java model cannot map it; nullable does not enable null under draft-07.",
+      "asyncwright": {
+        "id": "nullable-keyword",
+        "file": "synthetic/nullable-keyword.json",
+        "sha256": "2639dd7d248e0bf483355dfad6e94c2405a3f4c118fb150ef2a9afcf3594a62e",
+        "successful": false,
+        "documentPresent": false,
+        "errorRules": [
+          "model.mapping"
+        ],
+        "diagnostics": [
+          {
+            "ruleId": "model.mapping",
+            "severity": "error",
+            "message": "\"nullable\" is not valid extension property",
+            "file": "synthetic/nullable-keyword.json",
+            "line": 11,
+            "column": 9,
+            "pointer": "/components/schemas/Value/nullable",
+            "related": []
+          }
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "custom-binding",
+      "file": "synthetic/custom-binding.json",
+      "sha256": "c61c64917f379b130a6fc3bd8ca514fdd8d5c3b65aa70882783318c267d66701",
+      "classification": "model-limit",
+      "reason": "The typed Java model drops custom binding extensions; the preservation guard rejects the incomplete model.",
+      "asyncwright": {
+        "id": "custom-binding",
+        "file": "synthetic/custom-binding.json",
+        "sha256": "c61c64917f379b130a6fc3bd8ca514fdd8d5c3b65aa70882783318c267d66701",
+        "successful": false,
+        "documentPresent": false,
+        "errorRules": [
+          "model.preservation"
+        ],
+        "diagnostics": [
+          {
+            "ruleId": "model.preservation",
+            "severity": "error",
+            "message": "The typed model cannot preserve this source value",
+            "file": "synthetic/custom-binding.json",
+            "line": 11,
+            "column": 9,
+            "pointer": "/channels/events/bindings/x-custom",
+            "related": []
+          }
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "version-2-6",
+      "file": "synthetic/version-2-6.json",
+      "sha256": "a73351b3fdea66915553f2bea5058d404e93ccc9d6a8152ebf1ccd32afee6210",
+      "classification": "unsupported",
+      "reason": "Asyncwright deliberately supports only 3.0.0; the JavaScript parser also supports 2.6.0.",
+      "asyncwright": {
+        "id": "version-2-6",
+        "file": "synthetic/version-2-6.json",
+        "sha256": "a73351b3fdea66915553f2bea5058d404e93ccc9d6a8152ebf1ccd32afee6210",
+        "successful": false,
+        "documentPresent": false,
+        "errorRules": [
+          "unsupported.version"
+        ],
+        "diagnostics": [
+          {
+            "ruleId": "unsupported.version",
+            "severity": "error",
+            "message": "Only AsyncAPI 3.0.0 is supported in 0.1",
+            "file": "synthetic/version-2-6.json",
+            "line": 2,
+            "column": 3,
+            "pointer": "/asyncapi",
+            "related": []
+          }
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "version-3-1",
+      "file": "synthetic/version-3-1.json",
+      "sha256": "83063cbf00431c9c6bb71680fa7965efdd33aa984116d839a270bcd2988f4181",
+      "classification": "unsupported",
+      "reason": "Asyncwright deliberately supports only 3.0.0; the JavaScript parser also supports 3.1.0.",
+      "asyncwright": {
+        "id": "version-3-1",
+        "file": "synthetic/version-3-1.json",
+        "sha256": "83063cbf00431c9c6bb71680fa7965efdd33aa984116d839a270bcd2988f4181",
+        "successful": false,
+        "documentPresent": false,
+        "errorRules": [
+          "unsupported.version"
+        ],
+        "diagnostics": [
+          {
+            "ruleId": "unsupported.version",
+            "severity": "error",
+            "message": "Only AsyncAPI 3.0.0 is supported in 0.1",
+            "file": "synthetic/version-3-1.json",
+            "line": 2,
+            "column": 3,
+            "pointer": "/asyncapi",
+            "related": []
+          }
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": []
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "external-file",
+      "file": "synthetic/external-file.json",
+      "sha256": "bedec6ccb1268cc77fc84caf3035459e10bc9b7fd0222ec4d26485f1cac64994",
+      "classification": "unsupported",
+      "reason": "Asyncwright supports local document pointers only; JavaScript reads the checked-in external schema helper.",
+      "asyncwright": {
+        "id": "external-file",
+        "file": "synthetic/external-file.json",
+        "sha256": "bedec6ccb1268cc77fc84caf3035459e10bc9b7fd0222ec4d26485f1cac64994",
+        "successful": false,
+        "documentPresent": false,
+        "errorRules": [
+          "unsupported.reference"
+        ],
+        "diagnostics": [
+          {
+            "ruleId": "unsupported.reference",
+            "severity": "error",
+            "message": "External references are not supported in 0.1",
+            "file": "synthetic/external-file.json",
+            "line": 10,
+            "column": 9,
+            "pointer": "/components/schemas/Text/$ref",
+            "related": []
+          }
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "empty-document",
+      "file": "synthetic/empty-document.yaml",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "id": "empty-document",
+        "file": "synthetic/empty-document.yaml",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "successful": false,
+        "documentPresent": false,
+        "errorRules": [
+          "syntax"
+        ],
+        "diagnostics": [
+          {
+            "ruleId": "syntax",
+            "severity": "error",
+            "message": "The document is empty",
+            "file": "synthetic/empty-document.yaml",
+            "line": 1,
+            "column": 1,
+            "pointer": "",
+            "related": []
+          }
+        ]
+      },
+      "javascript": {
+        "successful": false,
+        "documentPresent": false,
+        "errorCodes": [
+          "asyncapi-is-asyncapi"
+        ],
+        "diagnostics": [
+          {
+            "code": "asyncapi-is-asyncapi",
+            "severity": 0,
+            "message": "This is not an AsyncAPI document. The \"asyncapi\" field as string is missing.",
+            "pointer": ""
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "malformed-yaml",
+      "file": "synthetic/malformed-yaml.yaml",
+      "sha256": "d800c5d1c059d8aaa5df3eda60e6fa9a6d3ee841c8517b2511e51f8835e7311c",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "id": "malformed-yaml",
+        "file": "synthetic/malformed-yaml.yaml",
+        "sha256": "d800c5d1c059d8aaa5df3eda60e6fa9a6d3ee841c8517b2511e51f8835e7311c",
+        "successful": false,
+        "documentPresent": false,
+        "errorRules": [
+          "syntax"
+        ],
+        "diagnostics": [
+          {
+            "ruleId": "syntax",
+            "severity": "error",
+            "message": "while parsing a flow node\n in 'reader', line 3, column 1:\n    \n    ^\nexpected the node content, but found '<stream end>'\n in 'reader', line 3, column 1:\n    \n    ^\n",
+            "file": "synthetic/malformed-yaml.yaml",
+            "line": 2,
+            "column": 8,
+            "pointer": "",
+            "related": []
+          }
+        ]
+      },
+      "javascript": {
+        "successful": false,
+        "documentPresent": false,
+        "errorCodes": [
+          "asyncapi-document-resolved",
+          "parser"
+        ],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          },
+          {
+            "code": "asyncapi-document-resolved",
+            "severity": 0,
+            "message": "\"info\" property type must be object",
+            "pointer": "/info"
+          },
+          {
+            "code": "parser",
+            "severity": 0,
+            "message": "Unexpected end of the stream within a flow collection",
+            "pointer": ""
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "duplicate-key",
+      "file": "synthetic/duplicate-key.yaml",
+      "sha256": "6848ad7470ffb67fbd6bae8cf52cf9465e39a6f711627588f3c6f103008a5b48",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "id": "duplicate-key",
+        "file": "synthetic/duplicate-key.yaml",
+        "sha256": "6848ad7470ffb67fbd6bae8cf52cf9465e39a6f711627588f3c6f103008a5b48",
+        "successful": false,
+        "documentPresent": false,
+        "errorRules": [
+          "syntax"
+        ],
+        "diagnostics": [
+          {
+            "ruleId": "syntax",
+            "severity": "error",
+            "message": "Duplicate field 'asyncapi'",
+            "file": "synthetic/duplicate-key.yaml",
+            "line": 2,
+            "column": 9,
+            "pointer": "",
+            "related": []
+          }
+        ]
+      },
+      "javascript": {
+        "successful": false,
+        "documentPresent": false,
+        "errorCodes": [
+          "parser"
+        ],
+        "diagnostics": [
+          {
+            "code": "parser",
+            "severity": 0,
+            "message": "Duplicate key: asyncapi",
+            "pointer": "/asyncapi"
+          },
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "missing-version",
+      "file": "synthetic/missing-version.json",
+      "sha256": "d1a0bfc810fc2cbf868ce4d15549160f2412e0e9cf83f18739704750d550727b",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "id": "missing-version",
+        "file": "synthetic/missing-version.json",
+        "sha256": "d1a0bfc810fc2cbf868ce4d15549160f2412e0e9cf83f18739704750d550727b",
+        "successful": false,
+        "documentPresent": false,
+        "errorRules": [
+          "schema.required"
+        ],
+        "diagnostics": [
+          {
+            "ruleId": "schema.required",
+            "severity": "error",
+            "message": "required property 'asyncapi' not found",
+            "file": "synthetic/missing-version.json",
+            "line": 1,
+            "column": 1,
+            "pointer": "",
+            "related": []
+          }
+        ]
+      },
+      "javascript": {
+        "successful": false,
+        "documentPresent": false,
+        "errorCodes": [
+          "asyncapi-is-asyncapi"
+        ],
+        "diagnostics": [
+          {
+            "code": "asyncapi-is-asyncapi",
+            "severity": 0,
+            "message": "This is not an AsyncAPI document. The \"asyncapi\" field as string is missing.",
+            "pointer": ""
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "missing-info",
+      "file": "synthetic/missing-info.json",
+      "sha256": "d167413ce9b0eaaaf822acb67c2a4ec18e08500d9607a109c788cfb2451563d7",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "id": "missing-info",
+        "file": "synthetic/missing-info.json",
+        "sha256": "d167413ce9b0eaaaf822acb67c2a4ec18e08500d9607a109c788cfb2451563d7",
+        "successful": false,
+        "documentPresent": false,
+        "errorRules": [
+          "schema.required"
+        ],
+        "diagnostics": [
+          {
+            "ruleId": "schema.required",
+            "severity": "error",
+            "message": "required property 'info' not found",
+            "file": "synthetic/missing-info.json",
+            "line": 1,
+            "column": 1,
+            "pointer": "",
+            "related": []
+          }
+        ]
+      },
+      "javascript": {
+        "successful": false,
+        "documentPresent": false,
+        "errorCodes": [
+          "asyncapi-document-resolved"
+        ],
+        "diagnostics": [
+          {
+            "code": "asyncapi-document-resolved",
+            "severity": 0,
+            "message": "Object must have required property \"info\"",
+            "pointer": ""
+          },
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "invalid-title",
+      "file": "synthetic/invalid-title.json",
+      "sha256": "97309d2a7f1c611496ec158f9a96e67e23095c32a75bcf462f01feab36fd5936",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "id": "invalid-title",
+        "file": "synthetic/invalid-title.json",
+        "sha256": "97309d2a7f1c611496ec158f9a96e67e23095c32a75bcf462f01feab36fd5936",
+        "successful": false,
+        "documentPresent": false,
+        "errorRules": [
+          "schema.type"
+        ],
+        "diagnostics": [
+          {
+            "ruleId": "schema.type",
+            "severity": "error",
+            "message": "integer found, string expected",
+            "file": "synthetic/invalid-title.json",
+            "line": 4,
+            "column": 5,
+            "pointer": "/info/title",
+            "related": []
+          }
+        ]
+      },
+      "javascript": {
+        "successful": false,
+        "documentPresent": false,
+        "errorCodes": [
+          "asyncapi-document-resolved"
+        ],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          },
+          {
+            "code": "asyncapi-document-resolved",
+            "severity": 0,
+            "message": "\"title\" property type must be string",
+            "pointer": "/info/title"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "unknown-root-property",
+      "file": "synthetic/unknown-root-property.json",
+      "sha256": "cc0292501c72b1d6ebc36ed6f0a71ae46e83f1cd00d0fa000c29b04e453e88f4",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "id": "unknown-root-property",
+        "file": "synthetic/unknown-root-property.json",
+        "sha256": "cc0292501c72b1d6ebc36ed6f0a71ae46e83f1cd00d0fa000c29b04e453e88f4",
+        "successful": false,
+        "documentPresent": false,
+        "errorRules": [
+          "schema.additionalProperties"
+        ],
+        "diagnostics": [
+          {
+            "ruleId": "schema.additionalProperties",
+            "severity": "error",
+            "message": "property 'unexpected' is not defined in the schema and the schema does not allow additional properties",
+            "file": "synthetic/unknown-root-property.json",
+            "line": 1,
+            "column": 1,
+            "pointer": "",
+            "related": []
+          }
+        ]
+      },
+      "javascript": {
+        "successful": false,
+        "documentPresent": false,
+        "errorCodes": [
+          "asyncapi-document-resolved"
+        ],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          },
+          {
+            "code": "asyncapi-document-resolved",
+            "severity": 0,
+            "message": "Property \"unexpected\" is not expected to be here",
+            "pointer": "/unexpected"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "invalid-action",
+      "file": "synthetic/invalid-action.json",
+      "sha256": "db6983631e4e7482c79f30233ba5cc9358b83e529fb4c660df384692f2d1e683",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "id": "invalid-action",
+        "file": "synthetic/invalid-action.json",
+        "sha256": "db6983631e4e7482c79f30233ba5cc9358b83e529fb4c660df384692f2d1e683",
+        "successful": false,
+        "documentPresent": false,
+        "errorRules": [
+          "schema.enum",
+          "schema.oneOf",
+          "schema.required"
+        ],
+        "diagnostics": [
+          {
+            "ruleId": "schema.oneOf",
+            "severity": "error",
+            "message": "must be valid to one and only one schema, but 0 are valid",
+            "file": "synthetic/invalid-action.json",
+            "line": 13,
+            "column": 5,
+            "pointer": "/operations/send",
+            "related": []
+          },
+          {
+            "ruleId": "schema.required",
+            "severity": "error",
+            "message": "required property '$ref' not found",
+            "file": "synthetic/invalid-action.json",
+            "line": 13,
+            "column": 5,
+            "pointer": "/operations/send",
+            "related": []
+          },
+          {
+            "ruleId": "schema.enum",
+            "severity": "error",
+            "message": "does not have a value in the enumeration [\"send\", \"receive\"]",
+            "file": "synthetic/invalid-action.json",
+            "line": 14,
+            "column": 7,
+            "pointer": "/operations/send/action",
+            "related": []
+          }
+        ]
+      },
+      "javascript": {
+        "successful": false,
+        "documentPresent": false,
+        "errorCodes": [
+          "asyncapi-document-resolved"
+        ],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          },
+          {
+            "code": "asyncapi-document-resolved",
+            "severity": 0,
+            "message": "\"action\" property must be equal to one of the allowed values: \"send\", \"receive\". Did you mean \"receive\"?",
+            "pointer": "/operations/send/action"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "operation-without-channel",
+      "file": "synthetic/operation-without-channel.json",
+      "sha256": "c129b917e9fb220c24751f869dbc240110b5abc148b5918870333ec621176d41",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "id": "operation-without-channel",
+        "file": "synthetic/operation-without-channel.json",
+        "sha256": "c129b917e9fb220c24751f869dbc240110b5abc148b5918870333ec621176d41",
+        "successful": false,
+        "documentPresent": false,
+        "errorRules": [
+          "schema.oneOf",
+          "schema.required"
+        ],
+        "diagnostics": [
+          {
+            "ruleId": "schema.oneOf",
+            "severity": "error",
+            "message": "must be valid to one and only one schema, but 0 are valid",
+            "file": "synthetic/operation-without-channel.json",
+            "line": 8,
+            "column": 5,
+            "pointer": "/operations/send",
+            "related": []
+          },
+          {
+            "ruleId": "schema.required",
+            "severity": "error",
+            "message": "required property '$ref' not found",
+            "file": "synthetic/operation-without-channel.json",
+            "line": 8,
+            "column": 5,
+            "pointer": "/operations/send",
+            "related": []
+          },
+          {
+            "ruleId": "schema.required",
+            "severity": "error",
+            "message": "required property 'channel' not found",
+            "file": "synthetic/operation-without-channel.json",
+            "line": 8,
+            "column": 5,
+            "pointer": "/operations/send",
+            "related": []
+          }
+        ]
+      },
+      "javascript": {
+        "successful": false,
+        "documentPresent": false,
+        "errorCodes": [
+          "asyncapi-document-resolved"
+        ],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          },
+          {
+            "code": "asyncapi-document-resolved",
+            "severity": 0,
+            "message": "\"send\" property must have required property \"channel\"",
+            "pointer": "/operations/send"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "missing-reference",
+      "file": "synthetic/missing-reference.json",
+      "sha256": "c2a97a1faea5175ae4c8981fd07c173a870b16d3c099ec2bac6f4e9715f7caa9",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "id": "missing-reference",
+        "file": "synthetic/missing-reference.json",
+        "sha256": "c2a97a1faea5175ae4c8981fd07c173a870b16d3c099ec2bac6f4e9715f7caa9",
+        "successful": false,
+        "documentPresent": false,
+        "errorRules": [
+          "reference.missing"
+        ],
+        "diagnostics": [
+          {
+            "ruleId": "reference.missing",
+            "severity": "error",
+            "message": "Reference target does not exist: #/components/schemas/Missing",
+            "file": "synthetic/missing-reference.json",
+            "line": 10,
+            "column": 9,
+            "pointer": "/components/schemas/Alias/$ref",
+            "related": []
+          }
+        ]
+      },
+      "javascript": {
+        "successful": false,
+        "documentPresent": false,
+        "errorCodes": [
+          "invalid-ref"
+        ],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          },
+          {
+            "code": "invalid-ref",
+            "severity": 0,
+            "message": "'#/components/schemas/Missing' does not exist",
+            "pointer": "/components/schemas/Alias/$ref"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "wrong-reference-kind",
+      "file": "synthetic/wrong-reference-kind.json",
+      "sha256": "482a19ccd679a3a4110655572020168437b39aa47e4e17202d9e767e64c68330",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "id": "wrong-reference-kind",
+        "file": "synthetic/wrong-reference-kind.json",
+        "sha256": "482a19ccd679a3a4110655572020168437b39aa47e4e17202d9e767e64c68330",
+        "successful": false,
+        "documentPresent": false,
+        "errorRules": [
+          "reference.type"
+        ],
+        "diagnostics": [
+          {
+            "ruleId": "reference.type",
+            "severity": "error",
+            "message": "Reference must target a channel object",
+            "file": "synthetic/wrong-reference-kind.json",
+            "line": 20,
+            "column": 9,
+            "pointer": "/operations/send/channel/$ref",
+            "related": []
+          }
+        ]
+      },
+      "javascript": {
+        "successful": false,
+        "documentPresent": false,
+        "errorCodes": [
+          "asyncapi-document-resolved",
+          "asyncapi3-required-operation-channel-unambiguity"
+        ],
+        "diagnostics": [
+          {
+            "code": "asyncapi-document-resolved",
+            "severity": 0,
+            "message": "Property \"payload\" is not expected to be here",
+            "pointer": "/operations/send/channel/payload"
+          },
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          },
+          {
+            "code": "asyncapi3-required-operation-channel-unambiguity",
+            "severity": 0,
+            "message": "The \"channel\" field of an operation under the root \"operations\" object must always reference a channel under the root \"channels\" object.",
+            "pointer": "/operations/send/channel/$ref"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "pure-reference-cycle",
+      "file": "synthetic/pure-reference-cycle.json",
+      "sha256": "1378802a5d255b00cb377ab193e0815ec9a14d1ef7e1ac4520ac15b4a34c3eda",
+      "classification": "policy-difference",
+      "reason": "Asyncwright rejects reference cycles without a concrete schema body; JavaScript accepts this document.",
+      "asyncwright": {
+        "id": "pure-reference-cycle",
+        "file": "synthetic/pure-reference-cycle.json",
+        "sha256": "1378802a5d255b00cb377ab193e0815ec9a14d1ef7e1ac4520ac15b4a34c3eda",
+        "successful": false,
+        "documentPresent": false,
+        "errorRules": [
+          "reference.cycle"
+        ],
+        "diagnostics": [
+          {
+            "ruleId": "reference.cycle",
+            "severity": "error",
+            "message": "Unresolvable reference cycle outside a recursive schema",
+            "file": "synthetic/pure-reference-cycle.json",
+            "line": 13,
+            "column": 9,
+            "pointer": "/components/schemas/B/$ref",
+            "related": [
+              {
+                "file": "synthetic/pure-reference-cycle.json",
+                "line": 9,
+                "column": 7,
+                "pointer": "/components/schemas/A"
+              },
+              {
+                "file": "synthetic/pure-reference-cycle.json",
+                "line": 12,
+                "column": 7,
+                "pointer": "/components/schemas/B"
+              }
+            ]
+          }
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "malformed-reference-escape",
+      "file": "synthetic/malformed-reference-escape.json",
+      "sha256": "a8ac0b1425143ab362f58c9c20502eb65dd8312e482f42b5488deb95394ead1f",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "id": "malformed-reference-escape",
+        "file": "synthetic/malformed-reference-escape.json",
+        "sha256": "a8ac0b1425143ab362f58c9c20502eb65dd8312e482f42b5488deb95394ead1f",
+        "successful": false,
+        "documentPresent": false,
+        "errorRules": [
+          "reference.pointer"
+        ],
+        "diagnostics": [
+          {
+            "ruleId": "reference.pointer",
+            "severity": "error",
+            "message": "Expected a local JSON Pointer with valid ~0/~1 escapes",
+            "file": "synthetic/malformed-reference-escape.json",
+            "line": 10,
+            "column": 9,
+            "pointer": "/components/schemas/Alias/$ref",
+            "related": []
+          }
+        ]
+      },
+      "javascript": {
+        "successful": false,
+        "documentPresent": false,
+        "errorCodes": [
+          "invalid-ref"
+        ],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          },
+          {
+            "code": "invalid-ref",
+            "severity": 0,
+            "message": "'#/components/schemas/B~2' does not exist",
+            "pointer": "/components/schemas/Alias/$ref"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "message-not-in-channel",
+      "file": "synthetic/message-not-in-channel.json",
+      "sha256": "dec75f2774e590c4c47c8631b5d06b7e956afdfb377f161e3f5392e0060b6c91",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "id": "message-not-in-channel",
+        "file": "synthetic/message-not-in-channel.json",
+        "sha256": "dec75f2774e590c4c47c8631b5d06b7e956afdfb377f161e3f5392e0060b6c91",
+        "successful": false,
+        "documentPresent": false,
+        "errorRules": [
+          "operation.message"
+        ],
+        "diagnostics": [
+          {
+            "ruleId": "operation.message",
+            "severity": "error",
+            "message": "Operation message does not belong to its channel",
+            "file": "synthetic/message-not-in-channel.json",
+            "line": 36,
+            "column": 11,
+            "pointer": "/operations/send/messages/0/$ref",
+            "related": [
+              {
+                "file": "synthetic/message-not-in-channel.json",
+                "line": 8,
+                "column": 5,
+                "pointer": "/channels/events"
+              }
+            ]
+          }
+        ]
+      },
+      "javascript": {
+        "successful": false,
+        "documentPresent": false,
+        "errorCodes": [
+          "asyncapi3-operation-messages-from-referred-channel"
+        ],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          },
+          {
+            "code": "asyncapi3-operation-messages-from-referred-channel",
+            "severity": 0,
+            "message": "Operation message does not belong to the specified channel.",
+            "pointer": "/operations/send/messages/0"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "undefined-channel-parameter",
+      "file": "synthetic/undefined-channel-parameter.json",
+      "sha256": "26cec5940ee47336d60a1c1d1ad751d137adb851213f461787999b39fc540dd9",
+      "classification": "reference-parser-difference",
+      "reason": "Asyncwright requires definitions for address placeholders. JavaScript skips its parameter rule when the parameters object is absent.",
+      "asyncwright": {
+        "id": "undefined-channel-parameter",
+        "file": "synthetic/undefined-channel-parameter.json",
+        "sha256": "26cec5940ee47336d60a1c1d1ad751d137adb851213f461787999b39fc540dd9",
+        "successful": false,
+        "documentPresent": false,
+        "errorRules": [
+          "channel.parameter"
+        ],
+        "diagnostics": [
+          {
+            "ruleId": "channel.parameter",
+            "severity": "error",
+            "message": "Undefined channel address parameter: tenant",
+            "file": "synthetic/undefined-channel-parameter.json",
+            "line": 9,
+            "column": 7,
+            "pointer": "/channels/events/address",
+            "related": []
+          }
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "invalid-schema-type",
+      "file": "synthetic/invalid-schema-type.json",
+      "sha256": "bd3cd84d4a09ac5f939a51b97d518980e6d5ffc55d065836959336c65ddaf9b9",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "id": "invalid-schema-type",
+        "file": "synthetic/invalid-schema-type.json",
+        "sha256": "bd3cd84d4a09ac5f939a51b97d518980e6d5ffc55d065836959336c65ddaf9b9",
+        "successful": false,
+        "documentPresent": false,
+        "errorRules": [
+          "schema.enum",
+          "schema.type"
+        ],
+        "diagnostics": [
+          {
+            "ruleId": "schema.enum",
+            "severity": "error",
+            "message": "does not have a value in the enumeration [\"array\", \"boolean\", \"integer\", \"null\", \"number\", \"object\", \"string\"]",
+            "file": "synthetic/invalid-schema-type.json",
+            "line": 10,
+            "column": 9,
+            "pointer": "/components/schemas/Value/type",
+            "related": []
+          },
+          {
+            "ruleId": "schema.type",
+            "severity": "error",
+            "message": "string found, array expected",
+            "file": "synthetic/invalid-schema-type.json",
+            "line": 10,
+            "column": 9,
+            "pointer": "/components/schemas/Value/type",
+            "related": []
+          }
+        ]
+      },
+      "javascript": {
+        "successful": false,
+        "documentPresent": false,
+        "errorCodes": [
+          "asyncapi-document-resolved"
+        ],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          },
+          {
+            "code": "asyncapi-document-resolved",
+            "severity": 0,
+            "message": "\"Value\" property must match \"else\" schema",
+            "pointer": "/components/schemas/Value"
+          },
+          {
+            "code": "asyncapi-document-resolved",
+            "severity": 0,
+            "message": "\"type\" property must be equal to one of the allowed values: \"array\", \"boolean\", \"integer\", \"null\", \"number\", \"object\", \"string\"",
+            "pointer": "/components/schemas/Value/type"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "invalid-security-type",
+      "file": "synthetic/invalid-security-type.json",
+      "sha256": "8395f10fcb73803016d7e839f60788fe27a11667a7b2d2e858861c01df4b0481",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "id": "invalid-security-type",
+        "file": "synthetic/invalid-security-type.json",
+        "sha256": "8395f10fcb73803016d7e839f60788fe27a11667a7b2d2e858861c01df4b0481",
+        "successful": false,
+        "documentPresent": false,
+        "errorRules": [
+          "schema.enum",
+          "schema.not",
+          "schema.oneOf",
+          "schema.required"
+        ],
+        "diagnostics": [
+          {
+            "ruleId": "schema.not",
+            "severity": "error",
+            "message": "must not be valid to the schema {\"type\":\"object\",\"properties\":{\"scheme\":{\"type\":\"string\",\"description\":\"A short description for security scheme.\",\"enum\":[\"bearer\"]}}}",
+            "file": "synthetic/invalid-security-type.json",
+            "line": 9,
+            "column": 7,
+            "pointer": "/components/securitySchemes/Auth",
+            "related": []
+          },
+          {
+            "ruleId": "schema.oneOf",
+            "severity": "error",
+            "message": "must be valid to one and only one schema, but 0 are valid",
+            "file": "synthetic/invalid-security-type.json",
+            "line": 9,
+            "column": 7,
+            "pointer": "/components/securitySchemes/Auth",
+            "related": []
+          },
+          {
+            "ruleId": "schema.required",
+            "severity": "error",
+            "message": "required property '$ref' not found",
+            "file": "synthetic/invalid-security-type.json",
+            "line": 9,
+            "column": 7,
+            "pointer": "/components/securitySchemes/Auth",
+            "related": []
+          },
+          {
+            "ruleId": "schema.required",
+            "severity": "error",
+            "message": "required property 'flows' not found",
+            "file": "synthetic/invalid-security-type.json",
+            "line": 9,
+            "column": 7,
+            "pointer": "/components/securitySchemes/Auth",
+            "related": []
+          },
+          {
+            "ruleId": "schema.required",
+            "severity": "error",
+            "message": "required property 'in' not found",
+            "file": "synthetic/invalid-security-type.json",
+            "line": 9,
+            "column": 7,
+            "pointer": "/components/securitySchemes/Auth",
+            "related": []
+          },
+          {
+            "ruleId": "schema.required",
+            "severity": "error",
+            "message": "required property 'name' not found",
+            "file": "synthetic/invalid-security-type.json",
+            "line": 9,
+            "column": 7,
+            "pointer": "/components/securitySchemes/Auth",
+            "related": []
+          },
+          {
+            "ruleId": "schema.required",
+            "severity": "error",
+            "message": "required property 'openIdConnectUrl' not found",
+            "file": "synthetic/invalid-security-type.json",
+            "line": 9,
+            "column": 7,
+            "pointer": "/components/securitySchemes/Auth",
+            "related": []
+          },
+          {
+            "ruleId": "schema.required",
+            "severity": "error",
+            "message": "required property 'scheme' not found",
+            "file": "synthetic/invalid-security-type.json",
+            "line": 9,
+            "column": 7,
+            "pointer": "/components/securitySchemes/Auth",
+            "related": []
+          },
+          {
+            "ruleId": "schema.enum",
+            "severity": "error",
+            "message": "does not have a value in the enumeration [\"X509\"]",
+            "file": "synthetic/invalid-security-type.json",
+            "line": 10,
+            "column": 9,
+            "pointer": "/components/securitySchemes/Auth/type",
+            "related": []
+          },
+          {
+            "ruleId": "schema.enum",
+            "severity": "error",
+            "message": "does not have a value in the enumeration [\"apiKey\"]",
+            "file": "synthetic/invalid-security-type.json",
+            "line": 10,
+            "column": 9,
+            "pointer": "/components/securitySchemes/Auth/type",
+            "related": []
+          },
+          {
+            "ruleId": "schema.enum",
+            "severity": "error",
+            "message": "does not have a value in the enumeration [\"asymmetricEncryption\"]",
+            "file": "synthetic/invalid-security-type.json",
+            "line": 10,
+            "column": 9,
+            "pointer": "/components/securitySchemes/Auth/type",
+            "related": []
+          },
+          {
+            "ruleId": "schema.enum",
+            "severity": "error",
+            "message": "does not have a value in the enumeration [\"gssapi\"]",
+            "file": "synthetic/invalid-security-type.json",
+            "line": 10,
+            "column": 9,
+            "pointer": "/components/securitySchemes/Auth/type",
+            "related": []
+          },
+          {
+            "ruleId": "schema.enum",
+            "severity": "error",
+            "message": "does not have a value in the enumeration [\"http\"]",
+            "file": "synthetic/invalid-security-type.json",
+            "line": 10,
+            "column": 9,
+            "pointer": "/components/securitySchemes/Auth/type",
+            "related": []
+          },
+          {
+            "ruleId": "schema.enum",
+            "severity": "error",
+            "message": "does not have a value in the enumeration [\"httpApiKey\"]",
+            "file": "synthetic/invalid-security-type.json",
+            "line": 10,
+            "column": 9,
+            "pointer": "/components/securitySchemes/Auth/type",
+            "related": []
+          },
+          {
+            "ruleId": "schema.enum",
+            "severity": "error",
+            "message": "does not have a value in the enumeration [\"oauth2\"]",
+            "file": "synthetic/invalid-security-type.json",
+            "line": 10,
+            "column": 9,
+            "pointer": "/components/securitySchemes/Auth/type",
+            "related": []
+          },
+          {
+            "ruleId": "schema.enum",
+            "severity": "error",
+            "message": "does not have a value in the enumeration [\"openIdConnect\"]",
+            "file": "synthetic/invalid-security-type.json",
+            "line": 10,
+            "column": 9,
+            "pointer": "/components/securitySchemes/Auth/type",
+            "related": []
+          },
+          {
+            "ruleId": "schema.enum",
+            "severity": "error",
+            "message": "does not have a value in the enumeration [\"plain\"]",
+            "file": "synthetic/invalid-security-type.json",
+            "line": 10,
+            "column": 9,
+            "pointer": "/components/securitySchemes/Auth/type",
+            "related": []
+          },
+          {
+            "ruleId": "schema.enum",
+            "severity": "error",
+            "message": "does not have a value in the enumeration [\"scramSha256\", \"scramSha512\"]",
+            "file": "synthetic/invalid-security-type.json",
+            "line": 10,
+            "column": 9,
+            "pointer": "/components/securitySchemes/Auth/type",
+            "related": []
+          },
+          {
+            "ruleId": "schema.enum",
+            "severity": "error",
+            "message": "does not have a value in the enumeration [\"symmetricEncryption\"]",
+            "file": "synthetic/invalid-security-type.json",
+            "line": 10,
+            "column": 9,
+            "pointer": "/components/securitySchemes/Auth/type",
+            "related": []
+          },
+          {
+            "ruleId": "schema.enum",
+            "severity": "error",
+            "message": "does not have a value in the enumeration [\"userPassword\"]",
+            "file": "synthetic/invalid-security-type.json",
+            "line": 10,
+            "column": 9,
+            "pointer": "/components/securitySchemes/Auth/type",
+            "related": []
+          }
+        ]
+      },
+      "javascript": {
+        "successful": false,
+        "documentPresent": false,
+        "errorCodes": [
+          "asyncapi-document-resolved"
+        ],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          },
+          {
+            "code": "asyncapi-document-resolved",
+            "severity": 0,
+            "message": "\"Auth\" property must have required property \"in\"",
+            "pointer": "/components/securitySchemes/Auth"
+          },
+          {
+            "code": "asyncapi-document-resolved",
+            "severity": 0,
+            "message": "\"Auth\" property must not be valid",
+            "pointer": "/components/securitySchemes/Auth"
+          },
+          {
+            "code": "asyncapi-document-resolved",
+            "severity": 0,
+            "message": "\"Auth\" property must have required property \"scheme\"",
+            "pointer": "/components/securitySchemes/Auth"
+          },
+          {
+            "code": "asyncapi-document-resolved",
+            "severity": 0,
+            "message": "\"Auth\" property must have required property \"name\"",
+            "pointer": "/components/securitySchemes/Auth"
+          },
+          {
+            "code": "asyncapi-document-resolved",
+            "severity": 0,
+            "message": "\"Auth\" property must have required property \"openIdConnectUrl\"",
+            "pointer": "/components/securitySchemes/Auth"
+          },
+          {
+            "code": "asyncapi-document-resolved",
+            "severity": 0,
+            "message": "\"type\" property must be equal to one of the allowed values: \"userPassword\", \"apiKey\", \"http\", \"httpApiKey\", \"oauth2\", \"openIdConnect\"",
+            "pointer": "/components/securitySchemes/Auth/type"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "example-instance-not-validated",
+      "file": "synthetic/example-instance-not-validated.json",
+      "sha256": "3147bc050b21dff4f5cfff4d8755c61db32a0f97a3b314d4d0176b8e4524a097",
+      "classification": "agreement",
+      "reason": "Both parsers accept the document without validating example payload instances against the payload schema; this is not instance-validation coverage.",
+      "asyncwright": {
+        "id": "example-instance-not-validated",
+        "file": "synthetic/example-instance-not-validated.json",
+        "sha256": "3147bc050b21dff4f5cfff4d8755c61db32a0f97a3b314d4d0176b8e4524a097",
+        "successful": true,
+        "documentPresent": true,
+        "errorRules": [],
+        "diagnostics": []
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "obsolete-message-id",
+      "file": "synthetic/obsolete-message-id.json",
+      "sha256": "1bd208c8a6ba003454f867426186520196203c274cbe848e44f77b2d998f654d",
+      "classification": "agreement",
+      "reason": "Both parsers agree on document acceptance.",
+      "asyncwright": {
+        "id": "obsolete-message-id",
+        "file": "synthetic/obsolete-message-id.json",
+        "sha256": "1bd208c8a6ba003454f867426186520196203c274cbe848e44f77b2d998f654d",
+        "successful": false,
+        "documentPresent": false,
+        "errorRules": [
+          "schema.additionalProperties",
+          "schema.oneOf",
+          "schema.required"
+        ],
+        "diagnostics": [
+          {
+            "ruleId": "schema.oneOf",
+            "severity": "error",
+            "message": "must be valid to one and only one schema, but 0 are valid",
+            "file": "synthetic/obsolete-message-id.json",
+            "line": 8,
+            "column": 5,
+            "pointer": "/channels/events",
+            "related": []
+          },
+          {
+            "ruleId": "schema.required",
+            "severity": "error",
+            "message": "required property '$ref' not found",
+            "file": "synthetic/obsolete-message-id.json",
+            "line": 8,
+            "column": 5,
+            "pointer": "/channels/events",
+            "related": []
+          },
+          {
+            "ruleId": "schema.additionalProperties",
+            "severity": "error",
+            "message": "property 'messageId' is not defined in the schema and the schema does not allow additional properties",
+            "file": "synthetic/obsolete-message-id.json",
+            "line": 11,
+            "column": 9,
+            "pointer": "/channels/events/messages/Event",
+            "related": []
+          },
+          {
+            "ruleId": "schema.oneOf",
+            "severity": "error",
+            "message": "must be valid to one and only one schema, but 0 are valid",
+            "file": "synthetic/obsolete-message-id.json",
+            "line": 11,
+            "column": 9,
+            "pointer": "/channels/events/messages/Event",
+            "related": []
+          },
+          {
+            "ruleId": "schema.required",
+            "severity": "error",
+            "message": "required property '$ref' not found",
+            "file": "synthetic/obsolete-message-id.json",
+            "line": 11,
+            "column": 9,
+            "pointer": "/channels/events/messages/Event",
+            "related": []
+          }
+        ]
+      },
+      "javascript": {
+        "successful": false,
+        "documentPresent": false,
+        "errorCodes": [
+          "asyncapi-document-resolved"
+        ],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          },
+          {
+            "code": "asyncapi-document-resolved",
+            "severity": 0,
+            "message": "Property \"messageId\" is not expected to be here",
+            "pointer": "/channels/events/messages/Event/messageId"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "redundant-channel-parameter",
+      "file": "synthetic/redundant-channel-parameter.json",
+      "sha256": "690c85e22b25a05ac043d2ed3c4ebe196f23a4f33321bd7d220a0b86d2c5b9d8",
+      "classification": "agreement",
+      "reason": "A channel parameter must occur in its address. Both parsers reject the unused parameter.",
+      "asyncwright": {
+        "id": "redundant-channel-parameter",
+        "file": "synthetic/redundant-channel-parameter.json",
+        "sha256": "690c85e22b25a05ac043d2ed3c4ebe196f23a4f33321bd7d220a0b86d2c5b9d8",
+        "successful": false,
+        "documentPresent": false,
+        "errorRules": [
+          "channel.parameter"
+        ],
+        "diagnostics": [
+          {
+            "ruleId": "channel.parameter",
+            "severity": "error",
+            "message": "Channel parameter is absent from the address: unused",
+            "file": "synthetic/redundant-channel-parameter.json",
+            "line": 11,
+            "column": 9,
+            "pointer": "/channels/events/parameters/unused",
+            "related": []
+          }
+        ]
+      },
+      "javascript": {
+        "successful": false,
+        "documentPresent": false,
+        "errorCodes": [
+          "asyncapi3-channel-parameters"
+        ],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          },
+          {
+            "code": "asyncapi3-channel-parameters",
+            "severity": 0,
+            "message": "Channel's \"parameters\" object has redundant defined \"unused\" parameter.",
+            "pointer": "/channels/events/parameters/unused"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "root-operation-component-channel",
+      "file": "synthetic/root-operation-component-channel.json",
+      "sha256": "4c8e8a55a596017348c99bd7ad59cc46cbd6c10c1df0323705239d8b56d2894b",
+      "classification": "agreement",
+      "reason": "A root operation must reference a root channel. Both parsers reject a direct reference to components.channels.",
+      "asyncwright": {
+        "id": "root-operation-component-channel",
+        "file": "synthetic/root-operation-component-channel.json",
+        "sha256": "4c8e8a55a596017348c99bd7ad59cc46cbd6c10c1df0323705239d8b56d2894b",
+        "successful": false,
+        "documentPresent": false,
+        "errorRules": [
+          "operation.channel"
+        ],
+        "diagnostics": [
+          {
+            "ruleId": "operation.channel",
+            "severity": "error",
+            "message": "Root operations must reference channels under /channels",
+            "file": "synthetic/root-operation-component-channel.json",
+            "line": 18,
+            "column": 9,
+            "pointer": "/operations/send/channel/$ref",
+            "related": [
+              {
+                "file": "synthetic/root-operation-component-channel.json",
+                "line": 9,
+                "column": 7,
+                "pointer": "/components/channels/events"
+              }
+            ]
+          }
+        ]
+      },
+      "javascript": {
+        "successful": false,
+        "documentPresent": false,
+        "errorCodes": [
+          "asyncapi3-required-operation-channel-unambiguity"
+        ],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          },
+          {
+            "code": "asyncapi3-required-operation-channel-unambiguity",
+            "severity": 0,
+            "message": "The \"channel\" field of an operation under the root \"operations\" object must always reference a channel under the root \"channels\" object.",
+            "pointer": "/operations/send/channel/$ref"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "root-channel-component-server",
+      "file": "synthetic/root-channel-component-server.json",
+      "sha256": "debaa94b421f4985f188e177fe35ec8633dbcc003d49f0a7eea665ea806b8746",
+      "classification": "agreement",
+      "reason": "A root channel must reference root servers. Both parsers reject a direct reference to components.servers.",
+      "asyncwright": {
+        "id": "root-channel-component-server",
+        "file": "synthetic/root-channel-component-server.json",
+        "sha256": "debaa94b421f4985f188e177fe35ec8633dbcc003d49f0a7eea665ea806b8746",
+        "successful": false,
+        "documentPresent": false,
+        "errorRules": [
+          "channel.server"
+        ],
+        "diagnostics": [
+          {
+            "ruleId": "channel.server",
+            "severity": "error",
+            "message": "Root channels must reference servers under /servers",
+            "file": "synthetic/root-channel-component-server.json",
+            "line": 20,
+            "column": 11,
+            "pointer": "/channels/events/servers/0/$ref",
+            "related": [
+              {
+                "file": "synthetic/root-channel-component-server.json",
+                "line": 9,
+                "column": 7,
+                "pointer": "/components/servers/broker"
+              }
+            ]
+          }
+        ]
+      },
+      "javascript": {
+        "successful": false,
+        "documentPresent": false,
+        "errorCodes": [
+          "asyncapi3-required-channel-servers-unambiguity"
+        ],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          },
+          {
+            "code": "asyncapi3-required-channel-servers-unambiguity",
+            "severity": 0,
+            "message": "The \"servers\" field of a channel under the root \"channels\" object must always reference a subset of the servers under the root \"servers\" object.",
+            "pointer": "/channels/events/servers/0/$ref"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "matching-channel-parameter",
+      "file": "synthetic/matching-channel-parameter.json",
+      "sha256": "d052e6d8b3448bc617a3a3a65705bcc142e50787c4d4c8ea0d2a5920f27e1192",
+      "classification": "agreement",
+      "reason": "A repeated address placeholder is satisfied by a single matching parameter definition.",
+      "asyncwright": {
+        "id": "matching-channel-parameter",
+        "file": "synthetic/matching-channel-parameter.json",
+        "sha256": "d052e6d8b3448bc617a3a3a65705bcc142e50787c4d4c8ea0d2a5920f27e1192",
+        "successful": true,
+        "documentPresent": true,
+        "errorRules": [],
+        "diagnostics": []
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "component-operation-component-channel",
+      "file": "synthetic/component-operation-component-channel.json",
+      "sha256": "c4115104abe160f1b7bf80abd5440ed0292c747b4d4e17ad1a34d2095eb089f2",
+      "classification": "agreement",
+      "reason": "An operation defined in components may directly reference a component channel.",
+      "asyncwright": {
+        "id": "component-operation-component-channel",
+        "file": "synthetic/component-operation-component-channel.json",
+        "sha256": "c4115104abe160f1b7bf80abd5440ed0292c747b4d4e17ad1a34d2095eb089f2",
+        "successful": true,
+        "documentPresent": true,
+        "errorRules": [],
+        "diagnostics": []
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "component-channel-component-server",
+      "file": "synthetic/component-channel-component-server.json",
+      "sha256": "fa14d6031b4898b26d4decf9b7418652dfd7f5c8b722fdf1034c2f741e38efb0",
+      "classification": "agreement",
+      "reason": "A channel defined in components may directly reference a component server.",
+      "asyncwright": {
+        "id": "component-channel-component-server",
+        "file": "synthetic/component-channel-component-server.json",
+        "sha256": "fa14d6031b4898b26d4decf9b7418652dfd7f5c8b722fdf1034c2f741e38efb0",
+        "successful": true,
+        "documentPresent": true,
+        "errorRules": [],
+        "diagnostics": []
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "root-operation-channel-alias",
+      "file": "synthetic/root-operation-channel-alias.json",
+      "sha256": "6f5b89422861dee761ad93c5555910454baceac3ba7d5f1776fb1032b7f0408f",
+      "classification": "agreement",
+      "reason": "A root operation may refer to a root channel alias even when its resolved body is in components.",
+      "asyncwright": {
+        "id": "root-operation-channel-alias",
+        "file": "synthetic/root-operation-channel-alias.json",
+        "sha256": "6f5b89422861dee761ad93c5555910454baceac3ba7d5f1776fb1032b7f0408f",
+        "successful": true,
+        "documentPresent": true,
+        "errorRules": [],
+        "diagnostics": []
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "root-channel-server-alias",
+      "file": "synthetic/root-channel-server-alias.json",
+      "sha256": "2383b1bfcaa6aa481e760e5b2785e49919e2bff77e8e8796f404fceea3386972",
+      "classification": "agreement",
+      "reason": "A root channel may refer to a root server alias even when its resolved body is in components.",
+      "asyncwright": {
+        "id": "root-channel-server-alias",
+        "file": "synthetic/root-channel-server-alias.json",
+        "sha256": "2383b1bfcaa6aa481e760e5b2785e49919e2bff77e8e8796f404fceea3386972",
+        "successful": true,
+        "documentPresent": true,
+        "errorRules": [],
+        "diagnostics": []
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "root-operation-encoded-channel-name",
+      "file": "synthetic/root-operation-encoded-channel-name.json",
+      "sha256": "9ddfed6a9bd21c5656decc4ec559d80c1a9ecb9049b7636c5011d265bd507179",
+      "classification": "agreement",
+      "reason": "A percent-encoded token resolves to a root channel and must remain valid.",
+      "asyncwright": {
+        "id": "root-operation-encoded-channel-name",
+        "file": "synthetic/root-operation-encoded-channel-name.json",
+        "sha256": "9ddfed6a9bd21c5656decc4ec559d80c1a9ecb9049b7636c5011d265bd507179",
+        "successful": true,
+        "documentPresent": true,
+        "errorRules": [],
+        "diagnostics": []
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "channel-server-list-second-invalid",
+      "file": "synthetic/channel-server-list-second-invalid.json",
+      "sha256": "a42448c1449ce6cbe73e2a009d8387cfc50db2722e5c976ef7c066cef13b006c",
+      "classification": "agreement",
+      "reason": "Every root channel server reference must target a root server, including entries after a valid one.",
+      "asyncwright": {
+        "id": "channel-server-list-second-invalid",
+        "file": "synthetic/channel-server-list-second-invalid.json",
+        "sha256": "a42448c1449ce6cbe73e2a009d8387cfc50db2722e5c976ef7c066cef13b006c",
+        "successful": false,
+        "documentPresent": false,
+        "errorRules": [
+          "channel.server"
+        ],
+        "diagnostics": [
+          {
+            "ruleId": "channel.server",
+            "severity": "error",
+            "message": "Root channels must reference servers under /servers",
+            "file": "synthetic/channel-server-list-second-invalid.json",
+            "line": 29,
+            "column": 11,
+            "pointer": "/channels/events/servers/1/$ref",
+            "related": [
+              {
+                "file": "synthetic/channel-server-list-second-invalid.json",
+                "line": 15,
+                "column": 7,
+                "pointer": "/components/servers/other"
+              }
+            ]
+          }
+        ]
+      },
+      "javascript": {
+        "successful": false,
+        "documentPresent": false,
+        "errorCodes": [
+          "asyncapi3-required-channel-servers-unambiguity"
+        ],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          },
+          {
+            "code": "asyncapi3-required-channel-servers-unambiguity",
+            "severity": 0,
+            "message": "The \"servers\" field of a channel under the root \"channels\" object must always reference a subset of the servers under the root \"servers\" object.",
+            "pointer": "/channels/events/servers/1/$ref"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "component-redundant-channel-parameter",
+      "file": "synthetic/component-redundant-channel-parameter.json",
+      "sha256": "70d1a2117228d0ec1da70d7bd2f9283923c60d17dde47969e2b49debc041276d",
+      "classification": "agreement",
+      "reason": "The address parameter matching constraint also applies to component channel definitions.",
+      "asyncwright": {
+        "id": "component-redundant-channel-parameter",
+        "file": "synthetic/component-redundant-channel-parameter.json",
+        "sha256": "70d1a2117228d0ec1da70d7bd2f9283923c60d17dde47969e2b49debc041276d",
+        "successful": false,
+        "documentPresent": false,
+        "errorRules": [
+          "channel.parameter"
+        ],
+        "diagnostics": [
+          {
+            "ruleId": "channel.parameter",
+            "severity": "error",
+            "message": "Channel parameter is absent from the address: unused",
+            "file": "synthetic/component-redundant-channel-parameter.json",
+            "line": 12,
+            "column": 11,
+            "pointer": "/components/channels/events/parameters/unused",
+            "related": []
+          }
+        ]
+      },
+      "javascript": {
+        "successful": false,
+        "documentPresent": false,
+        "errorCodes": [
+          "asyncapi3-channel-parameters"
+        ],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          },
+          {
+            "code": "asyncapi3-channel-parameters",
+            "severity": 0,
+            "message": "Channel's \"parameters\" object has redundant defined \"unused\" parameter.",
+            "pointer": "/components/channels/events/parameters/unused"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "root-operation-component-alias-to-root",
+      "file": "synthetic/root-operation-component-alias-to-root.json",
+      "sha256": "61e686b79956bdcb1368de740d87694a68293609bf8749a6d042331b4843c2b4",
+      "classification": "agreement",
+      "reason": "The first reference target must be a root channel; resolving a component alias to a root body does not satisfy this constraint.",
+      "asyncwright": {
+        "id": "root-operation-component-alias-to-root",
+        "file": "synthetic/root-operation-component-alias-to-root.json",
+        "sha256": "61e686b79956bdcb1368de740d87694a68293609bf8749a6d042331b4843c2b4",
+        "successful": false,
+        "documentPresent": false,
+        "errorRules": [
+          "operation.channel"
+        ],
+        "diagnostics": [
+          {
+            "ruleId": "operation.channel",
+            "severity": "error",
+            "message": "Root operations must reference channels under /channels",
+            "file": "synthetic/root-operation-component-alias-to-root.json",
+            "line": 23,
+            "column": 9,
+            "pointer": "/operations/send/channel/$ref",
+            "related": [
+              {
+                "file": "synthetic/root-operation-component-alias-to-root.json",
+                "line": 14,
+                "column": 7,
+                "pointer": "/components/channels/alias"
+              }
+            ]
+          }
+        ]
+      },
+      "javascript": {
+        "successful": false,
+        "documentPresent": false,
+        "errorCodes": [
+          "asyncapi3-required-operation-channel-unambiguity"
+        ],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          },
+          {
+            "code": "asyncapi3-required-operation-channel-unambiguity",
+            "severity": 0,
+            "message": "The \"channel\" field of an operation under the root \"operations\" object must always reference a channel under the root \"channels\" object.",
+            "pointer": "/operations/send/channel/$ref"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "root-channel-component-alias-to-root",
+      "file": "synthetic/root-channel-component-alias-to-root.json",
+      "sha256": "7a88912580af7ec092f85c737be74639d0f503f95f09782645ffaf5485e9d926",
+      "classification": "agreement",
+      "reason": "The first reference target must be a root server; resolving a component alias to a root body does not satisfy this constraint.",
+      "asyncwright": {
+        "id": "root-channel-component-alias-to-root",
+        "file": "synthetic/root-channel-component-alias-to-root.json",
+        "sha256": "7a88912580af7ec092f85c737be74639d0f503f95f09782645ffaf5485e9d926",
+        "successful": false,
+        "documentPresent": false,
+        "errorRules": [
+          "channel.server"
+        ],
+        "diagnostics": [
+          {
+            "ruleId": "channel.server",
+            "severity": "error",
+            "message": "Root channels must reference servers under /servers",
+            "file": "synthetic/root-channel-component-alias-to-root.json",
+            "line": 25,
+            "column": 11,
+            "pointer": "/channels/events/servers/0/$ref",
+            "related": [
+              {
+                "file": "synthetic/root-channel-component-alias-to-root.json",
+                "line": 15,
+                "column": 7,
+                "pointer": "/components/servers/alias"
+              }
+            ]
+          }
+        ]
+      },
+      "javascript": {
+        "successful": false,
+        "documentPresent": false,
+        "errorCodes": [
+          "asyncapi3-required-channel-servers-unambiguity"
+        ],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          },
+          {
+            "code": "asyncapi3-required-channel-servers-unambiguity",
+            "severity": 0,
+            "message": "The \"servers\" field of a channel under the root \"channels\" object must always reference a subset of the servers under the root \"servers\" object.",
+            "pointer": "/channels/events/servers/0/$ref"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    }
+  ]
+}

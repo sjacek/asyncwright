@@ -87,7 +87,9 @@ public class ParseExample {
 are in `io.github.sjacek.asyncwright.api`. The parser loads the bundled schema without network
 retrieval, reports project-relative paths with one-based positions, and stops after syntax
 or structural errors. It checks reference targets, unresolved cycles, operation message
-membership and channel address parameters. Schema recursion is allowed; pure reference
+membership, channel address parameters and root operation/channel reference locations.
+Parameter definitions must match address placeholders; component definitions may reference
+other components. Schema recursion is allowed; pure reference
 cycles are errors. The resolver returns target copies without expanding the document graph.
 Before returning a typed model, the parser checks that its serialization preserves source
 values. Added model defaults are allowed; silent omissions or changed values are errors.
@@ -109,6 +111,19 @@ The external five-document corpus has a separate opt-in check:
 
 Its JSON report is written to `parser/build/reports/asyncapi-corpus/result.json` and includes
 source checksums and diagnostics. Ordinary `check` does not require the external documents.
+
+## Public conformance corpus
+
+`check` also runs `:parser:publicCorpusTest` against checked-in public fixtures without
+Node.js or network access. The corpus contains 12 unmodified examples from the AsyncAPI
+3.0.0 specification release and 48 synthetic positive, negative and capability cases.
+The manifest pins fixture hashes, upstream provenance and each parser's reviewed outcome.
+
+An optional comparison uses `@asyncapi/parser` 3.6.6 with core rules enabled and recommended
+style rules disabled. See [comparison instructions and known gaps](tools/conformance/README.md)
+and the [recorded comparison](docs/conformance/comparison.json). Matching the baseline
+does not mean full conformance: the three identified semantic validation gaps are fixed,
+while documented capability, model and reference parser differences remain.
 
 ## Reproduce F0
 

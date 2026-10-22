@@ -1,0 +1,26 @@
+{
+  "asyncapi": "3.0.0",
+  "info": {
+    "title": "Public regression fixture",
+    "version": "1.0.0"
+  },
+  "components": {
+    "messageTraits": {
+      "Shared": {
+        "summary": "Shared summary"
+      }
+    },
+    "messages": {
+      "Event": {
+        "traits": [
+          {
+            "$ref": "#/components/messageTraits/Shared"
+          }
+        ],
+        "payload": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

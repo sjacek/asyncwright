@@ -1,0 +1,20 @@
+{
+  "asyncapi": "3.0.0",
+  "info": {
+    "title": "Public regression fixture",
+    "version": "1.0.0"
+  },
+  "components": {
+    "schemas": {
+      "Text": {
+        "type": "string"
+      },
+      "First": {
+        "$ref": "#/components/schemas/Text"
+      },
+      "Second": {
+        "$ref": "#/components/schemas/First"
+      }
+    }
+  }
+}

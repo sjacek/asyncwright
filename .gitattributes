@@ -1,3 +1,5 @@
 # Preserve the exact upstream bytes used by the schema provenance checksum.
 parser/src/main/resources/schemas/asyncapi/3.0.0.json -text
 parser/src/main/resources/META-INF/licenses/spec-json-schemas/* -text
+# Corpus checksums must survive checkouts on Windows and Unix unchanged.
+parser/src/test/resources/conformance/** -text

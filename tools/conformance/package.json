@@ -1,0 +1,10 @@
+{
+  "name": "asyncwright-conformance",
+  "private": true,
+  "scripts": {
+    "compare": "node compare.cjs"
+  },
+  "devDependencies": {
+    "@asyncapi/parser": "3.6.6"
+  }
+}

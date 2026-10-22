@@ -44,8 +44,21 @@ tasks.register('f0', JavaExec) {
 tasks.named('check') { dependsOn tasks.named('f0Classes') }
 
 tasks.named('test') {
-    useJUnitPlatform { excludeTags 'external-corpus' }
+    useJUnitPlatform { excludeTags 'external-corpus', 'public-corpus' }
 }
+
+tasks.register('publicCorpusTest', Test) {
+    description = 'Check the public AsyncAPI corpus against reviewed outcomes and write a comparison report.'
+    group = 'verification'
+    testClassesDirs = sourceSets.test.output.classesDirs
+    classpath = sourceSets.test.runtimeClasspath
+    useJUnitPlatform { includeTags 'public-corpus' }
+    def report = layout.buildDirectory.file('reports/conformance/asyncwright.json')
+    outputs.file(report)
+    systemProperty 'asyncwright.publicCorpusReport', report.get().asFile.absolutePath
+}
+
+tasks.named('check') { dependsOn tasks.named('publicCorpusTest') }
 
 tasks.register('contractCorpusTest', Test) {
     description = 'Validate and resolve the five external AsyncAPI contracts with the production parser.'

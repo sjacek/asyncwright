@@ -1,0 +1,22 @@
+{
+  "asyncapi": "3.0.0",
+  "info": {
+    "title": "Public regression fixture",
+    "version": "1.0.0"
+  },
+  "components": {
+    "channels": {
+      "events": {
+        "address": "events"
+      }
+    }
+  },
+  "operations": {
+    "send": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/components/channels/events"
+      }
+    }
+  }
+}

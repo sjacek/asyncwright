@@ -23,6 +23,8 @@ been published. The current development version is `0.1.0-SNAPSHOT`.
   diagnostics and a separate resolver retaining document references.
 - Reference target and cycle checks, operation message membership and channel parameter rules.
 - Opt-in integration checks for an external contract corpus and explicit local fork resolution.
+- Public regression corpus with 12 pinned official AsyncAPI 3.0.0 examples and 48 synthetic cases.
+- Offline JVM corpus checks and a reproducible JavaScript parser comparison with reviewed differences.
 
 ### Changed
 
@@ -35,6 +37,9 @@ been published. The current development version is `0.1.0-SNAPSHOT`.
 - Report missing mapped values explicitly and close the captured diagnostic stream automatically.
 - Support a Git-ignored local model repository configuration for IDE imports and CLI builds.
 - Provide a complete, compilable Java usage example.
+- Reject channel parameters that do not occur in the channel address.
+- Require root operations to reference root channels and root channels to reference root servers,
+  while preserving valid references in component definitions and root aliases.
 
 ### Development status
 
