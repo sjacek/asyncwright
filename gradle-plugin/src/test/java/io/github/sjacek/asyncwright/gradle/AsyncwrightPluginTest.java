@@ -85,6 +85,22 @@ class AsyncwrightPluginTest {
         assertTrue(result.getOutput().contains(root.resolve("contracts/events.yaml").toString()));
     }
 
+    @Test void schemaMetadataDoesNotWarnWhileProjectDiagnosticsRemainVisible() throws Exception {
+        Path root = fixture("schema-metadata", PLUGIN + SPEC);
+        projectExtension(root);
+        append(root, "build.gradle", REGISTRATION);
+        // A fresh daemon/classloader prevents NetworkNT's once-per-keyword cache from hiding the warning.
+        // Keep its files outside @TempDir because Windows daemons retain file locks after a build.
+        File testKit = new File(System.getProperty("asyncwright.testKitDir"), "schema-metadata-" + UUID.randomUUID());
+        BuildResult result = runner(root, "check", "asyncApiGenerateEventsCatalog").withTestKitDir(testKit).build();
+        assertEquals(SUCCESS, outcome(result, ":asyncApiValidateEvents"));
+        assertEquals(SUCCESS, outcome(result, ":asyncApiGenerateEventsCatalog"));
+        assertFalse(result.getOutput().contains("Unknown keyword example"), result::getOutput);
+        assertTrue(result.getOutput().contains("fixture.warning"), result::getOutput);
+        assertTrue(read(root, "build/reports/asyncapi/events.json").contains("fixture.warning"));
+        assertEquals("events.created", read(root, "build/generated/asyncapi/events/catalog/channels.txt"));
+    }
+
     @Test void parserErrorsSkipProjectRulesAndKeepStructuralReports() throws Exception {
         Path root = fixture("syntax", PLUGIN + SPEC + "asyncwright.specs.events.rules { rule 'does.not.Exist' }\n");
         write(root, "contracts/events.yaml", "asyncapi: 3.0.0\ninfo: [\n");

@@ -29,7 +29,7 @@ public final class AsyncApiParser {
 
     private static Schema schema() {
         String id = AsyncApi30.SCHEMA_ID;
-        SchemaRegistry registry = SchemaRegistry.withDefaultDialect(SpecificationVersion.DRAFT_7, builder -> builder
+        SchemaRegistry registry = SchemaRegistry.withDefaultDialect(SchemaCompatibility.dialect(), builder -> builder
                 .schemaRegistryConfig(SchemaRegistryConfig.builder().locale(Locale.ENGLISH)
                         .formatAssertionsEnabled(true).regularExpressionFactory(JoniRegularExpressionFactory.getInstance()).build())
                 .schemaIdResolvers(r -> r.mappings(Map.of(id, "classpath:" + AsyncApi30.SCHEMA_RESOURCE.substring(1))))

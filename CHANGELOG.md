@@ -59,6 +59,8 @@ been published. The current development version is `0.1.0-SNAPSHOT`.
 
 ### Fixed
 
+- Register the bundled schema's `example` metadata as an annotation to avoid NetworkNT's
+  unknown-keyword warning during validation and generation.
 - Apply a narrow runtime correction to the bundled schema's wrapper condition so boolean schemas
   reach the Schema Object validator; preserve the original upstream resource bytes.
 - Resolve boolean schema dependencies and apply the default format for wrappers without `schemaFormat`.
