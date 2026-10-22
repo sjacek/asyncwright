@@ -33,6 +33,24 @@ final class DocumentIndex {
             return;
         }
         if (kind == Kind.SCHEMA) {
+            if (node.has("schemaFormat")) {
+                if (Set.of("application/vnd.aai.asyncapi;version=3.0.0",
+                        "application/vnd.aai.asyncapi+json;version=3.0.0",
+                        "application/vnd.aai.asyncapi+yaml;version=3.0.0").contains(node.path("schemaFormat").asText()))
+                    child(pointer, "schema", node.path("schema"), Kind.SCHEMA);
+                else unsupported(pointer + "/schemaFormat", "Non-default schema formats are not supported in 0.1");
+                return;
+            }
+            if (node.has("$schema") && !Set.of("http://json-schema.org/draft-07/schema",
+                    "http://json-schema.org/draft-07/schema#", "https://json-schema.org/draft-07/schema",
+                    "https://json-schema.org/draft-07/schema#").contains(node.path("$schema").asText()))
+                diagnostics.add(Diagnostic.at("unsupported.schema-dialect", Severity.ERROR,
+                        "Only the default AsyncAPI / JSON Schema draft-07 dialect is supported in 0.1",
+                        source.location(pointer + "/$schema"), List.of()));
+            if (node.has("$id"))
+                diagnostics.add(Diagnostic.at("unsupported.schema-id", Severity.ERROR,
+                        "Schema resource identifiers ($id) are not supported in 0.1; use document-local JSON Pointers",
+                        source.location(pointer + "/$id"), List.of()));
             for (String key : List.of("properties", "patternProperties", "definitions", "$defs"))
                 mapChildren(node, pointer, key, Kind.SCHEMA);
             for (String key : List.of("allOf", "oneOf", "anyOf"))
@@ -68,18 +86,7 @@ final class DocumentIndex {
             Kind mapKind = mapKind(kind, key);
             if (mapKind != null) { mapChildren(node, pointer, key, mapKind); continue; }
             if (key.equals("payload") || key.equals("headers")) {
-                if (value.has("schemaFormat")) {
-                    if (Set.of("application/vnd.aai.asyncapi;version=3.0.0",
-                            "application/vnd.aai.asyncapi+json;version=3.0.0",
-                            "application/vnd.aai.asyncapi+yaml;version=3.0.0").contains(value.path("schemaFormat").asText())) {
-                        String wrapper = pointer + "/" + key;
-                        kinds.put(wrapper, Kind.OTHER);
-                        children.put(wrapper, new ArrayList<>());
-                        children.get(pointer).add(wrapper);
-                        child(wrapper, "schema", value.path("schema"), Kind.SCHEMA);
-                    } else unsupported(pointer + "/" + key + "/schemaFormat",
-                            "Non-default schema formats are not supported in 0.1");
-                } else child(pointer, key, value, Kind.SCHEMA);
+                child(pointer, key, value, Kind.SCHEMA);
                 continue;
             }
             Kind childKind = switch (key) {

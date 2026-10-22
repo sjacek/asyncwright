@@ -7,6 +7,8 @@ been published. The current development version is `0.1.0-SNAPSHOT`.
 
 ### Added
 
+- Documented validation scope and diagnostic contract, with additional public P3/P5 regressions
+  and explicit tracking of the shared boolean-schema conformance limitation.
 - Public rule and generator API with document/reference views, immutable text parameters,
   source-aware diagnostics and scoped output writes.
 - A Gradle-independent extension executor supporting class-name registration, caller-supplied
@@ -28,17 +30,26 @@ been published. The current development version is `0.1.0-SNAPSHOT`.
   diagnostics and a separate resolver retaining document references.
 - Reference target and cycle checks, operation message membership and channel parameter rules.
 - Opt-in integration checks for an external contract corpus and explicit local fork resolution.
-- Public regression corpus with 12 pinned official AsyncAPI 3.0.0 examples and 48 synthetic cases.
+- Public regression corpus with 12 pinned official AsyncAPI 3.0.0 examples and 58 synthetic cases.
 - Offline JVM corpus checks and a reproducible JavaScript parser comparison with reviewed differences.
 
 ### Changed
 
+- Report unsupported YAML aliases at their source pointer with `unsupported.yaml-alias`.
+- Reject foreign schema dialects and `$id` resource identifiers explicitly in the 0.1 scope.
 - Move `ResolvedReference` to `io.github.sjacek.asyncwright.api` and expose public document/reference interfaces.
 - Align the compatibility probe's Jackson dependencies with the `2.22.4` BOM to include
   upstream security fixes and override the model library's older transitive dependencies.
 
 ### Fixed
 
+- Validate formats and nested references in component schema wrappers.
+- Preserve arbitrary JSON instance objects and numeric precision in schema const/default/examples,
+  consistently in the parser, typed resolver and extension models.
+- Include transitive reference usages in shared-definition diagnostics and suppress secondary
+  operation membership errors when a channel's message set cannot be resolved.
+- Locate additional YAML documents correctly, reject nonportable diagnostic input paths and
+  order diagnostic ties deterministically.
 - Resolve the contract directory relative to the project root using Gradle's directory API.
 - Report missing mapped values explicitly and close the captured diagnostic stream automatically.
 - Support a Git-ignored local model repository configuration for IDE imports and CLI builds.

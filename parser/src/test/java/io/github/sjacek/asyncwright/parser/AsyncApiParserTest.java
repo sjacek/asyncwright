@@ -196,7 +196,7 @@ class AsyncApiParserTest {
         error(parser.parse("events.yaml", "info: ["), "syntax");
         error(parser.parse("events.json", "{\"asyncapi\":\"3.0.0\",\"asyncapi\":\"3.0.0\"}"), "syntax");
         var alias = parser.parse("events.yaml", "asyncapi: 3.0.0\ninfo: {title: &title Events, version: *title}");
-        error(alias, "syntax");
+        error(alias, "unsupported.yaml-alias");
         assertEquals(2, alias.diagnostics().get(0).line());
     }
 

@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 
 /** Gradle-independent AsyncAPI 3.0 parser; schema retrieval never uses the network. */
 public final class AsyncApiParser {
-    private static final ObjectMapper MAPPER = new ObjectMapper();
+    private static final ObjectMapper MAPPER = ModelMapping.mapper();
     private static final Pattern PARAMETER = Pattern.compile("\\{([^{}]+)}");
     private static final Schema SCHEMA = schema();
 
@@ -43,12 +43,15 @@ public final class AsyncApiParser {
     }
 
     public ParseResult parse(String relativeFile, String input) {
-        Path path = Path.of(relativeFile.replace('\\', '/')).normalize();
-        if (path.isAbsolute() || path.startsWith("..")) throw new IllegalArgumentException("Expected a project-relative file");
+        Path path = DirectoryOutput.relativePath(relativeFile);
         String file = path.toString().replace('\\', '/');
         if (file.isBlank()) throw new IllegalArgumentException("Expected a document file name");
         SourceDocument source;
         try { source = SourceDocument.read(file, input); }
+        catch (SourceDocument.UnsupportedAlias exception) {
+            return failed(List.of(Diagnostic.at("unsupported.yaml-alias", Severity.ERROR,
+                    exception.getMessage(), exception.location, List.of())));
+        }
         catch (IOException exception) {
             int line = 1, column = 1;
             String message = exception.getMessage();
@@ -75,7 +78,9 @@ public final class AsyncApiParser {
                     source.location(pointer), references.related(pointer)));
         }
         if (hasErrors(diagnostics)) return failed(diagnostics);
-        diagnostics.addAll(index.diagnostics);
+        for (Diagnostic diagnostic : index.diagnostics)
+            diagnostics.add(Diagnostic.at(diagnostic.ruleId(), diagnostic.severity(), diagnostic.message(),
+                    source.location(diagnostic.pointer()), references.related(diagnostic.pointer())));
         if (hasErrors(diagnostics)) return failed(diagnostics);
         diagnostics.addAll(references.validate());
         semanticRules(source, index, references, diagnostics);
@@ -128,7 +133,7 @@ public final class AsyncApiParser {
                 for (String parameter : parameters) if (!node.path("parameters").has(parameter))
                     diagnostics.add(Diagnostic.at("channel.parameter", Severity.ERROR,
                             "Undefined channel address parameter: " + parameter,
-                            source.location(pointer + "/address"), List.of()));
+                            source.location(pointer + "/address"), references.related(pointer + "/address")));
                 for (var parameter : node.path("parameters").properties()) if (!parameters.contains(parameter.getKey())) {
                     String definition = pointer + "/parameters/" + SourceDocument.escape(parameter.getKey());
                     diagnostics.add(Diagnostic.at("channel.parameter", Severity.ERROR,
@@ -148,9 +153,14 @@ public final class AsyncApiParser {
             var channel = references.resolve(pointer + "/channel");
             if (channel.isEmpty()) continue;
             Set<String> messages = new HashSet<>();
-            for (var message : channel.get().node().path("messages").properties())
-                references.resolve(channel.get().pointer() + "/messages/" + SourceDocument.escape(message.getKey()))
-                        .ifPresent(target -> messages.add(target.pointer()));
+            boolean completeMessages = true;
+            for (var message : channel.get().node().path("messages").properties()) {
+                var target = references.resolve(channel.get().pointer() + "/messages/" + SourceDocument.escape(message.getKey()));
+                if (target.isPresent()) messages.add(target.get().pointer());
+                else completeMessages = false;
+            }
+            // An unresolved member makes the channel's message set unknown, not empty.
+            if (!completeMessages) continue;
             JsonNode operationMessages = node.path("messages");
             for (int i = 0; i < operationMessages.size(); i++) {
                 String use = pointer + "/messages/" + i;

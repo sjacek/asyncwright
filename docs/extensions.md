@@ -52,6 +52,8 @@ Each invocation receives a fresh typed model reconstructed from the validated so
 to the invocation; later extensions and the original parsed document remain unchanged.
 Reconstruction avoids changes to numeric representations introduced by a model serialization round-trip.
 The source and reference index continue to describe the original document.
+Schema `const`, `default` and `examples` values use the same instance-data mapping as the
+parser and typed resolver, including arbitrary objects and precise JSON numbers.
 
 Parameters contain text values only. The specification copies the map, which remains immutable
 in the context. Use `requireParameter(name)` for required values and
@@ -75,7 +77,8 @@ requirements for extension diagnostics and their related locations.
 - An empty list means no diagnostics; returning null is an extension failure.
 
 Diagnostics are deduplicated and ordered by file, line, column, rule ID and message using
-the same ordering as parser results. `ExtensionResult.diagnosticsJson()` serializes diagnostics
+the same ordering as parser results, with pointer, severity and related locations breaking ties.
+`ExtensionResult.diagnosticsJson()` serializes diagnostics
 only; output paths are available separately through `generatedFiles()`.
 
 Exceptions from loading, constructors, parameter lookup, callback execution and output I/O

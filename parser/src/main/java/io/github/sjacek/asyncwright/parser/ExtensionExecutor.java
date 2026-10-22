@@ -15,7 +15,7 @@ import java.util.Objects;
 
 /** Executes extensions on the calling thread; the Gradle host supplies a worker classloader in F2. */
 public final class ExtensionExecutor {
-    private static final ObjectMapper MAPPER = new ObjectMapper();
+    private static final ObjectMapper MAPPER = ModelMapping.mapper();
     private final ClassLoader loader;
 
     public ExtensionExecutor(ClassLoader loader) { this.loader = Objects.requireNonNull(loader, "loader"); }

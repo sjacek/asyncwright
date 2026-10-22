@@ -14,7 +14,7 @@ import java.util.*;
 
 /** Resolves document positions without replacing references in the source or model. */
 public final class ReferenceResolver implements AsyncApiReferences {
-    private static final ObjectMapper MAPPER = new ObjectMapper();
+    private static final ObjectMapper MAPPER = ModelMapping.mapper();
     private final SourceDocument source;
     private final DocumentIndex index;
     private final Map<String, String> targets = new LinkedHashMap<>();

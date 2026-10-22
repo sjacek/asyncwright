@@ -1,0 +1,24 @@
+{
+  "asyncapi": "3.0.0",
+  "info": {
+    "title": "Public P3/P5 regression fixture",
+    "version": "1.0.0"
+  },
+  "components": {
+    "schemas": {
+      "Value": {
+        "schemaFormat": "application/vnd.apache.avro+json;version=1.9.0",
+        "schema": {
+          "type": "record",
+          "name": "Value",
+          "fields": [
+            {
+              "name": "text",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

@@ -64,14 +64,16 @@ async function main() {
       && JSON.stringify(errorCodes) === JSON.stringify(entry.javascript.errorCodes));
     if (!matches) failures++;
     results.push({ id: entry.id, file: entry.file, sha256: entry.sha256, classification: entry.classification,
-      reason: entry.reason, asyncwright, javascript, matchesBaseline: matches });
+      reason: entry.reason, ...(entry.knownSharedLimitation ? { knownSharedLimitation: entry.knownSharedLimitation } : {}),
+      asyncwright, javascript, matchesBaseline: matches });
     console.log(`${entry.id}: JS=${javascript.successful ? 'accept' : 'reject'}${probe ? '' : `, JVM=${asyncwright?.successful ? 'accept' : 'reject'}, baseline=${matches ? 'match' : 'CHANGED'}`}`);
   }
   const comparable = results.filter(r => r.asyncwright);
   const summary = { cases: results.length, agreements: comparable.filter(r => r.asyncwright.successful === r.javascript.successful).length,
     differences: comparable.filter(r => r.asyncwright.successful !== r.javascript.successful).length,
     classifications: results.reduce((counts, result) => { counts[result.classification] = (counts[result.classification] || 0) + 1; return counts; }, {}),
-    openImplementationGaps: results.filter(r => r.classification === 'implementation-gap').length, unexpectedChanges: failures };
+    openImplementationGaps: results.filter(r => r.classification === 'implementation-gap').length,
+    knownSharedLimitations: results.filter(r => r.knownSharedLimitation).length, unexpectedChanges: failures };
   fs.mkdirSync(path.dirname(output), { recursive: true });
   fs.writeFileSync(output, JSON.stringify({ formatVersion: 1, parser: { name: '@asyncapi/parser', version: parserVersion },
     node: process.version, ruleset: { core: true, recommended: false }, network: 'disabled',

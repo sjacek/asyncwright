@@ -1,0 +1,15 @@
+{
+  "asyncapi": "3.0.0",
+  "info": {
+    "title": "Public P3/P5 regression fixture",
+    "version": "1.0.0"
+  },
+  "components": {
+    "schemas": {
+      "Value": {
+        "$id": "other.json",
+        "type": "string"
+      }
+    }
+  }
+}

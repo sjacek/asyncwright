@@ -1,0 +1,14 @@
+{
+  "asyncapi": "3.0.0",
+  "info": {"title": "Public P3 instance-value regression", "version": "1.0.0"},
+  "components": {
+    "schemas": {
+      "Value": {
+        "type": "object",
+        "const": {"arbitrary": {"traits": [{"enabled": true}]}},
+        "default": {"arbitrary": {"traits": [{"enabled": true}]}},
+        "examples": [{"arbitrary": {"traits": [{"enabled": true}]}}]
+      }
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "asyncapi": "3.0.0",
+  "info": {
+    "title": "Public P3/P5 regression fixture",
+    "version": "1.0.0"
+  },
+  "components": {
+    "schemas": {
+      "Value": {
+        "schemaFormat": "application/vnd.aai.asyncapi+json;version=3.0.0",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "$ref": "#/components/schemas/Text"
+            }
+          }
+        }
+      },
+      "Text": {
+        "type": "string"
+      }
+    },
+    "messages": {
+      "m": {
+        "payload": {
+          "$ref": "#/components/schemas/Value"
+        }
+      }
+    }
+  }
+}

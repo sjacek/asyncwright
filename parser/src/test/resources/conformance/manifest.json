@@ -362,10 +362,11 @@
     {
       "id": "schema-boolean",
       "file": "synthetic/schema-boolean.json",
-      "group": "invalid",
+      "group": "capability",
       "sha256": "dd73525fa052b9f14c2172bc0c95b2846e376516b519c8f768a75e98e379d89b",
       "classification": "agreement",
-      "reason": "Both parsers agree on document acceptance.",
+      "reason": "AsyncAPI 3.0 prose permits boolean schemas, but both pinned implementations reject this case. Agreement does not establish specification conformance.",
+      "knownSharedLimitation": "boolean-schema",
       "asyncwright": {
         "successful": false,
         "errorRules": [
@@ -390,9 +391,9 @@
       "asyncwright": {
         "successful": false,
         "errorRules": [
-          "syntax"
+          "unsupported.yaml-alias"
         ],
-        "firstErrorPointer": ""
+        "firstErrorPointer": "/info/version"
       },
       "javascript": {
         "successful": true,
@@ -1155,6 +1156,196 @@
         "errorCodes": [
           "asyncapi3-required-channel-servers-unambiguity"
         ]
+      }
+    },
+    {
+      "id": "component-avro-format",
+      "file": "synthetic/component-avro-format.json",
+      "group": "capability",
+      "sha256": "b543a65add76b37b122fb0692975f9aa8eff590bffa5fc3bc12e82e5cbc84515",
+      "classification": "unsupported",
+      "reason": "Non-default formats are outside 0.1 in component schemas as well as message payloads.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "unsupported.construct"
+        ],
+        "firstErrorPointer": "/components/schemas/Value/schemaFormat"
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "component-default-missing-reference",
+      "file": "synthetic/component-default-missing-reference.json",
+      "group": "invalid",
+      "sha256": "0916b47736c3f611609ae9791c9dda956a5c3ac7d6174f99545d931ba05906a1",
+      "classification": "agreement",
+      "reason": "Default-format component wrappers must validate references inside their nested schema.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "reference.missing"
+        ],
+        "firstErrorPointer": "/components/schemas/Value/schema/properties/text/$ref"
+      },
+      "javascript": {
+        "successful": false,
+        "errorCodes": [
+          "invalid-ref"
+        ]
+      }
+    },
+    {
+      "id": "component-default-format-reference",
+      "file": "synthetic/component-default-format-reference.json",
+      "group": "valid",
+      "sha256": "eca1d50eb38bdd3af34c3143fb4dc48971779b25081d6d7006ea7bb8715e139d",
+      "classification": "agreement",
+      "reason": "Default-format component schemas and payload references preserve their nested schema references.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "schema-instance-values",
+      "file": "synthetic/schema-instance-values.json",
+      "group": "valid",
+      "sha256": "2972cdfbaff7293cca27f2b8e0ee1bdc56f06c03a2feb63f57cc0aa2ae7129ce",
+      "classification": "reference-parser-difference",
+      "reason": "Schema const/default/examples contain arbitrary JSON instance values. The JS parser incorrectly follows the reference-like const value; Asyncwright preserves the instance data.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": false,
+        "errorCodes": [
+          "invalid-ref"
+        ]
+      }
+    },
+    {
+      "id": "schema-foreign-dialect",
+      "file": "synthetic/schema-foreign-dialect.json",
+      "group": "capability",
+      "sha256": "5f2f9a43f5a74be554dab37ae874d635e62f34fc10cd313d8c34527759902f3c",
+      "classification": "unsupported",
+      "reason": "Only the default AsyncAPI / draft-07 dialect is supported; other declarations must not silently pass.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "unsupported.schema-dialect"
+        ],
+        "firstErrorPointer": "/components/schemas/Value/$schema"
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "schema-resource-id",
+      "file": "synthetic/schema-resource-id.json",
+      "group": "capability",
+      "sha256": "8a0eac804e0b59f8e4ac162dfceef67bf68b0dece0732ca0336bcbb11f3f5de4",
+      "classification": "unsupported",
+      "reason": "Resource identifiers and resource/anchor scope are outside the document-local JSON Pointer resolver in 0.1.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "unsupported.schema-id"
+        ],
+        "firstErrorPointer": "/components/schemas/Value/$id"
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "shared-channel-parameter",
+      "file": "synthetic/shared-channel-parameter.json",
+      "group": "invalid",
+      "sha256": "26154600f3d3a389a102c62ba6f78780224d0385d027a7da0be8343bfa27b1f7",
+      "classification": "agreement",
+      "reason": "A shared channel parameter error is reported once at its definition with transitive reference usages.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "channel.parameter"
+        ],
+        "firstErrorPointer": "/components/channels/shared/address"
+      },
+      "javascript": {
+        "successful": false,
+        "errorCodes": [
+          "asyncapi3-channel-parameters"
+        ]
+      }
+    },
+    {
+      "id": "broken-channel-message",
+      "file": "synthetic/broken-channel-message.json",
+      "group": "invalid",
+      "sha256": "742f978b3b37395f55ecbae641c63f0c626b93f71613ed59980e2ab0995badd2",
+      "classification": "agreement",
+      "reason": "An unresolved channel message prevents secondary operation membership diagnostics.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "reference.missing"
+        ],
+        "firstErrorPointer": "/channels/events/messages/broken/$ref"
+      },
+      "javascript": {
+        "successful": false,
+        "errorCodes": [
+          "asyncapi3-operation-messages-from-referred-channel",
+          "invalid-ref"
+        ]
+      }
+    },
+    {
+      "id": "shared-message-trait",
+      "file": "synthetic/shared-message-trait.json",
+      "group": "capability",
+      "sha256": "7036fc13a0b6b2ffa9f09f8aa9ba37f4e335ce16b3085a58e60ae6a97221f3dd",
+      "classification": "unsupported",
+      "reason": "The unsupported shared trait is reported once at its definition with both reference usages.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "unsupported.construct"
+        ],
+        "firstErrorPointer": "/components/messages/shared/traits"
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "schema-instance-object-values",
+      "file": "synthetic/schema-instance-object-values.json",
+      "group": "valid",
+      "sha256": "01cf219cf32220617c2c7c413ea93906b03d34f2767bef9faa204318e8013c2d",
+      "classification": "agreement",
+      "reason": "Object values in const/default/examples are arbitrary JSON data, not schema objects.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
       }
     }
   ],

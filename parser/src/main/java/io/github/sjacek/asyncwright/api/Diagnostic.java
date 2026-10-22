@@ -19,6 +19,8 @@ public record Diagnostic(String ruleId, Severity severity, String message, Strin
     public static List<Diagnostic> sorted(Collection<Diagnostic> diagnostics) {
         return diagnostics.stream().distinct().sorted(Comparator.comparing(Diagnostic::file)
                 .thenComparingInt(Diagnostic::line).thenComparingInt(Diagnostic::column)
-                .thenComparing(Diagnostic::ruleId).thenComparing(Diagnostic::message)).toList();
+                .thenComparing(Diagnostic::ruleId).thenComparing(Diagnostic::message)
+                .thenComparing(Diagnostic::pointer).thenComparing(Diagnostic::severity)
+                .thenComparing(d -> d.related().toString())).toList();
     }
 }

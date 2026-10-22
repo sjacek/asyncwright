@@ -1,8 +1,8 @@
 # Public parser comparison
 
 The public corpus is checked in under `parser/src/test/resources/conformance/`.
-It contains **60 cases**: 12 unchanged examples from `asyncapi/spec` tag `v3.0.0`
-(commit `d78dcea70c9b094a3df72f9a4e811828cec778cc`) and 48 synthetic fixtures.
+It contains **70 cases**: 12 unchanged examples from `asyncapi/spec` tag `v3.0.0`
+(commit `d78dcea70c9b094a3df72f9a4e811828cec778cc`) and 58 synthetic fixtures.
 The official files retain their original Apache-2.0 LICENSE and NOTICE; synthetic files
 use the project MIT license. No application contracts are included.
 
@@ -31,7 +31,7 @@ Configure the local model repository as described in the root README. From the p
 .\gradlew.bat check assemble --configuration-cache-problems=fail
 ```
 
-This includes `:parser:publicCorpusTest`, with 60 case checks and one manifest integrity check.
+This includes `:parser:publicCorpusTest`, with 70 case checks and one manifest integrity check.
 It needs no Node.js or external application contracts. With Gradle dependencies already
 cached, add `--offline`. The JVM report is `parser/build/reports/conformance/asyncwright.json`.
 
@@ -67,14 +67,14 @@ model graph equality. JavaScript dereferences and composes a document; Asyncwrig
 `$ref` values and exposes a separate resolver. Two rejecting parsers can report different
 diagnostics because Asyncwright stops after structural errors.
 
-The current result is **48 agreements and 12 reviewed differences**:
+The current result is **53 agreements and 17 reviewed differences** across **70 cases**:
 
 | Classification | Cases | Meaning |
 | --- | ---: | --- |
-| Agreement | 48 | Both accept or both reject. |
-| Unsupported | 7 | Traits (two official cases and one synthetic), YAML aliases, external files, versions 2.6 and 3.1. |
+| Agreement | 53 | Both accept or both reject; includes one known shared limitation. |
+| Unsupported | 11 | Traits (including a shared definition), YAML aliases, external files, versions 2.6/3.1, component Avro format, foreign schema dialect and schema resource ID. |
 | Model limit | 2 | Unknown `nullable` keyword and custom binding extensions cannot be preserved by the typed Java model. |
-| Reference parser difference | 2 | JavaScript follows a reference-like extension value and skips the channel parameter check when `parameters` is absent. |
+| Reference parser difference | 3 | JavaScript follows reference-like extension/const instance values and skips the channel parameter check when `parameters` is absent. |
 | Policy difference | 1 | Asyncwright rejects a pure schema reference cycle that JavaScript accepts. |
 | Implementation gap | 0 | The three identified semantic validation gaps below are fixed. |
 
@@ -99,8 +99,17 @@ resolves to a root channel. The corresponding server rule follows the same princ
 Definitions physically located in components retain the broader reference locations
 allowed by the specification. These checks preserve the model and its `$ref` values.
 
-No known implementation gaps remain in this selected corpus. The capability/model limits
-and the remaining differences below still prevent a claim of complete F1 conformance.
+`openImplementationGaps: 0` counts the manifest's differential implementation-gap category.
+It does not include bugs shared by both parsers. `schema-boolean` is a capability case:
+the prose specification permits boolean schemas, while both pinned implementations reject
+it. The manifest records `knownSharedLimitation`, and the comparison separately reports
+`knownSharedLimitations: 1`. This remains an F1 conformance blocker.
+
+The P3/P5 review adds ten public cases covering component format wrappers and nested
+references, arbitrary schema instance objects, foreign dialects/resource IDs, shared
+definition diagnostics and unresolved channel messages. `schema-instance-values` is a
+reviewed JS difference: a `$ref` in a const instance is data, but JS tries to resolve it.
+See the [validation contract](../../docs/validation.md) for all capability limits and stages.
 
 All 12 official examples pass JavaScript. Asyncwright accepts 10 and rejects the two
 streetlights examples because they use traits. The fixtures are intentionally unchanged.

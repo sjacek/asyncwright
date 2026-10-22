@@ -14,10 +14,20 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLParser;
 import io.github.sjacek.asyncwright.api.SourceLocation;
 
 import java.io.IOException;
+import java.io.Serial;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 final class SourceDocument {
+    static final class UnsupportedAlias extends IOException {
+        @Serial private static final long serialVersionUID = 1L;
+        final SourceLocation location;
+
+        UnsupportedAlias(SourceLocation location) {
+            super("YAML aliases are not supported in 0.1");
+            this.location = location;
+        }
+    }
     private static final ObjectMapper YAML = new ObjectMapper(YAMLFactory.builder()
             .enable(StreamReadFeature.STRICT_DUPLICATE_DETECTION).build());
     final JsonNode root;
@@ -35,7 +45,8 @@ final class SourceDocument {
         try (JsonParser parser = YAML.createParser(input)) {
             if (parser.nextToken() == null) throw new IOException("The document is empty");
             JsonNode root = readNode(parser, file, "", positions);
-            if (parser.nextToken() != null) throw new IOException("Expected a single YAML or JSON document");
+            if (parser.nextToken() != null) throw new JsonParseException(parser,
+                    "Expected a single YAML or JSON document", parser.currentTokenLocation());
             return new SourceDocument(file, root, positions);
         }
     }
@@ -44,7 +55,8 @@ final class SourceDocument {
                                      Map<String, SourceLocation> positions) throws IOException {
         var location = parser.currentTokenLocation();
         if (parser instanceof YAMLParser yaml && yaml.isCurrentAlias())
-            throw new JsonParseException(parser, "YAML aliases are not supported by this parser version");
+            throw new UnsupportedAlias(new SourceLocation(file, Math.max(1, location.getLineNr()),
+                    Math.max(1, location.getColumnNr()), pointer));
         positions.put(pointer, new SourceLocation(file, Math.max(1, location.getLineNr()),
                 Math.max(1, location.getColumnNr()), pointer));
         JsonNodeFactory nodes = JsonNodeFactory.instance;

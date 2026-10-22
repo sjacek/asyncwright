@@ -1,0 +1,31 @@
+{
+  "asyncapi": "3.0.0",
+  "info": {
+    "title": "Public P3/P5 regression fixture",
+    "version": "1.0.0"
+  },
+  "channels": {
+    "events": {
+      "address": "events",
+      "messages": {
+        "one": {
+          "$ref": "#/components/messages/shared"
+        },
+        "two": {
+          "$ref": "#/components/messages/shared"
+        }
+      }
+    }
+  },
+  "components": {
+    "messages": {
+      "shared": {
+        "traits": [
+          {
+            "summary": "Trait"
+          }
+        ]
+      }
+    }
+  }
+}

@@ -11,7 +11,7 @@ Modules:
 - `parser`: document loading, structural validation, local reference resolution and diagnostics;
   F0 has its own source set and dependency graph.
 - `gradle-plugin`: `java-gradle-plugin` scaffold depending on `parser`. Plugin ID registration,
-  publication and the consumer DSL will be added in F2, after the model decision.
+  publication and the consumer DSL will be added in F2.
 - `extension-examples`: ordinary Java rule/generator examples with their own tests;
   this development module is not part of the plugin's dependency graph.
 
@@ -103,6 +103,13 @@ conformance and the Gradle DSL, worker integration and publication remain under 
 Schema-valid constructs that the typed model cannot preserve are rejected with
 `model.preservation` diagnostics; custom binding extensions are one such current limitation.
 
+The [validation scope and diagnostic contract](docs/validation.md) records P3/P5 behavior,
+including explicit rejection of foreign schema dialects, `$id` resource scopes and YAML
+aliases. Object values in schema `const`, `default` and `examples` are preserved as instance
+data by the parser, resolver and extension snapshots. Boolean schemas remain a known F1
+conformance blocker: both pinned parsers reject the selected case even though the prose
+specification permits it.
+
 ## Rule and generator API
 
 The public extension contracts are in `io.github.sjacek.asyncwright.api`: `AsyncApiRule`,
@@ -138,7 +145,7 @@ source checksums and diagnostics. Ordinary `check` does not require the external
 
 `check` also runs `:parser:publicCorpusTest` against checked-in public fixtures without
 Node.js or network access. The corpus contains 12 unmodified examples from the AsyncAPI
-3.0.0 specification release and 48 synthetic positive, negative and capability cases.
+3.0.0 specification release and 58 synthetic positive, negative and capability cases.
 The manifest pins fixture hashes, upstream provenance and each parser's reviewed outcome.
 
 An optional comparison uses `@asyncapi/parser` 3.6.6 with core rules enabled and recommended
