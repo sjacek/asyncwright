@@ -3,9 +3,10 @@ package io.github.sjacek.asyncwright.parser;
 import com.asyncapi.v3._0_0.model.AsyncAPI;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.sjacek.asyncwright.api.SourceLocation;
+import io.github.sjacek.asyncwright.api.AsyncApiDocumentView;
 
 /** Typed document with retained references; the resolver reads a separate source tree. */
-public final class AsyncApiDocument {
+public final class AsyncApiDocument implements AsyncApiDocumentView {
     private final AsyncAPI model;
     private final SourceDocument source;
     private final ReferenceResolver references;

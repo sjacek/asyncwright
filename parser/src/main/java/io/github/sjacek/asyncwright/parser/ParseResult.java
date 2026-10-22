@@ -5,15 +5,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.sjacek.asyncwright.api.Diagnostic;
 import io.github.sjacek.asyncwright.api.Severity;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
 public record ParseResult(Optional<AsyncApiDocument> document, List<Diagnostic> diagnostics) {
     public ParseResult {
-        diagnostics = diagnostics.stream().distinct().sorted(Comparator.comparing(Diagnostic::file)
-                .thenComparingInt(Diagnostic::line).thenComparingInt(Diagnostic::column)
-                .thenComparing(Diagnostic::ruleId).thenComparing(Diagnostic::message)).toList();
+        diagnostics = Diagnostic.sorted(diagnostics);
     }
 
     public boolean successful() { return diagnostics.stream().noneMatch(d -> d.severity() == Severity.ERROR); }

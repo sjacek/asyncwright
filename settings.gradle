@@ -1,2 +1,4 @@
 rootProject.name = 'asyncwright'
 include 'parser', 'gradle-plugin'
+include 'extension-examples'
+project(':extension-examples').projectDir = file('examples/extensions')

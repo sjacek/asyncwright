@@ -1,4 +1,4 @@
-package io.github.sjacek.asyncwright.parser;
+package io.github.sjacek.asyncwright.api;
 
 import com.fasterxml.jackson.databind.JsonNode;
 

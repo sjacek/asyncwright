@@ -1,0 +1,13 @@
+asyncapi: 3.0.0
+info:
+  title: Extension API example
+  version: 1.0.0
+channels:
+  created:
+    address: events.demo.created
+  updated:
+    $ref: '#/components/channels/updated'
+components:
+  channels:
+    updated:
+      address: events.demo.updated

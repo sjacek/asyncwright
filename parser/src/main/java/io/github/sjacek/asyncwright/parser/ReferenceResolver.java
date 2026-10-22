@@ -5,13 +5,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.sjacek.asyncwright.api.Diagnostic;
 import io.github.sjacek.asyncwright.api.Severity;
 import io.github.sjacek.asyncwright.api.SourceLocation;
+import io.github.sjacek.asyncwright.api.AsyncApiReferences;
+import io.github.sjacek.asyncwright.api.ResolvedReference;
 
 import java.io.IOException;
 import java.net.URI;
 import java.util.*;
 
 /** Resolves document positions without replacing references in the source or model. */
-public final class ReferenceResolver {
+public final class ReferenceResolver implements AsyncApiReferences {
     private static final ObjectMapper MAPPER = new ObjectMapper();
     private final SourceDocument source;
     private final DocumentIndex index;
@@ -124,7 +126,7 @@ public final class ReferenceResolver {
         return mapping;
     }
 
-    List<SourceLocation> related(String pointer) {
+    public List<SourceLocation> related(String pointer) {
         Set<SourceLocation> locations = new LinkedHashSet<>();
         for (var use : index.references) {
             try {

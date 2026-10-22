@@ -12,6 +12,8 @@ Modules:
   F0 has its own source set and dependency graph.
 - `gradle-plugin`: `java-gradle-plugin` scaffold depending on `parser`. Plugin ID registration,
   publication and the consumer DSL will be added in F2, after the model decision.
+- `extension-examples`: ordinary Java rule/generator examples with their own tests;
+  this development module is not part of the plugin's dependency graph.
 
 ## Build
 
@@ -100,6 +102,26 @@ references, traits and non-default schema formats are currently unsupported. Bro
 conformance and the Gradle DSL, worker integration and publication remain under development.
 Schema-valid constructs that the typed model cannot preserve are rejected with
 `model.preservation` diagnostics; custom binding extensions are one such current limitation.
+
+## Rule and generator API
+
+The public extension contracts are in `io.github.sjacek.asyncwright.api`: `AsyncApiRule`,
+`AsyncApiGenerator`, document/reference views, execution contexts, text parameters and diagnostics.
+`ExtensionExecutor` loads classes by name using a supplied classloader and runs the
+parse → project rules → generators sequence without Gradle. Each invocation receives its
+own model; references stay in the document and are followed through the resolver.
+
+Run the checked-in example after configuring the model repository:
+
+```powershell
+.\gradlew.bat :extension-examples:runExample --configuration-cache-problems=fail
+```
+
+This validates channel address prefixes and writes
+`examples/extensions/build/generated-example/catalog/channels.json` using typed channel targets.
+See the [extension API contract](docs/extensions.md) and [runnable examples](examples/extensions/README.md).
+Worker API, the `asyncwrightExtensions` Gradle configuration, task registration and TestKit
+integration remain F2 work. `ResolvedReference` now belongs to the public `api` package.
 
 The external five-document corpus has a separate opt-in check:
 

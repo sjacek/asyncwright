@@ -7,6 +7,11 @@ been published. The current development version is `0.1.0-SNAPSHOT`.
 
 ### Added
 
+- Public rule and generator API with document/reference views, immutable text parameters,
+  source-aware diagnostics and scoped output writes.
+- A Gradle-independent extension executor supporting class-name registration, caller-supplied
+  classloaders, per-invocation models and explicit extension failures.
+- Runnable Java extension examples and tests using an independently compiled extension jar.
 - Initial project structure with separate parser and Gradle plugin modules.
 - Gradle `9.8.1` Wrapper with distribution checksum verification and compilation targeting
   Java 17 bytecode.
@@ -28,6 +33,7 @@ been published. The current development version is `0.1.0-SNAPSHOT`.
 
 ### Changed
 
+- Move `ResolvedReference` to `io.github.sjacek.asyncwright.api` and expose public document/reference interfaces.
 - Align the compatibility probe's Jackson dependencies with the `2.22.4` BOM to include
   upstream security fixes and override the model library's older transitive dependencies.
 
