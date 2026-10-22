@@ -4,6 +4,16 @@ on:
     branches: ['**']
   pull_request:
   workflow_dispatch:
+    inputs:
+      model_ref:
+        description: 'Fork distribution commit SHA (or development branch before release)'
+        type: string
+        default: build/asyncwright-distribution
+  workflow_call:
+    inputs:
+      model_ref:
+        type: string
+        required: true
 permissions:
   contents: read
 concurrency:
@@ -17,8 +27,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          path: asyncwright
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
           repository: sjacek/jasyncapi
-          ref: 7ba1dc432b529e87c66fb10ae43d3c9729e3bb71
+          ref: ${{ inputs.model_ref || vars.ASYNCWRIGHT_MODEL_REF || 'build/asyncwright-distribution' }}
+          path: model
           persist-credentials: false
       - uses: actions/setup-java@v4
         with:
@@ -33,12 +48,26 @@ jobs:
           EOF
       - name: Build, test and install model into an isolated file repository
         shell: bash
-        run: pwsh -File tools/install-local.ps1 -Repository "$RUNNER_TEMP/model-repository" -Maven mvn
+        working-directory: model
+        run: |
+          python - <<'PY'
+          import pathlib, tomllib, xml.etree.ElementTree as ET
+          selected = tomllib.loads(pathlib.Path('../asyncwright/gradle/libs.versions.toml').read_text())['versions']['jasyncapi-fork']
+          actual = ET.parse('pom.xml').getroot().find('{http://maven.apache.org/POM/4.0.0}version').text
+          if selected != actual:
+              raise SystemExit(f'Model version mismatch: plugin requires {selected}, fork provides {actual}. Push the distribution first.')
+          PY
+          git rev-parse HEAD > "$RUNNER_TEMP/model-source-commit.txt"
+          pwsh -File tools/install-local.ps1 -Repository "$RUNNER_TEMP/model-repository" -Maven mvn
       - uses: actions/upload-artifact@v4
         with:
           name: model-repository
           path: ${{ runner.temp }}/model-repository
           retention-days: 7
+      - uses: actions/upload-artifact@v4
+        with:
+          name: model-source-commit
+          path: ${{ runner.temp }}/model-source-commit.txt
   compatibility:
     needs: model
     name: Gradle ${{ matrix.gradle }} / JDK ${{ matrix.java }}
@@ -46,6 +75,8 @@ jobs:
     timeout-minutes: 30
     strategy:
       fail-fast: false
+      # Cold dependency resolution previously received HTTP 429 from Maven Central with all cells at once.
+      max-parallel: 3
       matrix:
         gradle: ['9.0.0', '9.1.0', '9.8.1']
         java: ['17', '21', '25']

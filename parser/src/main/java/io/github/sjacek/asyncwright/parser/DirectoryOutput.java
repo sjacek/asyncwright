@@ -37,6 +37,7 @@ final class DirectoryOutput implements GeneratedFiles {
     public void write(String relativePath, byte[] contents) throws IOException {
         Path relative = relativePath(relativePath);
         String name = relative.toString().replace('\\', '/');
+        // Enforce the same uniqueness on case-sensitive CI filesystems and Windows consumers.
         String key = name.toLowerCase(Locale.ROOT);
         if (writtenKeys.contains(key)) throw new IOException("Generated file already written: " + name);
         Files.createDirectories(directory);

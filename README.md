@@ -14,7 +14,8 @@ Modules:
 - `parser`: document loading, structural validation, local reference resolution and diagnostics;
   F0 has its own source set and dependency graph.
 - `gradle-plugin`: `io.github.sjacek.asyncwright`, with the parser/API included in its JAR;
-  DSL, cacheable tasks, Worker API and consumer TestKit tests. Publication is pending.
+  DSL, cacheable tasks, Worker API and consumer TestKit tests. Publication is prepared but pending;
+  see the [release guide](docs/releases.md).
 - `extension-examples`: ordinary Java rule/generator examples with their own tests;
   this development module is not part of the plugin's dependency graph.
 
@@ -35,6 +36,10 @@ For IDE imports and builds without command-line parameters, copy
 `asyncwrightModelRepository` to the same repository path. Use forward slashes in Windows
 paths. This local file is ignored by Git; the `-P` option overrides its value.
 Reload the Gradle project in the IDE after configuring the repository.
+
+Generate the combined API/parser/Gradle Javadoc with `:gradle-plugin:javadoc`; the HTML
+is written to `gradle-plugin/build/docs/javadoc`. Documentation warnings fail the build.
+The ordinary verification build also checks Javadoc while preparing artifacts for consumer tests.
 
 ## Parser dependency baseline
 
@@ -59,12 +64,16 @@ In IntelliJ IDEA, exclude this file from the `JsonSchemaRefReference` and
 references or redundant escapes. Keep these IDE preferences local rather than editing the schema.
 
 The selected coordinates for the separately maintained model fork are
-`io.github.sjacek.jasyncapi:asyncapi-core:1.0.0-RC4-asyncwright.2`, based on
+`io.github.sjacek.jasyncapi:asyncapi-core:1.0.0-RC4-asyncwright.3`, based on
 [`sjacek/jasyncapi` at `05116f0d`](https://github.com/sjacek/jasyncapi/commit/05116f0d99f9e3f3c1b7d1aa8491f120364acf91).
 The parser resolves this artifact from `asyncwrightModelRepository`, restricted to the fork
 group. The file repository contains the parent POM, model POM and model jar; `mavenLocal()`
 is not consulted. Distribution changes are separate from the upstream bug-fix branch.
 A public distribution must be available before releasing Asyncwright.
+The [published-consumer example](examples/published-consumer) uses only Maven coordinates and
+public repository defaults, with no local paths or included build. It becomes usable against
+those defaults after the release; TestKit currently verifies the same project over staged HTTP
+repositories. This is separate from the composite-build development example.
 
 ## Initial Java API
 

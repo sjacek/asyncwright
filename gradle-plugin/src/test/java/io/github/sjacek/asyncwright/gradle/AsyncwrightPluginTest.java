@@ -329,6 +329,51 @@ class AsyncwrightPluginTest {
         assertEquals(SUCCESS, outcome(run(root, "check"), ":asyncApiValidateEvents"));
     }
 
+    @Test void patternFlagsSurviveWorkerIsolationAndTheirChangeInvalidatesTheCache() throws Exception {
+        String policy = "asyncwright.specs.events.rules.channelAddress(java.util.regex.Pattern.compile('EVENTS[.].+', java.util.regex.Pattern.CASE_INSENSITIVE))\n";
+        Path root = fixture("pattern-flags", PLUGIN + SPEC + policy);
+        assertEquals(SUCCESS, outcome(run(root, "check"), ":asyncApiValidateEvents"));
+        BuildResult repeated = run(root, "check");
+        assertEquals(UP_TO_DATE, outcome(repeated, ":asyncApiValidateEvents"));
+        assertTrue(repeated.getOutput().contains("Reusing configuration cache"));
+        write(root, "build.gradle", read(root, "build.gradle").replace("java.util.regex.Pattern.CASE_INSENSITIVE", "0"));
+        assertEquals(FAILED, outcome(fail(root, "check"), ":asyncApiValidateEvents"));
+        assertTrue(read(root, "build/reports/asyncapi/events.json").contains("project.channel-address"));
+    }
+
+    @Test void successfulEmptyGenerationRemovesObsoleteOutputsAndRemainsCacheable() throws Exception {
+        Path root = fixture("empty-generation", PLUGIN + SPEC);
+        projectExtension(root);
+        append(root, "build.gradle", REGISTRATION);
+        run(root, "asyncApiGenerateEventsCatalog");
+        Path destination = root.resolve("build/generated/asyncapi/events/catalog");
+        assertTrue(Files.exists(destination.resolve("channels.txt")));
+        write(root, "extensions/src/main/java/fixture/Catalog.java", generator().replace(
+                "context.output().writeUtf8(context.requireParameter(\"name\"), channel.getAddress());", ""));
+        assertEquals(SUCCESS, outcome(run(root, "asyncApiGenerateEventsCatalog"), ":asyncApiGenerateEventsCatalog"));
+        assertTrue(Files.isDirectory(destination));
+        try (var files = Files.list(destination)) { assertEquals(0, files.count()); }
+        assertEquals(FROM_CACHE, outcome(run(root, "clean", "asyncApiGenerateEventsCatalog"), ":asyncApiGenerateEventsCatalog"));
+        assertFalse(Files.exists(destination.resolve("channels.txt")));
+    }
+
+    @Test void generatorOutputCannotOwnTheBuildDirectoryOrContainItsInput() throws Exception {
+        Path root = fixture("output-boundaries", PLUGIN + SPEC);
+        projectExtension(root);
+        append(root, "build.gradle", REGISTRATION);
+        String build = read(root, "build.gradle");
+        write(root, "build/keep.txt", "keep");
+        write(root, "build.gradle", build + "tasks.named('asyncApiGenerateEventsCatalog') { outputDirectory = layout.buildDirectory }\n");
+        assertTrue(fail(root, "asyncApiGenerateEventsCatalog").getOutput().contains("dedicated directory below buildDirectory"));
+        assertEquals("keep", read(root, "build/keep.txt"));
+
+        write(root, "build/owned/input.yaml", DOCUMENT);
+        write(root, "build.gradle", build.replace("contracts/events.yaml", "build/owned/input.yaml")
+                + "tasks.named('asyncApiGenerateEventsCatalog') { outputDirectory = layout.buildDirectory.dir('owned') }\n");
+        assertTrue(fail(root, "asyncApiGenerateEventsCatalog").getOutput().contains("must not contain the input document"));
+        assertEquals(DOCUMENT, read(root, "build/owned/input.yaml"));
+    }
+
     @Test void customRuleFailureKeepsItsOriginalCauseAndRemovesStaleReports() throws Exception {
         Path root = fixture("rule-exception", PLUGIN + SPEC);
         projectExtension(root);

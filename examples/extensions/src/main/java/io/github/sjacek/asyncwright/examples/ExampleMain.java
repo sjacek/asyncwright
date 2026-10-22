@@ -11,6 +11,11 @@ import java.util.Map;
 public final class ExampleMain {
     private ExampleMain() { }
 
+    /**
+     * Runs validation and catalog generation using the same API as isolated Gradle workers.
+     * @param args specification file and output directory
+     * @throws Exception if arguments, input validation or extension execution fail
+     */
     public static void main(String[] args) throws Exception {
         if (args.length != 2) throw new IllegalArgumentException("Usage: " + ExampleMain.class.getSimpleName() + " <specification> <output-directory>");
         Path input = Path.of(args[0]).toAbsolutePath().normalize();

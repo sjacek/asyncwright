@@ -70,6 +70,7 @@ final class DocumentIndex {
         for (var field : node.properties()) {
             String key = field.getKey();
             JsonNode value = field.getValue();
+            // Instance data may contain a literal $ref; only schema/specification positions carry references.
             if (key.startsWith(EXTENSION_PREFIX) || Set.of(EXAMPLES, EXAMPLE, DEFAULT, CONST, ENUM).contains(key)) continue;
             if (kind == Kind.COMPONENTS && Set.of(OPERATION_TRAITS, MESSAGE_TRAITS).contains(key) && !value.isEmpty()) {
                 unsupported(pointer + "/" + key, "Traits are not supported in 0.1");

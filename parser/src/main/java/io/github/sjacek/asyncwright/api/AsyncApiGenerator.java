@@ -8,5 +8,11 @@ import java.util.List;
  */
 @FunctionalInterface
 public interface AsyncApiGenerator {
+    /**
+     * Generates output from one validated document.
+     * @param context invocation-local model, immutable parameters and host services
+     * @return non-null diagnostics; an empty list indicates no findings
+     * @throws Exception if execution fails; the host preserves the cause separately from validation findings
+     */
     List<Diagnostic> generate(GeneratorContext context) throws Exception;
 }

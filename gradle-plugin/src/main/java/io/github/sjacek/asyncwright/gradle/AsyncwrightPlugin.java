@@ -9,11 +9,35 @@ import org.gradle.api.tasks.TaskProvider;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Registers the Asyncwright DSL, isolated extension classpath and lazy validation/generation tasks.
+ * Applies Gradle's base plugin so aggregate validation participates in {@code check}.
+ */
 public final class AsyncwrightPlugin implements Plugin<Project> {
+    /**
+     * Creates the plugin entry point instantiated by Gradle.
+     */
+    public AsyncwrightPlugin() { }
+
+    /**
+     * Published Gradle plugin identifier.
+     */
     public static final String PLUGIN_ID = "io.github.sjacek.asyncwright";
+    /**
+     * Root configuration extension name.
+     */
     public static final String EXTENSION_NAME = "asyncwright";
+    /**
+     * Dependency configuration supplying rule and generator runtime JARs to workers.
+     */
     public static final String EXTENSIONS_CONFIGURATION_NAME = "asyncwrightExtensions";
+    /**
+     * Aggregate validation task name and prefix for per-specification validation tasks.
+     */
     public static final String VALIDATE_TASK_NAME = "asyncApiValidate";
+    /**
+     * Prefix for generation tasks, followed by capitalized specification and generator names.
+     */
     public static final String GENERATE_TASK_PREFIX = "asyncApiGenerate";
     private static final String REPORTS_DIRECTORY = "reports/asyncapi/";
     private static final String GENERATED_DIRECTORY = "generated/asyncapi/";

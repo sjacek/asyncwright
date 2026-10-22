@@ -8,10 +8,11 @@ localProperties.load(new StringReader(providers.fileContents(
         layout.projectDirectory.file('gradle/local.properties')).asText.getOrElse('')))
 def modelRepository = providers.gradleProperty('asyncwrightModelRepository')
         .getOrElse(localProperties.getProperty('asyncwrightModelRepository', ''))
+ext.asyncwrightModelRepository = modelRepository
 
 allprojects {
     group = 'io.github.sjacek.asyncwright'
-    version = '0.1.0-SNAPSHOT'
+    version = '0.1.0'
     repositories {
         if (!modelRepository.isBlank()) {
             exclusiveContent {
@@ -47,6 +48,8 @@ subprojects {
 
 tasks.named('check') { dependsOn subprojects.collect { it.tasks.named('check') } }
 tasks.named('assemble') { dependsOn subprojects.collect { it.tasks.named('assemble') } }
+
+apply from: 'gradle/release-verification.gradle'
 
 tasks.named('wrapper') {
     gradleVersion = '9.8.1'

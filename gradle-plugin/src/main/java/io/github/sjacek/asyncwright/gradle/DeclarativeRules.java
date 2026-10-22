@@ -7,6 +7,11 @@ import static io.github.sjacek.asyncwright.api.AsyncApiFields.*;
 
 /** Built-in DSL rules run in the same isolated context as project rules. */
 public final class DeclarativeRules implements AsyncApiRule {
+    /**
+     * Creates the built-in policy callback loaded by the worker extension executor.
+     */
+    public DeclarativeRules() { }
+
     enum Parameter {
         CHANNEL_ADDRESS("channelAddress"), CHANNEL_ADDRESS_FLAGS("channelAddressFlags"),
         CONTENT_TYPE("contentType"), PROTOCOL("protocol");

@@ -1,18 +1,19 @@
 # Changelog
 
 Notable changes to Asyncwright are recorded here. Changes under **Unreleased** have not
-been published. The current development version is `0.1.0-SNAPSHOT`.
+been published. The current release candidate is `0.1.0`.
 
 ## Unreleased
 
-### Changed
-
-- Centralized specification metadata, field names, built-in diagnostic IDs and Gradle
-  names; shared typed rule parameters and JSON Pointer construction. Diagnostic wire
-  values, report formats and validation behavior remain unchanged.
-
 ### Added
 
+- Complete public API and Gradle DSL Javadoc, including reference resolution, extension failures,
+  output ownership and cache behavior; documentation warnings now fail artifact preparation.
+- Regression coverage for extension diagnostic contracts, regex flags across worker/cache boundaries,
+  empty generation, protected output directories and failed output writes.
+- Publication metadata, plugin marker packaging, source/Javadoc artifacts and a release guide.
+- A Maven-coordinate consumer example and HTTP repository tests without composite builds or Maven Local.
+- Manual preparation workflows that test and package candidates without submitting artifacts.
 - Optional class-based rule registration for rule types already available to the build
   script, retaining binary class names for isolated worker execution.
 - Development Gradle plugin with a specification DSL, declarative/project rules, cacheable
@@ -51,6 +52,10 @@ been published. The current development version is `0.1.0-SNAPSHOT`.
 
 ### Changed
 
+- Centralized specification metadata, field names, built-in diagnostic IDs and Gradle
+  names; shared typed rule parameters and JSON Pointer construction. Diagnostic wire
+  values, report formats and validation behavior remain unchanged.
+- Use model distribution candidate `1.0.0-RC4-asyncwright.3` for Maven Central publication preparation.
 - Report unsupported YAML aliases at their source pointer with `unsupported.yaml-alias`.
 - Reject foreign schema dialects and `$id` resource identifiers explicitly in the 0.1 scope.
 - Move `ResolvedReference` to `io.github.sjacek.asyncwright.api` and expose public document/reference interfaces.

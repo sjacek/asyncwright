@@ -11,7 +11,12 @@ import java.util.TreeMap;
 
 /** Generates a deterministic UTF-8 catalog while preserving references in the input model. */
 public final class ChannelCatalogGenerator implements AsyncApiGenerator {
+    /** Public no-argument constructor required by the extension loader. */
+    public ChannelCatalogGenerator() { }
+
+    /** Optional parameter overriding the relative output file name. */
     public static final String FILE_PARAMETER = "file";
+    /** Output path used when no file parameter is supplied. */
     public static final String DEFAULT_OUTPUT_FILE = "channels.json";
     @Override
     public List<Diagnostic> generate(GeneratorContext context) throws Exception {

@@ -1,14 +1,22 @@
 plugins {
     id 'java-gradle-plugin'
+    id 'maven-publish'
+    id 'com.gradle.plugin-publish' version '2.2.1'
 }
 
+description = 'AsyncAPI validation and model-based generators in isolated Gradle workers.'
+java { withJavadocJar() }
+
 gradlePlugin {
+    website = 'https://github.com/sjacek/asyncwright'
+    vcsUrl = 'https://github.com/sjacek/asyncwright.git'
     plugins {
         asyncwright { PluginDeclaration plugin ->
             plugin.setId('io.github.sjacek.asyncwright')
             plugin.setImplementationClass('io.github.sjacek.asyncwright.gradle.AsyncwrightPlugin')
             plugin.setDisplayName('Asyncwright')
             plugin.setDescription('AsyncAPI validation and model-based generators in isolated Gradle workers.')
+            plugin.tags.set(['asyncapi', 'validation', 'code-generation', 'java'])
         }
     }
 }
@@ -35,14 +43,59 @@ dependencies {
 
 tasks.named('jar') { from project(':parser').sourceSets.main.output }
 tasks.named('sourcesJar') { from project(':parser').sourceSets.main.allSource }
+tasks.named('javadoc') {
+    source project(':parser').sourceSets.main.allJava
+    classpath += project(':parser').sourceSets.main.compileClasspath
+    options.encoding = 'UTF-8'
+    // Published API documentation is part of the artifact contract, including parameter and return tags.
+    options.addBooleanOption('Xdoclint:all', true)
+    options.addBooleanOption('Werror', true)
+}
+
+publishing {
+    publications.withType(MavenPublication).configureEach {
+        if (name == 'pluginMaven') artifactId = 'asyncwright-gradle-plugin'
+        pom { MavenPom pom ->
+            pom.name.set('Asyncwright')
+            pom.description.set(project.description)
+            pom.url.set('https://github.com/sjacek/asyncwright')
+            pom.licenses { license { name = 'MIT License'; url = 'https://opensource.org/license/mit' } }
+            pom.developers { developer { id = 'sjacek'; url = 'https://github.com/sjacek' } }
+            pom.scm {
+                connection = 'scm:git:https://github.com/sjacek/asyncwright.git'
+                developerConnection = 'scm:git:ssh://git@github.com/sjacek/asyncwright.git'
+                url = 'https://github.com/sjacek/asyncwright'
+            }
+        }
+    }
+    // Local packaging output, served over HTTP by the publication consumer tests. No remote deployment.
+    repositories { maven { name = 'staging'; url = layout.buildDirectory.dir('staging-repository') } }
+}
+
+tasks.named('publishPlugins') { dependsOn rootProject.tasks.named('verifyReleaseModel') }
 tasks.named('pluginUnderTestMetadata') {
     pluginClasspath.from(project(':parser').sourceSets.main.output)
 }
 tasks.named('test') {
     maxHeapSize = '512m'
+    inputs.files(rootProject.fileTree('examples/published-consumer') {
+        exclude '**/build/**', '**/.gradle/**'
+    }).withPropertyName('publishedConsumerExample').withPathSensitivity(PathSensitivity.RELATIVE)
+    inputs.file(rootProject.file('gradle/release-verification.gradle'))
+            .withPropertyName('releaseVerificationScript').withPathSensitivity(PathSensitivity.RELATIVE)
+    inputs.files(tasks.named('sourcesJar'), tasks.named('javadocJar'),
+            tasks.named('generatePomFileForPluginMavenPublication'),
+            tasks.named('generatePomFileForAsyncwrightPluginMarkerMavenPublication'))
+            .withPropertyName('publicationArtifacts').withPathSensitivity(PathSensitivity.RELATIVE)
     systemProperty 'asyncwright.testGradleHome', gradle.gradleHomeDir.absolutePath
     systemProperty 'asyncwright.testKitDir', rootProject.layout.projectDirectory.dir('.gradle-user-home/testkit').asFile.absolutePath
     systemProperty 'asyncwright.testGradleVersion', providers.gradleProperty('testGradleVersion').getOrElse('')
     dependsOn tasks.named('jar')
     systemProperty 'asyncwright.pluginJar', tasks.named('jar').flatMap { it.archiveFile }.get().asFile.absolutePath
+    dependsOn tasks.named('publishAllPublicationsToStagingRepository')
+    systemProperty 'asyncwright.stagingRepository', layout.buildDirectory.dir('staging-repository').get().asFile.absolutePath
+    systemProperty 'asyncwright.modelRepository', rootProject.ext.asyncwrightModelRepository
+    systemProperty 'asyncwright.projectDirectory', rootProject.layout.projectDirectory.asFile.absolutePath
+    systemProperty 'asyncwright.version', project.version.toString()
+    systemProperty 'asyncwright.modelVersion', libs.versions.jasyncapi.fork.get()
 }

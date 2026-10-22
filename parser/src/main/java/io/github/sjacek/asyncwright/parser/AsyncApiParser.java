@@ -23,6 +23,9 @@ import java.util.regex.Pattern;
 
 /** Gradle-independent AsyncAPI 3.0 parser; schema retrieval never uses the network. */
 public final class AsyncApiParser {
+    /** Creates a parser using the bundled AsyncAPI 3.0 schema and model mapping. */
+    public AsyncApiParser() { }
+
     private static final ObjectMapper MAPPER = ModelMapping.mapper();
     private static final Pattern PARAMETER = Pattern.compile("\\{([^{}]+)}");
     private static final Schema SCHEMA = schema();
@@ -39,6 +42,14 @@ public final class AsyncApiParser {
         return schema;
     }
 
+    /**
+     * Reads UTF-8 JSON or YAML within a project directory and validates it offline.
+     * @param projectRoot base directory for portable diagnostic file names
+     * @param file absolute file path or a path relative to the project directory
+     * @return validated model and diagnostics, or diagnostics without a model on invalid input
+     * @throws IOException if the file cannot be read
+     * @throws IllegalArgumentException if the normalized file path is outside the project directory
+     */
     public ParseResult parse(Path projectRoot, Path file) throws IOException {
         Path root = projectRoot.toAbsolutePath().normalize();
         Path absolute = file.isAbsolute() ? file.normalize() : root.resolve(file).normalize();
@@ -46,6 +57,13 @@ public final class AsyncApiParser {
         return parse(root.relativize(absolute).toString().replace('\\', '/'), Files.readString(absolute));
     }
 
+    /**
+     * Validates one JSON or YAML document without reading external resources.
+     * @param relativeFile project-relative diagnostic name; backslashes are normalized
+     * @param input complete document text
+     * @return validated model and diagnostics, or diagnostics without a model on invalid input
+     * @throws IllegalArgumentException if the diagnostic file name is not a portable relative path
+     */
     public ParseResult parse(String relativeFile, String input) {
         Path path = DirectoryOutput.relativePath(relativeFile);
         String file = path.toString().replace('\\', '/');
@@ -81,6 +99,7 @@ public final class AsyncApiParser {
             diagnostics.add(Diagnostic.at(BuiltinRuleId.schemaKeyword(error.getKeyword()), Severity.ERROR, error.getMessage(),
                     source.location(pointer), references.related(pointer)));
         }
+        // Later stages assume structurally valid objects; stop here to avoid misleading secondary findings.
         if (hasErrors(diagnostics)) return failed(diagnostics);
         for (Diagnostic diagnostic : index.diagnostics)
             diagnostics.add(Diagnostic.at(diagnostic.ruleId(), diagnostic.severity(), diagnostic.message(),

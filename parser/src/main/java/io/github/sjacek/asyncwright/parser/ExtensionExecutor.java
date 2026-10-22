@@ -18,13 +18,40 @@ public final class ExtensionExecutor {
     private static final ObjectMapper MAPPER = ModelMapping.mapper();
     private final ClassLoader loader;
 
+    /**
+     * Creates an executor for a host-supplied extension classpath.
+     * @param loader classloader used to load extensions and as callback context classloader
+     * @throws NullPointerException if the loader is null
+     */
     public ExtensionExecutor(ClassLoader loader) { this.loader = Objects.requireNonNull(loader, "loader"); }
+    /**
+     * Creates an executor using the classloader that loaded Asyncwright.
+     */
     public ExtensionExecutor() { this(ExtensionExecutor.class.getClassLoader()); }
 
+    /**
+     * Runs every configured rule in order after a successful parse. Validation errors do not
+     * short-circuit later rules; execution failures do. Invalid input skips all extension loading.
+     * @param parsed parser outcome
+     * @param rules ordered rule declarations
+     * @return combined parser and rule diagnostics
+     * @throws ExtensionExecutionException if an extension cannot load, construct or execute, or returns invalid diagnostics
+     */
     public ExtensionResult validate(ParseResult parsed, List<ExtensionSpec> rules) throws ExtensionExecutionException {
         return execute(parsed, rules, List.of(), null);
     }
 
+    /**
+     * Validates, then invokes generators in order until the first error. Output paths are unique
+     * across generators. This direct API leaves already written files on failure; the Gradle host
+     * provides staging and cleanup. Each callback receives a fresh model.
+     * @param parsed parser outcome
+     * @param rules ordered rule declarations
+     * @param generators ordered generator declarations
+     * @param outputDirectory directory scoped to this execution
+     * @return combined findings and the paths written so far
+     * @throws ExtensionExecutionException if loading, execution, diagnostic validation or output writing fails
+     */
     public ExtensionResult generate(ParseResult parsed, List<ExtensionSpec> rules, List<ExtensionSpec> generators,
                                     Path outputDirectory) throws ExtensionExecutionException {
         return execute(parsed, rules, generators, Objects.requireNonNull(outputDirectory, "outputDirectory"));
@@ -91,6 +118,7 @@ public final class ExtensionExecutor {
         } catch (Exception | LinkageError exception) {
             throw new ExtensionExecutionException(spec.className(), kind, exception);
         } finally {
+            // A failed extension must not leak its classloader into the calling Gradle worker/thread.
             Thread.currentThread().setContextClassLoader(previous);
         }
     }

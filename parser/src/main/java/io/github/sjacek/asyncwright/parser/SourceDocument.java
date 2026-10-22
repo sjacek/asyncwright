@@ -19,6 +19,7 @@ import java.io.Serial;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/** Reads a single document while retaining source coordinates independently of model deserialization. */
 final class SourceDocument {
     static final class UnsupportedAlias extends IOException {
         @Serial private static final long serialVersionUID = 1L;
@@ -83,6 +84,7 @@ final class SourceDocument {
             }
             return array;
         }
+        // Keep exact numeric values for the preservation check; double conversion can silently round input.
         return switch (parser.currentToken()) {
             case VALUE_STRING -> nodes.textNode(parser.getText());
             case VALUE_NUMBER_INT -> nodes.numberNode(parser.getBigIntegerValue());
@@ -95,6 +97,8 @@ final class SourceDocument {
     }
 
     SourceLocation location(String pointer) {
+        // Missing required properties have no token: point at their nearest existing container,
+        // but retain the requested pointer so consumers still know which property is missing.
         String current = pointer;
         while (!positions.containsKey(current) && !current.isEmpty()) {
             current = current.substring(0, current.lastIndexOf('/'));

@@ -1,0 +1,44 @@
+pluginManagement {
+    // Overrides are HTTP(S) repositories used by the prepublication consumer test.
+    // The normal consumer uses only the Portal and Maven Central.
+    repositories {
+        if (providers.gradleProperty('asyncwrightPluginRepositoryUrl').isPresent()) {
+            maven {
+                url = uri(providers.gradleProperty('asyncwrightPluginRepositoryUrl').get())
+                if (!(url.scheme in ['http', 'https'])) throw new GradleException('Expected an HTTP(S) plugin repository')
+                allowInsecureProtocol = url.scheme == 'http' && url.host in ['127.0.0.1', 'localhost']
+                content { includeGroup 'io.github.sjacek.asyncwright' }
+            }
+        }
+        if (providers.gradleProperty('asyncwrightModelRepositoryUrl').isPresent()) {
+            maven {
+                url = uri(providers.gradleProperty('asyncwrightModelRepositoryUrl').get())
+                if (!(url.scheme in ['http', 'https'])) throw new GradleException('Expected an HTTP(S) model repository')
+                allowInsecureProtocol = url.scheme == 'http' && url.host in ['127.0.0.1', 'localhost']
+                content { includeGroup 'io.github.sjacek.jasyncapi' }
+            }
+        }
+        gradlePluginPortal()
+        mavenCentral()
+    }
+    plugins { id 'io.github.sjacek.asyncwright' version providers.gradleProperty('asyncwrightVersion').getOrElse('0.1.0') }
+}
+
+dependencyResolutionManagement {
+    repositories {
+        for (propertyName in ['asyncwrightPluginRepositoryUrl', 'asyncwrightModelRepositoryUrl']) {
+            if (providers.gradleProperty(propertyName).isPresent()) {
+                maven {
+                    url = uri(providers.gradleProperty(propertyName).get())
+                    if (!(url.scheme in ['http', 'https'])) throw new GradleException('Expected an HTTP(S) artifact repository')
+                    allowInsecureProtocol = url.scheme == 'http' && url.host in ['127.0.0.1', 'localhost']
+                    content { includeGroup 'io.github.sjacek.asyncwright'; includeGroup 'io.github.sjacek.jasyncapi' }
+                }
+            }
+        }
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+rootProject.name = 'asyncwright-published-consumer'
+include 'extensions'

@@ -31,24 +31,100 @@ import java.util.List;
 import java.util.Map;
 import static io.github.sjacek.asyncwright.gradle.DeclarativeRules.Parameter.*;
 
+/**
+ * Worker implementation detail: parses and validates in an isolated classloader, writes reports,
+ * and synchronizes successful generation from staging. Extensions are trusted code, not a process sandbox.
+ */
 public abstract class AsyncApiWork implements WorkAction<AsyncApiWork.Parameters> {
+    /**
+     * Creates a worker; managed parameters and services are injected by Gradle.
+     */
+    public AsyncApiWork() { }
+
+    /**
+     * Managed values crossing the worker boundary; no Project, model, callback or extension instances.
+     */
     public interface Parameters extends WorkParameters {
+        /**
+         * UTF-8 specification input.
+         * @return managed worker value
+         */
         RegularFileProperty getFile();
+        /**
+         * Portable project-relative diagnostic name.
+         * @return managed worker value
+         */
         Property<String> getSourcePath();
+        /**
+         * Root for clickable console locations.
+         * @return managed worker value
+         */
         DirectoryProperty getProjectDirectory();
+        /**
+         * Channel full-match regex, empty when disabled.
+         * @return managed worker value
+         */
         Property<String> getChannelAddress();
+        /**
+         * Flags retained from the configured Java Pattern.
+         * @return managed worker value
+         */
         Property<Integer> getChannelAddressFlags();
+        /**
+         * Required root content type, empty when disabled.
+         * @return managed worker value
+         */
         Property<String> getContentType();
+        /**
+         * Required declared-server protocol, empty when disabled.
+         * @return managed worker value
+         */
         Property<String> getProtocol();
+        /**
+         * Ordered binary rule class names.
+         * @return managed worker value
+         */
         ListProperty<String> getRuleClasses();
+        /**
+         * Parameter maps aligned by index with rule class names.
+         * @return managed worker value
+         */
         ListProperty<Map<String, String>> getRuleParameters();
+        /**
+         * Optional JSON report destination, absent during generation.
+         * @return managed worker value
+         */
         RegularFileProperty getJsonReport();
+        /**
+         * Optional text report destination, present with the JSON report.
+         * @return managed worker value
+         */
         RegularFileProperty getTextReport();
+        /**
+         * Optional generation destination; its presence selects generation mode.
+         * @return managed worker value
+         */
         DirectoryProperty getOutputDirectory();
+        /**
+         * Fresh temporary output used during generation.
+         * @return managed worker value
+         */
         DirectoryProperty getStagingDirectory();
+        /**
+         * Generator binary class name, required only in generation mode.
+         * @return managed worker value
+         */
         Property<String> getGeneratorClass();
+        /**
+         * Explicit generator parameters.
+         * @return managed worker value
+         */
         MapProperty<String, String> getGeneratorParameters();
     }
+    /**
+     * Returns Gradle's file service for replacing task-owned output.
+     * @return injected filesystem operations
+     */
     @Inject protected abstract FileSystemOperations getFiles();
 
     @Override public void execute() {

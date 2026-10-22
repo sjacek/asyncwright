@@ -8,6 +8,10 @@ import javax.inject.Inject;
 @NullMarked
 public abstract class GeneratorOptions extends ExtensionOptions implements Named {
     private final String name;
+    /**
+     * Creates a named generator declaration.
+     * @param name container identity used in the task suffix and output directory
+     */
     @Inject public GeneratorOptions(String name) { this.name = name; }
     @Override public String getName() { return name; }
 }

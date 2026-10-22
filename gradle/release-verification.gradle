@@ -1,0 +1,38 @@
+tasks.register('verifyReleaseTag') {
+    group = 'verification'
+    description = 'Checks that a stable release tag matches the evaluated project version.'
+    inputs.property('releaseTag', providers.gradleProperty('releaseTag').orElse(''))
+    inputs.property('releaseVersion', project.version.toString())
+    doLast { Task task ->
+        String tag = task.inputs.properties['releaseTag'] as String
+        String releaseVersion = task.inputs.properties['releaseVersion'] as String
+        if (!(tag ==~ /v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)/))
+            throw new GradleException('releaseTag must be a stable vMAJOR.MINOR.PATCH tag.')
+        if (tag.substring(1) != releaseVersion)
+            throw new GradleException('releaseTag must match project.version; snapshots cannot be published.')
+    }
+}
+
+tasks.register('verifyReleaseModel') {
+    group = 'verification'
+    description = 'Checks availability of the selected fork model and parent POM in Maven Central before Portal submission.'
+    dependsOn tasks.named('verifyReleaseTag')
+    inputs.property('modelVersion', libs.versions.jasyncapi.fork.get())
+    doLast { Task task ->
+        String version = task.inputs.properties['modelVersion'] as String
+        for (String artifact : ['asyncapi', 'asyncapi-core']) {
+            List<String> extensions = artifact == 'asyncapi' ? ['pom'] : ['pom', 'jar']
+            for (String extension : extensions) {
+                URI uri = URI.create("https://repo.maven.apache.org/maven2/io/github/sjacek/jasyncapi/$artifact/$version/$artifact-$version.$extension")
+                HttpURLConnection connection = (HttpURLConnection) uri.toURL().openConnection()
+                try {
+                    connection.requestMethod = 'HEAD'
+                    connection.connectTimeout = 15000
+                    connection.readTimeout = 15000
+                    if (connection.responseCode != 200)
+                        throw new GradleException("Model is not yet available in Maven Central: $artifact:$version ($extension)")
+                } finally { connection.disconnect() }
+            }
+        }
+    }
+}

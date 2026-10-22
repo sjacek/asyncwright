@@ -1,0 +1,18 @@
+plugins { id 'io.github.sjacek.asyncwright' }
+
+dependencies { asyncwrightExtensions project(':extensions') }
+
+asyncwright {
+    specs {
+        events { spec ->
+            spec.file.set(layout.projectDirectory.file('contracts/events.yaml'))
+            spec.rules { rules ->
+                rules.requireProtocol('amqp')
+                rules.rule('sample.ChannelAddressRule') { parameters.put('prefix', 'events.') }
+            }
+            spec.generators {
+                catalog { className = 'sample.ChannelCatalogGenerator' }
+            }
+        }
+    }
+}

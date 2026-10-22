@@ -1,0 +1,50 @@
+name: Prepare release (no upload)
+on:
+  workflow_dispatch:
+    inputs:
+      model_ref:
+        description: 'Full immutable commit SHA of the tested model distribution'
+        required: true
+        type: string
+permissions:
+  contents: read
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require an immutable model revision
+        env:
+          MODEL_REF: ${{ inputs.model_ref }}
+        run: '[[ "$MODEL_REF" =~ ^[0-9a-f]{40}$ ]]'
+  compatibility:
+    needs: preflight
+    uses: ./.github/workflows/compatibility.yml
+    with:
+      model_ref: ${{ inputs.model_ref }}
+  package:
+    needs: compatibility
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: gradle/actions/setup-gradle@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: model-repository
+          path: ${{ runner.temp }}/model-repository
+      - name: Prepare implementation, marker, sources and Javadoc
+        run: >-
+          bash ./gradlew :gradle-plugin:publishAllPublicationsToStagingRepository
+          -PasyncwrightModelRepository="$RUNNER_TEMP/model-repository"
+          --configuration-cache-problems=fail
+      - uses: actions/upload-artifact@v4
+        with:
+          name: asyncwright-publication-preview
+          path: gradle-plugin/build/staging-repository/
+          retention-days: 7

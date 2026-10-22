@@ -3,6 +3,8 @@
 The development plugin ID is `io.github.sjacek.asyncwright`. It validates the same
 [AsyncAPI 3.0.0 subset](validation.md) as the parser. It does not require Node.js.
 The plugin has not been released to the Plugin Portal.
+Publication metadata, source/Javadoc artifacts and marker packaging are prepared;
+see [release preparation and the HTTP consumer test](releases.md).
 
 ## Validation DSL
 
@@ -177,13 +179,16 @@ generator must be declared by its task, or caching must be disabled for that tas
 TestKit checks Groovy/Kotlin DSL, `check`, failure reports, configuration cache reuse,
 build cache restoration, relocation, extension JAR/parameter/input invalidation,
 included-build extensions, Jackson 3 on the host, the packaged plugin and output cleanup.
+Regressions also cover regex flags across the worker/cache boundary, empty generation
+and output guards for both the build directory itself and directories containing the input.
 Run `:gradle-plugin:test :gradle-plugin:validatePlugins`. Set `-PtestGradleVersion=9.0.0`
 to select a consumer Gradle distribution; the default uses the running build's distribution
 and JDK. The compatibility workflow defines eight Gradle/JDK pairs: 9.0.0, 9.1.0 and
 9.8.1 on JDK 17/21/25, excluding 9.0.0 on JDK 25. CI results must be reviewed before
 claiming the entire matrix or releasing the plugin.
 
-The workflow builds and tests the model from fork commit
-`7ba1dc432b529e87c66fb10ae43d3c9729e3bb71` into an isolated file repository. This
-bootstrap makes CI independent of a developer's Maven cache; public artifact hosting
-and release publication remain separate work.
+The workflow builds the selected model distribution into an isolated file repository,
+checks its version against the catalog and records its resolved commit. Development CI
+uses `ASYNCWRIGHT_MODEL_REF` or the distribution branch; release preparation requires an
+immutable full commit SHA. This bootstrap makes CI independent of a developer's Maven cache.
+Public hosting and submission remain separate external steps; preparation does not upload.

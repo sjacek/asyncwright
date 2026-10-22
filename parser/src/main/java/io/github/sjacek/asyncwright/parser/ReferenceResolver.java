@@ -60,6 +60,7 @@ public final class ReferenceResolver implements AsyncApiReferences {
         for (String target : edges) {
             if (states.getOrDefault(target, 0) == 1) {
                 List<String> cycle = stack.subList(stack.indexOf(target), stack.size());
+                // Concrete recursive schemas are useful; a ring consisting only of aliases has no value to resolve.
                 boolean recursiveSchema = cycle.stream().allMatch(p -> index.kinds.get(p) == DocumentIndex.Kind.SCHEMA)
                         && cycle.stream().anyMatch(p -> !source.root.at(p).has(REF));
                 if (!recursiveSchema) {
@@ -84,6 +85,7 @@ public final class ReferenceResolver implements AsyncApiReferences {
         if (!(reference.startsWith("#") || reference.isEmpty()))
             throw new IllegalArgumentException("External references are not supported in 0.1");
         String pointer;
+        // URI fragment decoding preserves literal plus signs, unlike form URL decoding.
         try { pointer = reference.isEmpty() ? "" : URI.create(reference).getFragment(); }
         catch (IllegalArgumentException exception) { throw new IllegalArgumentException("Malformed reference URI"); }
         if (pointer == null || (!pointer.isEmpty() && !pointer.startsWith("/"))
@@ -117,6 +119,7 @@ public final class ReferenceResolver implements AsyncApiReferences {
     }
 
     JsonNode mappingTree(String base, JsonNode tree) {
+        // Adapt only a copy for the generated model: the resolver and diagnostics must retain original source.
         JsonNode mapping = tree.deepCopy();
         for (var entry : index.kinds.entrySet()) {
             if (entry.getValue() != DocumentIndex.Kind.SCHEMA

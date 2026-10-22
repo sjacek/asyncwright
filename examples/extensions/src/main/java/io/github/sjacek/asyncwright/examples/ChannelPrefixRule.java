@@ -8,7 +8,12 @@ import java.util.TreeSet;
 
 /** Example project rule using typed channel targets and definition/use diagnostics. */
 public final class ChannelPrefixRule implements AsyncApiRule {
+    /** Public no-argument constructor required by the extension loader. */
+    public ChannelPrefixRule() { }
+
+    /** Required text parameter holding the channel address prefix. */
     public static final String PREFIX_PARAMETER = "prefix";
+    /** Stable project rule identifier emitted in reports. */
     public static final String RULE_ID = "example.channel-prefix";
     @Override
     public List<Diagnostic> validate(ExtensionContext context) throws Exception {

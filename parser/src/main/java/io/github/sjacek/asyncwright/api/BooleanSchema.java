@@ -12,9 +12,17 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public final class BooleanSchema extends AsyncAPISchema {
     private final boolean value;
 
+    /**
+     * Creates an unconstrained or impossible schema leaf.
+     * @param value {@code true} accepts every instance; {@code false} accepts none
+     */
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public BooleanSchema(boolean value) { this.value = value; }
 
+    /**
+     * Returns the schema assertion and its JSON representation.
+     * @return the boolean supplied at construction
+     */
     @JsonValue
     public boolean value() { return value; }
 
