@@ -1,8 +1,10 @@
 # Asyncwright
 
 Gradle tooling for contract-first AsyncAPI validation and model-based rules and generators.
-The project contains an initial Gradle-independent Java parser, the Gradle plugin scaffold
-and a separate compatibility experiment. Java bytecode targets 17; the Wrapper uses Gradle 9.8.1.
+The Gradle-independent Java parser and extension API completed F1 acceptance for the
+[documented 0.1 scope](docs/validation.md#f1-acceptance). Gradle plugin integration remains
+F2 work; the project also retains a separate compatibility experiment. Java bytecode
+targets 17; the Wrapper uses Gradle 9.8.1.
 
 Notable changes are recorded in the [changelog](CHANGELOG.md).
 
