@@ -1,8 +1,8 @@
 # Public parser comparison
 
 The public corpus is checked in under `parser/src/test/resources/conformance/`.
-It contains **70 cases**: 12 unchanged examples from `asyncapi/spec` tag `v3.0.0`
-(commit `d78dcea70c9b094a3df72f9a4e811828cec778cc`) and 58 synthetic fixtures.
+It contains **80 cases**: 12 unchanged examples from `asyncapi/spec` tag `v3.0.0`
+(commit `d78dcea70c9b094a3df72f9a4e811828cec778cc`) and 68 synthetic fixtures.
 The official files retain their original Apache-2.0 LICENSE and NOTICE; synthetic files
 use the project MIT license. No application contracts are included.
 
@@ -31,7 +31,7 @@ Configure the local model repository as described in the root README. From the p
 .\gradlew.bat check assemble --configuration-cache-problems=fail
 ```
 
-This includes `:parser:publicCorpusTest`, with 70 case checks and one manifest integrity check.
+This includes `:parser:publicCorpusTest`, with 80 case checks and one manifest integrity check.
 It needs no Node.js or external application contracts. With Gradle dependencies already
 cached, add `--offline`. The JVM report is `parser/build/reports/conformance/asyncwright.json`.
 
@@ -67,14 +67,14 @@ model graph equality. JavaScript dereferences and composes a document; Asyncwrig
 `$ref` values and exposes a separate resolver. Two rejecting parsers can report different
 diagnostics because Asyncwright stops after structural errors.
 
-The current result is **53 agreements and 17 reviewed differences** across **70 cases**:
+The current result is **59 agreements and 21 reviewed differences** across **80 cases**:
 
 | Classification | Cases | Meaning |
 | --- | ---: | --- |
-| Agreement | 53 | Both accept or both reject; includes one known shared limitation. |
+| Agreement | 59 | Both accept or both reject. |
 | Unsupported | 11 | Traits (including a shared definition), YAML aliases, external files, versions 2.6/3.1, component Avro format, foreign schema dialect and schema resource ID. |
 | Model limit | 2 | Unknown `nullable` keyword and custom binding extensions cannot be preserved by the typed Java model. |
-| Reference parser difference | 3 | JavaScript follows reference-like extension/const instance values and skips the channel parameter check when `parameters` is absent. |
+| Reference parser difference | 7 | JavaScript follows reference-like instance values, skips one channel parameter check and rejects four valid boolean-schema cases. |
 | Policy difference | 1 | Asyncwright rejects a pure schema reference cycle that JavaScript accepts. |
 | Implementation gap | 0 | The three identified semantic validation gaps below are fixed. |
 
@@ -100,10 +100,15 @@ Definitions physically located in components retain the broader reference locati
 allowed by the specification. These checks preserve the model and its `$ref` values.
 
 `openImplementationGaps: 0` counts the manifest's differential implementation-gap category.
-It does not include bugs shared by both parsers. `schema-boolean` is a capability case:
-the prose specification permits boolean schemas, while both pinned implementations reject
-it. The manifest records `knownSharedLimitation`, and the comparison separately reports
-`knownSharedLimitations: 1`. This remains an F1 conformance blocker.
+It does not include bugs shared by both parsers. The former `schema-boolean` shared limit
+has been fixed in Asyncwright: the original fixture is unchanged, but the JVM now accepts it.
+It is a valid case with a reviewed JS difference; `knownSharedLimitations` is now **0**.
+
+Ten further boolean cases cover direct payloads, nested keywords, schema aliases, explicit
+and implicit default-format wrappers, dependencies, instance data and negative guards.
+The JS parser rejects `schema-boolean`, `boolean-payload`, `boolean-schema-reference` and
+`boolean-dependency-reference`, although their boolean schemas are valid. Both parsers accept
+the nested and wrapper cases. Comparison remains about acceptance, not JS model fidelity.
 
 The P3/P5 review adds ten public cases covering component format wrappers and nested
 references, arbitrary schema instance objects, foreign dialects/resource IDs, shared

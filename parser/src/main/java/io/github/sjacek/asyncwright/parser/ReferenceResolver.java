@@ -114,6 +114,14 @@ public final class ReferenceResolver implements AsyncApiReferences {
 
     JsonNode mappingTree(String base, JsonNode tree) {
         JsonNode mapping = tree.deepCopy();
+        for (var entry : index.kinds.entrySet()) {
+            if (entry.getValue() != DocumentIndex.Kind.SCHEMA
+                    || !(entry.getKey().equals(base) || entry.getKey().startsWith(base + "/"))) continue;
+            JsonNode value = mapping.at(entry.getKey().substring(base.length()));
+            if (value instanceof com.fasterxml.jackson.databind.node.ObjectNode object
+                    && object.has("schema") && !object.has("schemaFormat") && !object.has("$ref"))
+                object.put("schemaFormat", "application/vnd.aai.asyncapi+json;version=3.0.0");
+        }
         for (var use : index.references) {
             if (!(use.pointer().equals(base) || use.pointer().startsWith(base + "/"))) continue;
             JsonNode value = mapping.at(use.pointer().substring(base.length()));

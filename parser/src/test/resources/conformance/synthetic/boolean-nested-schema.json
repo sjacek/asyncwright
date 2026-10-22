@@ -1,0 +1,50 @@
+{
+  "asyncapi": "3.0.0",
+  "info": {
+    "title": "Boolean schema regression",
+    "version": "1.0.0"
+  },
+  "components": {
+    "schemas": {
+      "Value": {
+        "properties": {
+          "any": true,
+          "none": false
+        },
+        "patternProperties": {
+          "^x-": false
+        },
+        "definitions": {
+          "any": true
+        },
+        "dependencies": {
+          "flag": false
+        },
+        "items": [
+          true,
+          false
+        ],
+        "additionalItems": false,
+        "additionalProperties": true,
+        "contains": true,
+        "propertyNames": false,
+        "if": true,
+        "then": false,
+        "else": true,
+        "not": false,
+        "allOf": [
+          true,
+          false
+        ],
+        "anyOf": [
+          true,
+          false
+        ],
+        "oneOf": [
+          true,
+          false
+        ]
+      }
+    }
+  }
+}

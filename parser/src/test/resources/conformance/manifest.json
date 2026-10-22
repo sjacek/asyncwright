@@ -362,17 +362,13 @@
     {
       "id": "schema-boolean",
       "file": "synthetic/schema-boolean.json",
-      "group": "capability",
+      "group": "valid",
       "sha256": "dd73525fa052b9f14c2172bc0c95b2846e376516b519c8f768a75e98e379d89b",
-      "classification": "agreement",
-      "reason": "AsyncAPI 3.0 prose permits boolean schemas, but both pinned implementations reject this case. Agreement does not establish specification conformance.",
-      "knownSharedLimitation": "boolean-schema",
+      "classification": "reference-parser-difference",
+      "reason": "AsyncAPI 3.0 permits boolean schemas. Asyncwright preserves true/false; the pinned JS parser rejects this valid case.",
       "asyncwright": {
-        "successful": false,
-        "errorRules": [
-          "schema.type"
-        ],
-        "firstErrorPointer": "/components/schemas/Any"
+        "successful": true,
+        "errorRules": []
       },
       "javascript": {
         "successful": false,
@@ -1346,6 +1342,189 @@
       "javascript": {
         "successful": true,
         "errorCodes": []
+      }
+    },
+    {
+      "id": "boolean-payload",
+      "file": "synthetic/boolean-payload.json",
+      "group": "valid",
+      "sha256": "1fbcef2543ac7ef832d7e38849ad81d1d0dcc532d225119bbce4aa15ee309b5f",
+      "classification": "reference-parser-difference",
+      "reason": "Boolean payload schemas retain their true/false values. The pinned JS parser rejects the valid boolean schema in this position.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": false,
+        "errorCodes": [
+          "asyncapi-document-resolved"
+        ]
+      }
+    },
+    {
+      "id": "boolean-nested-schema",
+      "file": "synthetic/boolean-nested-schema.json",
+      "group": "valid",
+      "sha256": "cb75916d73882597946b7c6afb1e45f1a94a5e3b90572b08194fb66bcaf80dc9",
+      "classification": "agreement",
+      "reason": "Boolean leaves are schemas in nested draft-07 positions, including typed model fields and tuples.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "boolean-schema-reference",
+      "file": "synthetic/boolean-schema-reference.json",
+      "group": "valid",
+      "sha256": "a8b3bbcf264c907d820ba27b142dfa7094b2b099d9b42f4d835ed9f09c5dfce7",
+      "classification": "reference-parser-difference",
+      "reason": "A schema reference chain can terminate at false; false is not a missing reference target. The pinned JS parser rejects the valid boolean schema in this position.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": false,
+        "errorCodes": [
+          "asyncapi-document-resolved"
+        ]
+      }
+    },
+    {
+      "id": "boolean-default-format",
+      "file": "synthetic/boolean-default-format.json",
+      "group": "valid",
+      "sha256": "9401d2769bb61f02baf42822d926e30b4a86c874cfc5b60132b25dd9b8e0fb21",
+      "classification": "agreement",
+      "reason": "Explicit default-format wrappers retain boolean schema bodies.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "boolean-implicit-format",
+      "file": "synthetic/boolean-implicit-format.json",
+      "group": "valid",
+      "sha256": "17b81eb5b954ce5fe719c6e0724c9361dbf029dcf1baa4a66de715f5838710c1",
+      "classification": "agreement",
+      "reason": "Omitting schemaFormat from a schema wrapper selects the default AsyncAPI format.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "boolean-invalid-channel",
+      "file": "synthetic/boolean-invalid-channel.json",
+      "group": "invalid",
+      "sha256": "a70ec0a75f7523ce9999707b7624e1c899af144edade285f4ae26535067d6b90",
+      "classification": "agreement",
+      "reason": "A boolean channel is not a Schema Object and remains a structural error.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "schema.oneOf",
+          "schema.type"
+        ],
+        "firstErrorPointer": "/channels/events"
+      },
+      "javascript": {
+        "successful": false,
+        "errorCodes": [
+          "asyncapi-document-resolved"
+        ]
+      }
+    },
+    {
+      "id": "boolean-invalid-scalar-schema",
+      "file": "synthetic/boolean-invalid-scalar-schema.json",
+      "group": "invalid",
+      "sha256": "9df2d1d3300b5f0ecebcddb9dd6a862f456f1f69b772451976fb2042298125aa",
+      "classification": "agreement",
+      "reason": "Supporting boolean schemas does not permit numeric schema definitions.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "schema.type"
+        ],
+        "firstErrorPointer": "/components/schemas/Value"
+      },
+      "javascript": {
+        "successful": false,
+        "errorCodes": [
+          "asyncapi-document-resolved"
+        ]
+      }
+    },
+    {
+      "id": "boolean-invalid-nested-type",
+      "file": "synthetic/boolean-invalid-nested-type.json",
+      "group": "invalid",
+      "sha256": "d8eec3899e7590a34eab7c620401b5c85195f9c9f83fdd4bcda587f0b6e6c881",
+      "classification": "agreement",
+      "reason": "A valid boolean sibling does not mask invalid object-schema fields.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "schema.enum",
+          "schema.type"
+        ],
+        "firstErrorPointer": "/components/schemas/Value/allOf/1/type"
+      },
+      "javascript": {
+        "successful": false,
+        "errorCodes": [
+          "asyncapi-document-resolved"
+        ]
+      }
+    },
+    {
+      "id": "boolean-instance-data",
+      "file": "synthetic/boolean-instance-data.json",
+      "group": "valid",
+      "sha256": "d28fb65f79861087a9ee159d1577537a546fb0def4a1ee23578fa4cd845c87c9",
+      "classification": "agreement",
+      "reason": "Boolean values inside const/default/examples remain instance data rather than schema leaves.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "boolean-dependency-reference",
+      "file": "synthetic/boolean-dependency-reference.json",
+      "group": "valid",
+      "sha256": "075b8167a580b92f066c09abac21275767e7f298387bffdd3acc11e5584e25ff",
+      "classification": "reference-parser-difference",
+      "reason": "A boolean schema dependency is indexed as a valid reference target. The pinned JS parser rejects the valid boolean schema in this position.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": false,
+        "errorCodes": [
+          "asyncapi-document-resolved"
+        ]
       }
     }
   ],

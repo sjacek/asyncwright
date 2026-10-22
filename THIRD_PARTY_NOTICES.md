@@ -42,6 +42,12 @@ official bundled schema with `$id` values from `asyncapi/spec-json-schemas`:
 - License: Apache-2.0. The upstream LICENSE and NOTICE are included unchanged under
   `parser/src/main/resources/META-INF/licenses/spec-json-schemas/` and in the parser jar.
 
+The production parser applies one correction to an in-memory copy: the `if` condition in
+`http://asyncapi.com/definitions/3.0.0/anySchema.json` gains `type: object` alongside
+`required: [schema]`. This prevents boolean schemas from incorrectly selecting the
+Multi Format Schema branch. `SchemaCompatibility` implements the correction; regression
+tests verify that it is the only tree change and that the bundled file retains its checksum.
+
 The upstream NOTICE states:
 
 ```text

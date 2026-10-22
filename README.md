@@ -106,9 +106,10 @@ Schema-valid constructs that the typed model cannot preserve are rejected with
 The [validation scope and diagnostic contract](docs/validation.md) records P3/P5 behavior,
 including explicit rejection of foreign schema dialects, `$id` resource scopes and YAML
 aliases. Object values in schema `const`, `default` and `examples` are preserved as instance
-data by the parser, resolver and extension snapshots. Boolean schemas remain a known F1
-conformance blocker: both pinned parsers reject the selected case even though the prose
-specification permits it.
+data by the parser, resolver and extension snapshots. Boolean schemas are supported:
+`true` and `false` retain their values in the model, nested schema
+positions, default-format wrappers and local reference targets. The typed resolver exposes
+them as `api.BooleanSchema`, a subtype of the model's `AsyncAPISchema` with a `value()` method.
 
 ## Rule and generator API
 
@@ -145,7 +146,7 @@ source checksums and diagnostics. Ordinary `check` does not require the external
 
 `check` also runs `:parser:publicCorpusTest` against checked-in public fixtures without
 Node.js or network access. The corpus contains 12 unmodified examples from the AsyncAPI
-3.0.0 specification release and 58 synthetic positive, negative and capability cases.
+3.0.0 specification release and 68 synthetic positive, negative and capability cases.
 The manifest pins fixture hashes, upstream provenance and each parser's reviewed outcome.
 
 An optional comparison uses `@asyncapi/parser` 3.6.6 with core rules enabled and recommended

@@ -7,8 +7,10 @@ been published. The current development version is `0.1.0-SNAPSHOT`.
 
 ### Added
 
+- Boolean schema support, with a public `BooleanSchema` leaf and regressions covering nested
+  schemas, local references, model serialization, extension rules and generators.
 - Documented validation scope and diagnostic contract, with additional public P3/P5 regressions
-  and explicit tracking of the shared boolean-schema conformance limitation.
+  and explicit tracking of reviewed parser differences and shared limitations.
 - Public rule and generator API with document/reference views, immutable text parameters,
   source-aware diagnostics and scoped output writes.
 - A Gradle-independent extension executor supporting class-name registration, caller-supplied
@@ -30,7 +32,7 @@ been published. The current development version is `0.1.0-SNAPSHOT`.
   diagnostics and a separate resolver retaining document references.
 - Reference target and cycle checks, operation message membership and channel parameter rules.
 - Opt-in integration checks for an external contract corpus and explicit local fork resolution.
-- Public regression corpus with 12 pinned official AsyncAPI 3.0.0 examples and 58 synthetic cases.
+- Public regression corpus with 12 pinned official AsyncAPI 3.0.0 examples and 68 synthetic cases.
 - Offline JVM corpus checks and a reproducible JavaScript parser comparison with reviewed differences.
 
 ### Changed
@@ -43,6 +45,9 @@ been published. The current development version is `0.1.0-SNAPSHOT`.
 
 ### Fixed
 
+- Apply a narrow runtime correction to the bundled schema's wrapper condition so boolean schemas
+  reach the Schema Object validator; preserve the original upstream resource bytes.
+- Resolve boolean schema dependencies and apply the default format for wrappers without `schemaFormat`.
 - Validate formats and nested references in component schema wrappers.
 - Preserve arbitrary JSON instance objects and numeric precision in schema const/default/examples,
   consistently in the parser, typed resolver and extension models.

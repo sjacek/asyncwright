@@ -16,6 +16,7 @@ parser is a regression result, not proof of complete specification conformance.
 | External references and named anchors | Outside the resolver scope; rejected, without fetching remote resources. |
 | Traits | Rejected with `unsupported.construct`; no trait merge occurs. |
 | Default schema format, implicit or explicit | Supported in payloads and component schemas, including references within wrappers. |
+| Boolean schemas `true`/`false` | Supported in components, payloads, headers, nested schema positions and default-format wrappers; boolean reference targets retain their values. |
 | Other `schemaFormat` values | Rejected with `unsupported.construct`, including Avro and explicit `application/schema+json;version=draft-07`. |
 | Explicit `$schema` | Only HTTP/HTTPS draft-07 schema URIs, with or without trailing `#`, are accepted. Other dialects reject with `unsupported.schema-dialect`. |
 | Schema resource identifiers `$id` | Rejected with `unsupported.schema-id`; resource scopes and named identifiers are not implemented in 0.1. |
@@ -32,15 +33,36 @@ These are product limits, not statements that the rejected constructs are invali
 They apply to schema/document positions, not arbitrary instance values or extension data.
 The parser, typed resolver and extension snapshots share model mapping that preserves
 instance objects and arbitrary-precision JSON numbers. This mapping uses local Jackson
-mixins; the separately maintained model artifact and its source are unchanged.
+mixins and a boolean-aware schema deserializer; the separately maintained model artifact
+and its source are unchanged.
+
+## Boolean schemas
+
+`true` and `false` are schema values under the
+[AsyncAPI 3.0 Schema Object specification](https://www.asyncapi.com/docs/reference/specification/v3.0.0#schemaObject).
+They stay boolean when serialized; they are not replaced by equivalent object schemas.
+The parser does not validate example payload instances, so a valid `false` schema does
+not by itself reject an AsyncAPI document.
+
+The typed resolver returns `api.BooleanSchema` for boolean targets requested as
+`AsyncAPISchema.class`, including references terminating at `false`. The subtype's `value()`
+exposes the leaf. Some untyped model fields already hold native Java `Boolean` values;
+the [extension contract](extensions.md) explains this distinction. `const/default/examples`
+booleans remain instance data. A boolean outside a schema position does not become a
+valid channel, message, operation or security scheme.
+
+The upstream bundle's `anySchema` conditional uses `required: [schema]` without restricting
+the instance type, which incorrectly routes a boolean to the object-only wrapper validator.
+`SchemaCompatibility` adds `type: object` to that condition in an in-memory copy. The
+bundled resource stays byte-identical with its provenance/checksum intact. Tests verify
+the single tree change and the continued rejection of invalid object schemas and scalars.
+
+Wrappers without `schemaFormat` select the default AsyncAPI format. Mapping adds that
+default to the typed model without changing the source or positions. Boolean dependencies
+are indexed as schemas; a reference to an arbitrary boolean instance value is still invalid.
 
 ## Known coverage and model limits
 
-- Standalone boolean schemas (`true`/`false`) are permitted by the
-  [AsyncAPI 3.0 Schema Object specification](https://www.asyncapi.com/docs/reference/specification/v3.0.0#schemaObject).
-  The bundled schema and pinned JS parser both reject the corpus case. The manifest marks
-  it as a capability case with `knownSharedLimitation`; the comparison reports it separately.
-  This remains an F1 conformance blocker even though both parsers agree.
 - Custom binding entries such as `bindings.x-custom` are dropped by the selected typed
   model and therefore rejected by the preservation guard. Source data is never silently
   discarded from a successful document.
@@ -48,10 +70,14 @@ mixins; the separately maintained model artifact and its source are unchanged.
   mapping. Use the supported draft-07 null union for nullable types. This is a model limit,
   not support for OpenAPI's nullable semantics.
 
-The [recorded comparison](conformance/comparison.json) contains **70 cases: 53 agreements
-and 17 reviewed differences**, plus **one known shared limitation** within the agreements.
-The differences comprise 11 capability exclusions, 2 model limits, 3 reference parser
+The [recorded comparison](conformance/comparison.json) contains **80 cases: 59 agreements
+and 21 reviewed differences**, with **zero known shared limitations** in this selected corpus.
+The differences comprise 11 capability exclusions, 2 model limits, 7 reference parser
 differences and 1 pure-cycle policy difference. No unreviewed outcome changes remain.
+
+The former `schema-boolean` limitation is now a valid JVM case and a JS difference. The
+pinned JS parser rejects it, direct boolean payloads, reference aliases to `false` and a
+reference to a boolean dependency. Both parsers accept the nested boolean and format-wrapper cases.
 
 The JS parser treats a `$ref` inside a `const` instance value as a reference in
 `schema-instance-values`; Asyncwright preserves it as data. This classification follows
@@ -93,8 +119,7 @@ subsequent stages. A loading/execution exception in a project extension propagat
 
 ## Remaining F1 acceptance work
 
-Boolean schema support needs a parser/model solution or an explicit revision of the F1
-acceptance scope. The documented capability/model exclusions need to be included in the
+Boolean schema support is implemented. The documented capability/model exclusions need to be included in the
 final acceptance record; a green differential test cannot approve them by itself.
 The review and local verification do not establish full AsyncAPI conformance.
 Worker isolation, Gradle tasks/DSL, TestKit and task-cache behavior remain F2 work.

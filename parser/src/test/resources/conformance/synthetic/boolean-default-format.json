@@ -1,0 +1,23 @@
+{
+  "asyncapi": "3.0.0",
+  "info": {
+    "title": "Boolean schema regression",
+    "version": "1.0.0"
+  },
+  "components": {
+    "schemas": {
+      "None": {
+        "schemaFormat": "application/vnd.aai.asyncapi+json;version=3.0.0",
+        "schema": false
+      }
+    },
+    "messages": {
+      "m": {
+        "payload": {
+          "schemaFormat": "application/vnd.aai.asyncapi+json;version=3.0.0",
+          "schema": true
+        }
+      }
+    }
+  }
+}

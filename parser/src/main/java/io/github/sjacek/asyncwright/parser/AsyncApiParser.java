@@ -30,7 +30,7 @@ public final class AsyncApiParser {
                         .formatAssertionsEnabled(true).regularExpressionFactory(JoniRegularExpressionFactory.getInstance()).build())
                 .schemaIdResolvers(r -> r.mappings(Map.of(id, "classpath:schemas/asyncapi/3.0.0.json")))
                 .schemaLoader(loader -> loader.fetchRemoteResources(false)));
-        Schema schema = registry.getSchema(SchemaLocation.of(id));
+        Schema schema = registry.getSchema(SchemaLocation.of(id), SchemaCompatibility.schema());
         schema.initializeValidators();
         return schema;
     }

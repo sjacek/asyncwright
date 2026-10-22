@@ -33,8 +33,8 @@ final class DocumentIndex {
             return;
         }
         if (kind == Kind.SCHEMA) {
-            if (node.has("schemaFormat")) {
-                if (Set.of("application/vnd.aai.asyncapi;version=3.0.0",
+            if (node.has("schemaFormat") || node.has("schema")) {
+                if (!node.has("schemaFormat") || Set.of("application/vnd.aai.asyncapi;version=3.0.0",
                         "application/vnd.aai.asyncapi+json;version=3.0.0",
                         "application/vnd.aai.asyncapi+yaml;version=3.0.0").contains(node.path("schemaFormat").asText()))
                     child(pointer, "schema", node.path("schema"), Kind.SCHEMA);
@@ -63,7 +63,7 @@ final class DocumentIndex {
                     child(pointer, key, child, Kind.SCHEMA);
             }
             JsonNode dependencies = node.path("dependencies");
-            for (var field : dependencies.properties()) if (field.getValue().isObject())
+            for (var field : dependencies.properties()) if (field.getValue().isObject() || field.getValue().isBoolean())
                 child(pointer, "dependencies/" + SourceDocument.escape(field.getKey()), field.getValue(), Kind.SCHEMA);
             return;
         }

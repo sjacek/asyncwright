@@ -15,6 +15,7 @@ the normal build. It is separate from the two production modules.
 | `AsyncApiDocumentView` | Typed model, source copy, positions and reference access. |
 | `AsyncApiReferences` | Target lookup, typed lookup and related reference usage locations. |
 | `ResolvedReference` | Target pointer and a defensive copy of its source value. |
+| `BooleanSchema` | An `AsyncAPISchema` subtype representing a boolean schema, serialized as `true` or `false`. |
 | `ExtensionResult` | Combined ordered diagnostics, success status and sorted relative output paths. |
 | `ExtensionExecutionException` | Extension class/kind and original cause for loading or execution failures. |
 
@@ -54,6 +55,20 @@ Reconstruction avoids changes to numeric representations introduced by a model s
 The source and reference index continue to describe the original document.
 Schema `const`, `default` and `examples` values use the same instance-data mapping as the
 parser and typed resolver, including arbitrary objects and precise JSON numbers.
+
+For a uniform typed view of schema leaves, use `references().resolve(pointer, AsyncAPISchema.class)`.
+Boolean targets return `BooleanSchema`; inspect its `value()` before object-schema getters.
+You can also resolve a known boolean target directly as `BooleanSchema.class`. A target
+of `false` is present, not an empty optional. The model retains reference objects and does
+not replace them with targets.
+
+In model fields typed as `Object`, the fork may already represent a boolean schema as a
+native `Boolean` (for example, `properties` or `additionalProperties`); that behavior is retained.
+Fields requiring `AsyncAPISchema` use the subtype. Both serialize to the same boolean leaf.
+Inherited object-schema setters do not change a `BooleanSchema` leaf's `value()` or JSON.
+Boolean values inside instance data are ordinary Java booleans, not `BooleanSchema` objects.
+An implicit format wrapper gains the default `schemaFormat` only in the mapping projection
+and typed model; the source tree and source positions remain unchanged.
 
 Parameters contain text values only. The specification copies the map, which remains immutable
 in the context. Use `requireParameter(name)` for required values and

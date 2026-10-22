@@ -1,0 +1,22 @@
+{
+  "asyncapi": "3.0.0",
+  "info": {
+    "title": "Boolean schema regression",
+    "version": "1.0.0"
+  },
+  "components": {
+    "schemas": {
+      "None": false,
+      "Alias": {
+        "$ref": "#/components/schemas/None"
+      }
+    },
+    "messages": {
+      "m": {
+        "payload": {
+          "$ref": "#/components/schemas/Alias"
+        }
+      }
+    }
+  }
+}
