@@ -7,6 +7,8 @@ been published. The current development version is `0.1.0-SNAPSHOT`.
 
 ### Added
 
+- F1 acceptance record for the documented parser and Java extension API scope, with a clean
+  verification run, reviewed limitations and an unchanged 80-case JS comparison baseline.
 - Boolean schema support, with a public `BooleanSchema` leaf and regressions covering nested
   schemas, local references, model serialization, extension rules and generators.
 - Documented validation scope and diagnostic contract, with additional public P3/P5 regressions

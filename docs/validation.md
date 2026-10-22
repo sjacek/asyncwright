@@ -117,9 +117,31 @@ subsequent stages. A loading/execution exception in a project extension propagat
 `ExtensionExecutionException`; it is not an ordinary contract diagnostic. See the
 [extension API](extensions.md) for generator behavior and partial output handling.
 
-## Remaining F1 acceptance work
+## F1 acceptance
 
-Boolean schema support is implemented. The documented capability/model exclusions need to be included in the
-final acceptance record; a green differential test cannot approve them by itself.
-The review and local verification do not establish full AsyncAPI conformance.
+F1 was accepted on **2026-10-22** for the parser and plain-Java rule/generator API in
+commit `e5b73f957ece1127f1490930b3563ef7ca897328`, within the explicit 0.1 scope above.
+The acceptance includes the documented capability exclusions and model limits; it does
+not claim complete AsyncAPI 3.0 conformance or a released Gradle plugin.
+
+A clean `check assemble`, example execution and the five corrected external contracts
+completed successfully on Gradle **9.8.1 / Temurin 21.0.12.1**. Of **189 test cases**,
+**188 passed** and **one was skipped** because this Windows host could not create symbolic
+links. That skip affects the output helper's symlink guard verification; all other output
+path guards passed. Compilation targets Java 17 (classfile version 61); the full supported
+Gradle/JDK runtime matrix belongs to F2.
+
+A fresh comparison with **@asyncapi/parser 3.6.6 / Node 26.4.0** reproduced the committed
+report: **80 cases, 59 agreements, 21 reviewed differences, zero unexpected changes**.
+The six JVM-accepted/JS-rejected cases are deliberate, documented corrections of reference
+parser behavior: reference-like extension/const data and four valid boolean-schema cases.
+They do not disable required semantic checks. The comparison is supporting evidence;
+specification behavior, negative tests and source preservation remain acceptance criteria.
+
+The external integration check uses the five corrected contract copies and verifies
+**91 local references and 13 typed AMQP bindings**. It does not establish acceptance of
+the original contracts containing `nullable` or perform application migration.
+
 Worker isolation, Gradle tasks/DSL, TestKit and task-cache behavior remain F2 work.
+Public distribution of the model artifact is required before release. The historical
+negative F0/P1 result for upstream RC4 remains unchanged.
