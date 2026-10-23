@@ -105,8 +105,8 @@ asyncwright.specs.platformEvents {
 ```
 
 The extension subproject uses a `compileOnly` dependency on the plugin artifact
-(`io.github.sjacek.asyncwright:gradle-plugin:0.1.0-SNAPSHOT` in the current development
-build). The plugin JAR includes the parser and public API; its API dependencies provide
+(`io.github.sjacek.asyncwright:asyncwright-gradle-plugin:0.1.0` for the prepared publication).
+The plugin JAR includes the parser and public API; its API dependencies provide
 the typed model and Jackson 2. A published development repository must supply the
 plugin and fork model dependencies. TestKit also exercises file-based compilation
 against the plugin-under-test classpath, without relying on a public repository.

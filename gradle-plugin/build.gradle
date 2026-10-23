@@ -4,7 +4,17 @@ plugins {
     id 'com.gradle.plugin-publish' version '2.2.1'
 }
 
-description = 'AsyncAPI validation and model-based generators in isolated Gradle workers.'
+description = 'Asyncwright brings contract-first AsyncAPI validation and model-based generation to Gradle builds and CI. ' +
+        'It validates a defined subset of AsyncAPI 3.0.0 YAML and JSON documents, resolves local JSON Pointer references, ' +
+        'and produces JSON and text diagnostic reports. A Groovy/Kotlin DSL configures specifications and project rules; ' +
+        'validation integrates with the check task so contract errors fail the build. ' +
+        'The Java extension API lets teams supply custom validation rules and generators that work with a typed model. ' +
+        'Generation runs through explicitly invoked tasks using user-supplied generators. ' +
+        'Validation and generation tasks support the Gradle build cache and configuration cache, and run in ' +
+        'classloader-isolated Gradle workers without requiring Node.js. Custom extensions must declare their inputs ' +
+        'and produce deterministic outputs for correct caching. The supported subset excludes external references, ' +
+        'traits, YAML aliases and non-default schema formats. See the project documentation for setup, examples ' +
+        'and the full validation scope.'
 java { withJavadocJar() }
 
 gradlePlugin {
@@ -15,7 +25,7 @@ gradlePlugin {
             plugin.setId('io.github.sjacek.asyncwright')
             plugin.setImplementationClass('io.github.sjacek.asyncwright.gradle.AsyncwrightPlugin')
             plugin.setDisplayName('Asyncwright')
-            plugin.setDescription('AsyncAPI validation and model-based generators in isolated Gradle workers.')
+            plugin.setDescription(project.description)
             plugin.tags.set(['asyncapi', 'validation', 'code-generation', 'java'])
         }
     }
@@ -37,7 +47,7 @@ dependencies {
     testImplementation gradleTestKit()
     testImplementation project(':parser')
     // Host-only fixture proves that Jackson 3 does not leak into the isolated worker.
-    testImplementation 'tools.jackson.core:jackson-databind:3.2.3'
+    testImplementation 'tools.jackson.core:jackson-databind:3.2.4'
     testRuntimeOnly(libs.junit.platform.launcher)
 }
 

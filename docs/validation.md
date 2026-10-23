@@ -142,6 +142,7 @@ The external integration check uses the five corrected contract copies and verif
 **91 local references and 13 typed AMQP bindings**. It does not establish acceptance of
 the original contracts containing `nullable` or perform application migration.
 
-Worker isolation, Gradle tasks/DSL, TestKit and task-cache behavior remain F2 work.
+Worker isolation, Gradle tasks/DSL, TestKit and task-cache behavior were outside the F1
+acceptance scope. They are now implemented and documented in the [Gradle plugin guide](gradle-plugin.md).
 Public distribution of the model artifact is required before release. The historical
 negative F0/P1 result for upstream RC4 remains unchanged.

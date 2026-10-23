@@ -1,6 +1,13 @@
 # Asyncwright
 
 Gradle tooling for contract-first AsyncAPI validation and model-based rules and generators.
+Use Asyncwright to check messaging contracts during local builds and CI, enforce project
+conventions, and generate project-specific artifacts from a typed AsyncAPI model. Validation
+integrates with Gradle's `check`; custom Java generators run through explicit generation tasks.
+The plugin supports a defined subset of AsyncAPI **3.0.0**, without requiring Node.js.
+See the [Gradle DSL and usage examples](docs/gradle-plugin.md) and
+[supported features and limitations](docs/validation.md).
+
 The Gradle-independent Java parser and extension API completed F1 acceptance for the
 [documented 0.1 scope](docs/validation.md#f1-acceptance). The development
 [Gradle plugin](docs/gradle-plugin.md) adds a specification DSL, validation and generator
@@ -111,7 +118,8 @@ values. Added model defaults are allowed; silent omissions or changed values are
 Ignored reference siblings produce warnings and remain available in the source tree. Example
 data and extension values are not treated as document references. YAML aliases, external
 references, traits and non-default schema formats are currently unsupported. Broader parser
-conformance and the Gradle DSL, worker integration and publication remain under development.
+conformance remains under development; the Gradle DSL and worker integration are implemented,
+and publication is prepared but pending.
 Schema-valid constructs that the typed model cannot preserve are rejected with
 `model.preservation` diagnostics; custom binding extensions are one such current limitation.
 
@@ -140,8 +148,9 @@ Run the checked-in example after configuring the model repository:
 This validates channel address prefixes and writes
 `examples/extensions/build/generated-example/catalog/channels.json` using typed channel targets.
 See the [extension API contract](docs/extensions.md) and [runnable examples](examples/extensions/README.md).
-Worker API, the `asyncwrightExtensions` Gradle configuration, task registration and TestKit
-integration remain F2 work. `ResolvedReference` now belongs to the public `api` package.
+The [Gradle plugin](docs/gradle-plugin.md) provides the `asyncwrightExtensions` configuration,
+validation and generator tasks, classloader-isolated Worker API execution and TestKit coverage.
+`ResolvedReference` belongs to the public `api` package.
 
 The external five-document corpus has a separate opt-in check:
 
