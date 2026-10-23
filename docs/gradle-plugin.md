@@ -1,24 +1,28 @@
 # Gradle plugin
 
-The development plugin ID is `io.github.sjacek.asyncwright`. It validates the same
+The plugin ID is `io.github.sjacek.asyncwright`. It validates the same
 [AsyncAPI 3.0.0 subset](validation.md) as the parser. It does not require Node.js.
 The plugin has not been released to the Plugin Portal.
 Publication metadata, source/Javadoc artifacts and marker packaging are prepared;
 see [release preparation and the HTTP consumer test](releases.md).
+Start with the [complete minimal consumer setup](../README.md#quick-start), including
+repositories, the plugin version, a contract and the validation command. The model
+distribution `1.0.0-RC4-asyncwright.3` is already available from Maven Central.
 
 ## Validation DSL
 
 The runnable `examples/gradle-consumer` build resolves the plugin directly from this
-checkout through `pluginManagement.includeBuild`. Configure the fork model repository
-as described in the root README, then run from the repository root:
+checkout through `pluginManagement.includeBuild`. Run from the repository root using
+the public model:
 
 ```powershell
-.\gradlew.bat -p examples/gradle-consumer check --configuration-cache-problems=fail
+.\gradlew.bat -p examples/gradle-consumer check '-PasyncwrightModelRepository=' --configuration-cache-problems=fail
 ```
 
-The example also configures `pluginManagement.repositories` for Maven Central and the
-fork model file repository. Plugin runtime dependencies are resolved in the consumer's
-plugin-management repositories; repositories of the included plugin build are not inherited.
+The empty override disables an existing local development model repository. The example
+uses Maven Central, with an optional file repository only when a development path is set.
+Plugin runtime dependencies are resolved in the consumer's plugin-management repositories;
+repositories of the included plugin build are not inherited.
 
 After resolving the plugin from your configured development repository or included build:
 

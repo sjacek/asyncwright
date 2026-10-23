@@ -16,6 +16,73 @@ targets 17; the Wrapper uses Gradle 9.8.1.
 
 Notable changes are recorded in the [changelog](CHANGELOG.md).
 
+## Quick start
+
+Requires Gradle 9.0 or newer and a JDK supported by that Gradle version (Java 17 or newer).
+Version `0.1.0` is being prepared for Plugin Portal approval and is not publicly available yet.
+The following setup is for the approved release. To try the plugin from this checkout now,
+run the [development example](examples/gradle-consumer):
+
+```powershell
+.\gradlew.bat -p examples/gradle-consumer check '-PasyncwrightModelRepository=' --configuration-cache-problems=fail
+```
+
+For a consuming project, add the public plugin repositories in `settings.gradle`:
+
+```groovy
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        mavenCentral()
+    }
+}
+rootProject.name = 'messaging-contracts'
+```
+
+Apply and configure the plugin in `build.gradle`:
+
+```groovy
+plugins {
+    id 'io.github.sjacek.asyncwright' version '0.1.0'
+}
+
+asyncwright {
+    specs {
+        events {
+            file = layout.projectDirectory.file('contracts/events.yaml')
+            rules { requireProtocol 'amqp' }
+        }
+    }
+}
+```
+
+Create `contracts/events.yaml`:
+
+```yaml
+asyncapi: 3.0.0
+info:
+  title: Messaging contracts
+  version: 1.0.0
+servers:
+  broker:
+    host: localhost
+    protocol: amqp
+channels:
+  events:
+    address: events.created
+```
+
+Run `./gradlew check` (or `.\gradlew.bat check` on Windows). Asyncwright validates the
+document and runs the configured project rule; errors fail the build. Diagnostics are
+written to `build/reports/asyncapi/events.json` and `events.txt`. You can run only this
+specification with `asyncApiValidateEvents`.
+
+For custom Java rules and generators, see the [Gradle DSL guide](docs/gradle-plugin.md),
+[extension API](docs/extensions.md), and [complete consumer with an extension subproject](examples/published-consumer).
+Generation is explicit and uses a supplied generator; applying the plugin alone does not
+generate Java DTOs. The [validation guide](docs/validation.md) lists supported constructs
+and limitations.
+
 Modules:
 
 - `parser`: document loading, structural validation, local reference resolution and diagnostics;
@@ -28,10 +95,18 @@ Modules:
 
 ## Build
 
-Use JDK 17 or newer supported by the selected Gradle runtime. The model fork currently
-requires an explicit file repository. In a checkout of the fork's distribution branch,
-run `tools/install-local.ps1 -Repository C:/path/to/model-repository` (JDK 21 with Maven
-Toolchains is required for the fork's tests). Then build Asyncwright:
+The model fork `1.0.0-RC4-asyncwright.3` is available in Maven Central. Compile and package
+the plugin using public dependencies:
+
+```powershell
+.\gradlew.bat assemble '-PasyncwrightModelRepository=' --configuration-cache-problems=fail
+```
+
+The empty override also disables any development model path in `gradle/local.properties`.
+The full `check` build includes prepublication HTTP consumer tests that require a staged
+model file repository as a test fixture. For those tests, use a checkout of the model's
+distribution branch and run `tools/install-local.ps1 -Repository C:/path/to/model-repository`
+(JDK 21 with Maven Toolchains is required for the model tests). Then run:
 
 ```powershell
 .\gradlew.bat check assemble --configuration-cache-problems=fail `
@@ -73,10 +148,11 @@ references or redundant escapes. Keep these IDE preferences local rather than ed
 The selected coordinates for the separately maintained model fork are
 `io.github.sjacek.jasyncapi:asyncapi-core:1.0.0-RC4-asyncwright.3`, based on
 [`sjacek/jasyncapi` at `05116f0d`](https://github.com/sjacek/jasyncapi/commit/05116f0d99f9e3f3c1b7d1aa8491f120364acf91).
-The parser resolves this artifact from `asyncwrightModelRepository`, restricted to the fork
-group. The file repository contains the parent POM, model POM and model jar; `mavenLocal()`
-is not consulted. Distribution changes are separate from the upstream bug-fix branch.
-A public distribution must be available before releasing Asyncwright.
+The parser resolves this artifact from Maven Central by default. An explicit
+`asyncwrightModelRepository` selects a development file repository restricted to the fork
+group; it must contain the parent POM, model POM and model JAR. `mavenLocal()` is not consulted.
+Distribution changes are separate from the upstream bug-fix branch. The published model
+does not require a sibling checkout or a local repository in a consuming project.
 The [published-consumer example](examples/published-consumer) uses only Maven coordinates and
 public repository defaults, with no local paths or included build. It becomes usable against
 those defaults after the release; TestKit currently verifies the same project over staged HTTP
@@ -139,10 +215,10 @@ The public extension contracts are in `io.github.sjacek.asyncwright.api`: `Async
 parse → project rules → generators sequence without Gradle. Each invocation receives its
 own model; references stay in the document and are followed through the resolver.
 
-Run the checked-in example after configuring the model repository:
+Run the checked-in Java extension example with the public model:
 
 ```powershell
-.\gradlew.bat :extension-examples:runExample --configuration-cache-problems=fail
+.\gradlew.bat :extension-examples:runExample '-PasyncwrightModelRepository=' --configuration-cache-problems=fail
 ```
 
 This validates channel address prefixes and writes

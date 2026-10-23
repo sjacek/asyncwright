@@ -1,91 +1,48 @@
 # Changelog
 
-Notable changes to Asyncwright are recorded here. Changes under **Unreleased** have not
-been published. The current release candidate is `0.1.0`.
+User-visible changes to Asyncwright. Changes under **Unreleased** are not yet publicly available.
 
 ## Unreleased
 
+Planned first public release: **0.1.0**.
+
 ### Added
 
-- Complete public API and Gradle DSL Javadoc, including reference resolution, extension failures,
-  output ownership and cache behavior; documentation warnings now fail artifact preparation.
-- Regression coverage for extension diagnostic contracts, regex flags across worker/cache boundaries,
-  empty generation, protected output directories and failed output writes.
-- Publication metadata, plugin marker packaging, source/Javadoc artifacts and a release guide.
-- A Maven-coordinate consumer example and HTTP repository tests without composite builds or Maven Local.
-- Manual preparation workflows that test and package candidates without submitting artifacts.
-- Optional class-based rule registration for rule types already available to the build
-  script, retaining binary class names for isolated worker execution.
-- Development Gradle plugin with a specification DSL, declarative/project rules, cacheable
-  validation and generator tasks, relative JSON/text reports and isolated Worker API execution.
-- TestKit coverage for consumer builds, caching and relocation, extension changes, Jackson
-  isolation and generator output cleanup; an eight-pair Gradle/JDK compatibility workflow.
-- F1 acceptance record for the documented parser and Java extension API scope, with a clean
-  verification run, reviewed limitations and an unchanged 80-case JS comparison baseline.
-- Boolean schema support, with a public `BooleanSchema` leaf and regressions covering nested
-  schemas, local references, model serialization, extension rules and generators.
-- Documented validation scope and diagnostic contract, with additional public P3/P5 regressions
-  and explicit tracking of reviewed parser differences and shared limitations.
-- Public rule and generator API with document/reference views, immutable text parameters,
-  source-aware diagnostics and scoped output writes.
-- A Gradle-independent extension executor supporting class-name registration, caller-supplied
-  classloaders, per-invocation models and explicit extension failures.
-- Runnable Java extension examples and tests using an independently compiled extension jar.
-- Initial project structure with separate parser and Gradle plugin modules.
-- Gradle `9.8.1` Wrapper with distribution checksum verification and compilation targeting
-  Java 17 bytecode.
-- An experimental compatibility probe for `asyncapi-core:1.0.0-RC4`, covering data
-  preservation during serialization, AMQP bindings, references and recursive schemas.
-- JSON compatibility reports with input checksums, data differences and mapping errors.
-  Contributors can select an external contract directory and compare Jackson versions.
-- Development setup and build instructions, MIT licensing and third-party notices.
-- Pinned JSON Schema validation dependencies and the official AsyncAPI 3.0.0 schema,
-  including upstream license notices and checks for offline loading and validation.
-- Regression checks distinguishing optional properties, explicit null values and the
-  nonstandard `nullable` keyword under JSON Schema draft-07.
-- Initial Java parsing API with source positions, offline schema validation, structured
-  diagnostics and a separate resolver retaining document references.
-- Reference target and cycle checks, operation message membership and channel parameter rules.
-- Opt-in integration checks for an external contract corpus and explicit local fork resolution.
-- Public regression corpus with 12 pinned official AsyncAPI 3.0.0 examples and 68 synthetic cases.
-- Offline JVM corpus checks and a reproducible JavaScript parser comparison with reviewed differences.
+- Validate AsyncAPI 3.0.0 YAML and JSON contracts as part of Gradle's `check` task.
+  Invalid contracts fail the build, so the same checks can run locally and in CI.
+- Configure multiple named specifications, each with its own validation rules and reports.
+  Run all validations with `asyncApiValidate` or select one specification with
+  `asyncApiValidate<SpecName>`.
+- Get JSON and text diagnostics with the contract path, line, column and JSON Pointer,
+  including related locations for reference errors.
+- Enforce project conventions with built-in rules for channel addresses, server protocols
+  and the default content type.
+- Write custom validation rules and generators in Java using the typed AsyncAPI model.
+  Follow local references through a separate resolver while retaining `$ref` values in
+  the document. Run generators explicitly to produce project-specific files.
+- Use boolean schemas (`true` and `false`) and recursive schemas. Preserve JSON values
+  in schema `const`, `default` and `examples`, including arbitrary-precision numbers.
+- Reuse validation and generation results through Gradle's build cache and configuration
+  cache. Custom extensions must use declared inputs and produce deterministic outputs.
+- Run validation and custom generators in isolated Gradle workers, without requiring Node.js.
+- Start with the [quick start](README.md#quick-start), configure the plugin with
+  [Groovy or Kotlin DSL](docs/gradle-plugin.md), and extend it using the
+  [Java API and runnable examples](docs/extensions.md).
 
-### Changed
+### Requirements
 
-- Centralized specification metadata, field names, built-in diagnostic IDs and Gradle
-  names; shared typed rule parameters and JSON Pointer construction. Diagnostic wire
-  values, report formats and validation behavior remain unchanged.
-- Use model distribution candidate `1.0.0-RC4-asyncwright.3` for Maven Central publication preparation.
-- Report unsupported YAML aliases at their source pointer with `unsupported.yaml-alias`.
-- Reject foreign schema dialects and `$id` resource identifiers explicitly in the 0.1 scope.
-- Move `ResolvedReference` to `io.github.sjacek.asyncwright.api` and expose public document/reference interfaces.
-- Align the compatibility probe's Jackson dependencies with the `2.22.4` BOM to include
-  upstream security fixes and override the model library's older transitive dependencies.
+- Gradle 9.0 or newer and Java 17 or newer. The selected JDK must also be supported by
+  the Gradle version running the build.
+- The model dependency `io.github.sjacek.jasyncapi:asyncapi-core:1.0.0-RC4-asyncwright.3`
+  is available from Maven Central; consumers do not need a local model repository.
 
-### Fixed
+### Scope and limitations
 
-- Document compact record constructor parameters explicitly so strict Javadoc builds work on JDK 17.
-- Register the bundled schema's `example` metadata as an annotation to avoid NetworkNT's
-  unknown-keyword warning during validation and generation.
-- Apply a narrow runtime correction to the bundled schema's wrapper condition so boolean schemas
-  reach the Schema Object validator; preserve the original upstream resource bytes.
-- Resolve boolean schema dependencies and apply the default format for wrappers without `schemaFormat`.
-- Validate formats and nested references in component schema wrappers.
-- Preserve arbitrary JSON instance objects and numeric precision in schema const/default/examples,
-  consistently in the parser, typed resolver and extension models.
-- Include transitive reference usages in shared-definition diagnostics and suppress secondary
-  operation membership errors when a channel's message set cannot be resolved.
-- Locate additional YAML documents correctly, reject nonportable diagnostic input paths and
-  order diagnostic ties deterministically.
-- Resolve the contract directory relative to the project root using Gradle's directory API.
-- Report missing mapped values explicitly and close the captured diagnostic stream automatically.
-- Support a Git-ignored local model repository configuration for IDE imports and CLI builds.
-- Provide a complete, compilable Java usage example.
-- Reject channel parameters that do not occur in the channel address.
-- Require root operations to reference root channels and root channels to reference root servers,
-  while preserving valid references in component definitions and root aliases.
-
-### Development status
-
-- The Java parser has initial validation and reference coverage. The Gradle plugin API,
-  complete conformance checks and public artifact distribution remain under development.
+- Supports a [documented subset of AsyncAPI 3.0.0](docs/validation.md), rather than full
+  specification conformance. Other AsyncAPI versions are not supported.
+- References must use local JSON Pointers. External references, traits, YAML aliases,
+  schema `$id` resource scopes and non-default schema formats are not supported.
+- Example payloads are not validated against their schemas. Documents containing values
+  the typed model cannot preserve are rejected with diagnostics rather than silently altered.
+- Generation requires a custom generator. This release does not include a Java DTO generator
+  or automatically attach generated files to compilation.

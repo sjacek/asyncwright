@@ -1,8 +1,29 @@
 # Preparing and publishing a release
 
-Publication is prepared, but no Asyncwright or fork artifact has been submitted by this work.
-The build prepares the first stable plugin candidate `0.1.0`; this is not a released version.
-The model candidate is `1.0.0-RC4-asyncwright.3`; `.2` remains an unchanged local baseline.
+The model `1.0.0-RC4-asyncwright.3` is published in Maven Central. The first plugin
+submission `0.1.0` was canceled during Portal review because the default repository branch
+did not expose the plugin implementation and usage documentation. The Portal explicitly
+allows resubmitting `0.1.0` after correcting these issues; it is not a public release yet.
+Model `.2` remains an unchanged local baseline.
+
+## Repository checks before submission
+
+The repository root used for `website` and `vcsUrl` must open on the complete plugin project.
+Before retrying, bring the reviewed F2 sources and documentation onto `main`, push that
+branch, and set `main` as the default branch in GitHub's repository settings. Verify the
+remote default branch rather than relying on the locally cached `origin/HEAD`.
+
+Open the repository while signed out and verify that its default branch contains:
+
+- `gradle-plugin/src/main/java/io/github/sjacek/asyncwright/gradle/AsyncwrightPlugin.java`;
+- parser/API sources under `parser/src/main/java`;
+- the English README with the minimal consumer setup;
+- the linked Gradle DSL, extension API, validation scope and runnable examples.
+
+A longer Portal description does not replace publicly reachable sources and usage
+documentation. After these checks, validate and resubmit the canceled version using the
+steps below. Keep a record of the exact source commit used for the retry; an existing tag
+must not silently be treated as if it referred to a newer commit.
 
 ## Repositories and coordinates
 
