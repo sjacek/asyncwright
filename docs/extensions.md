@@ -79,9 +79,9 @@ in the context. Use `requireParameter(name)` for required values and
 `parameters().getOrDefault(name, defaultValue)` for optional values. Missing required parameters
 are configuration/execution failures, not invalid-contract diagnostics.
 
-## Binding-map references (development)
+## Binding-map references
 
-This support requires the development `0.1.1-SNAPSHOT` / model `.4-SNAPSHOT` pair.
+This support requires the prepared `0.1.1` / model `.4` pair, which is not yet published.
 It is not present in public `0.1.0` / model `.3`. Existing `Map<String, Object>` getters
 retain their signatures. An owner's whole-map reference is represented as
 `Map.of("$ref", originalUri)`; concrete maps hold protocol names and typed protocol bindings.

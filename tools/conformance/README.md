@@ -67,7 +67,7 @@ model graph equality. JavaScript dereferences and composes a document; Asyncwrig
 `$ref` values and exposes a separate resolver. Two rejecting parsers can report different
 diagnostics because Asyncwright stops after structural errors.
 
-The current result is **59 agreements and 21 reviewed differences** across **108 cases**:
+The current result is **79 agreements and 29 reviewed differences** across **108 cases**:
 
 | Classification | Cases | Meaning |
 | --- | ---: | --- |
@@ -122,7 +122,7 @@ The `example-instance-not-validated` case documents that neither parser validate
 payload instances here. This corpus is a selected regression baseline, not a complete
 AsyncAPI conformance suite or a replacement for payload instance validation.
 
-## Binding-map regression coverage (development)
+## Binding-map regression coverage (0.1.1, prepared)
 
 The 28 new fixtures cover four binding-map kinds, each with direct references, two-hop
 aliases, missing targets, wrong target kinds, alias cycles, malformed pointers and invalid

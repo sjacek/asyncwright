@@ -16,7 +16,8 @@ class ReleaseVerificationTest {
     @TempDir Path root;
 
     @ParameterizedTest
-    @CsvSource({"0.1.0,v0.1.0,true", "0.1.0-SNAPSHOT,v0.1.0,false", "0.1.1,v0.1.0,false", "0.1.0,v01.1.0,false"})
+    @CsvSource({"0.1.0,v0.1.0,true", "0.1.1,v0.1.1,true", "0.1.0-SNAPSHOT,v0.1.0,false",
+            "0.1.1-SNAPSHOT,v0.1.1,false", "0.1.1,v0.1.0,false", "0.1.0,v01.1.0,false"})
     void requiresAStableTagMatchingTheEvaluatedVersion(String version, String tag, boolean accepted) throws Exception {
         Files.copy(Path.of(System.getProperty("asyncwright.projectDirectory"), "gradle/release-verification.gradle"),
                 root.resolve("release-verification.gradle"));

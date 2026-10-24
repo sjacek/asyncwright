@@ -1,8 +1,11 @@
 # Changelog
 
-User-visible changes to Asyncwright. Changes under **Unreleased** are not yet publicly available.
+User-visible changes to Asyncwright. Prepared releases are not publicly available until
+publication is confirmed.
 
 ## Unreleased
+
+## 0.1.1 — prepared, not published
 
 ### Fixed
 
@@ -12,8 +15,16 @@ User-visible changes to Asyncwright. Changes under **Unreleased** are not yet pu
 - Report missing binding maps, incompatible target kinds and alias cycles at their source
   locations. Invalid protocol definitions retain their full path and related reference uses.
 
-These changes are being tested as `0.1.1-SNAPSHOT` with model `.4-SNAPSHOT` in a local
-development repository. They are not available in the public `0.1.0` / model `.3` release.
+### Dependencies and upgrading
+
+- Uses model `io.github.sjacek.jasyncapi:asyncapi-core:1.0.0-RC4-asyncwright.4`.
+- Existing inline binding maps continue to work. When following a reference to a whole
+  binding map, resolve the map first and then select its protocol; see the
+  [extension API example](docs/extensions.md#binding-map-references).
+- Requirements remain Java 17+ and Gradle 9.0+ on a compatible JDK.
+
+The stable version numbers are prepared for release. Model `.4` and plugin `0.1.1` have
+not been published; the public `0.1.0` / model `.3` release remains unchanged.
 
 ## [0.1.0] - 2026-10-23
 

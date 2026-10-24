@@ -16,6 +16,10 @@ targets 17; the Wrapper uses Gradle 9.8.1.
 
 Notable changes are recorded in the [changelog](CHANGELOG.md).
 
+This branch prepares **Asyncwright 0.1.1** with model **1.0.0-RC4-asyncwright.4**.
+These versions are not published yet. The quick start below uses the available public
+`0.1.0` release; see [release preparation](docs/releases.md) for testing this candidate.
+
 ## Quick start
 
 Requires Gradle 9.0 or newer and a JDK supported by that Gradle version (Java 17 or newer).
@@ -90,30 +94,28 @@ Modules:
 
 ## Build
 
-The model fork `1.0.0-RC4-asyncwright.3` is available in Maven Central. Compile and package
-the plugin using public dependencies:
+This checkout prepares `0.1.1` with model `1.0.0-RC4-asyncwright.4`. Until `.4` is published,
+build the fork's `build/binding-map-references-distribution` branch and install it into an
+explicit file repository using `tools/install-local.ps1 -Repository C:/path/to/model-repository`.
+The model tests require JDK 21 and a matching Maven Toolchains entry.
 
-```powershell
-.\gradlew.bat assemble '-PasyncwrightModelRepository=' --configuration-cache-problems=fail
-```
-
-The empty override also disables any development model path in `gradle/local.properties`.
-To try changes to the plugin itself, run the [development consumer](examples/gradle-consumer)
-against the included build:
-
-```powershell
-.\gradlew.bat -p examples/gradle-consumer check '-PasyncwrightModelRepository=' --configuration-cache-problems=fail
-```
-
-The full `check` build includes prepublication HTTP consumer tests that require a staged
-model file repository as a test fixture. For those tests, use a checkout of the model's
-distribution branch and run `tools/install-local.ps1 -Repository C:/path/to/model-repository`
-(JDK 21 with Maven Toolchains is required for the model tests). Then run:
+Run the complete build, including prepublication HTTP consumer tests:
 
 ```powershell
 .\gradlew.bat check assemble --configuration-cache-problems=fail `
   '-PasyncwrightModelRepository=C:/path/to/model-repository'
 ```
+
+To try the plugin through the included-build [development consumer](examples/gradle-consumer):
+
+```powershell
+.\gradlew.bat -p examples/gradle-consumer check --configuration-cache-problems=fail `
+  '-PasyncwrightModelRepository=C:/path/to/model-repository'
+```
+
+After `.4` becomes available in Maven Central, `assemble` can use public dependencies with
+`'-PasyncwrightModelRepository='`. The full `check` still needs a model file repository as
+an HTTP consumer-test fixture. Maven Local is not used.
 
 For IDE imports and builds without command-line parameters, copy
 `gradle/local.properties.example` to `gradle/local.properties` and set
@@ -150,11 +152,11 @@ references or redundant escapes. Keep these IDE preferences local rather than ed
 The public `0.1.0` release uses the separately maintained model fork
 `io.github.sjacek.jasyncapi:asyncapi-core:1.0.0-RC4-asyncwright.3`, based on
 [`sjacek/jasyncapi` at `05116f0d`](https://github.com/sjacek/jasyncapi/commit/05116f0d99f9e3f3c1b7d1aa8491f120364acf91).
-That release resolves its model from Maven Central. This development branch builds
-`0.1.1-SNAPSHOT` against model `1.0.0-RC4-asyncwright.4-SNAPSHOT` with the binding-map
+That release resolves its model from Maven Central. This branch prepares
+`0.1.1` against stable model `1.0.0-RC4-asyncwright.4` with the binding-map
 reference fix. Build the matching `build/binding-map-references-distribution` branch of
 the fork and install it into an explicit file repository before building this checkout.
-The development artifacts have not been published. An explicit
+These prepared versions have not been published. An explicit
 `asyncwrightModelRepository` selects a development file repository restricted to the fork
 group; it must contain the parent POM, model POM and model JAR. `mavenLocal()` is not consulted.
 Distribution changes are separate from the upstream bug-fix branch. The published model
@@ -165,9 +167,9 @@ public repository defaults, with no local paths or included build. It resolves p
 project over staged HTTP repositories before publication. This is separate from the
 composite-build development example.
 
-The development parser accepts references to whole server, channel, operation and message
+The `0.1.1` parser accepts references to whole server, channel, operation and message
 binding maps. Models keep `$ref`; follow the map first, then select its protocol through
-the separate resolver. See the [binding-map example](docs/extensions.md#binding-map-references-development).
+the separate resolver. See the [binding-map example](docs/extensions.md#binding-map-references).
 
 ## Initial Java API
 
