@@ -1,15 +1,23 @@
 # Preparing and publishing a release
 
-The model `1.0.0-RC4-asyncwright.3` is published in Maven Central. The first plugin
-submission `0.1.0` was canceled during Portal review because the default repository branch
-did not expose the plugin implementation and usage documentation. The Portal explicitly
-allows resubmitting `0.1.0` after correcting these issues; it is not a public release yet.
+Asyncwright [0.1.0 is published in the Gradle Plugin Portal](https://plugins.gradle.org/plugin/io.github.sjacek.asyncwright/0.1.0).
+The model `1.0.0-RC4-asyncwright.3` is published in Maven Central. The release tag
+`v0.1.0` identifies source commit `62608abc66f8c7c3f9f5a5c48ff31f23782cf115`.
 Model `.2` remains an unchanged local baseline.
+
+The public release was verified on 2026-10-24 with Gradle 9.8.1 and JDK 21 using
+`examples/published-consumer` outside the checkout, empty Gradle and Maven caches, and
+no repository overrides or included plugin build. Validation, custom rules, typed-model
+generation, configuration cache reuse, failure cleanup and build cache restoration passed.
+
+The commands below document the release procedure using `0.1.0` as an example. For the
+next release, select a new version and matching tag; do not resubmit or replace the now
+public `0.1.0` artifacts.
 
 ## Repository checks before submission
 
 The repository root used for `website` and `vcsUrl` must open on the complete plugin project.
-Before retrying, bring the reviewed F2 sources and documentation onto `main`, push that
+Before submitting, bring the reviewed sources and documentation onto `main`, push that
 branch, and set `main` as the default branch in GitHub's repository settings. Verify the
 remote default branch rather than relying on the locally cached `origin/HEAD`.
 
@@ -21,8 +29,8 @@ Open the repository while signed out and verify that its default branch contains
 - the linked Gradle DSL, extension API, validation scope and runnable examples.
 
 A longer Portal description does not replace publicly reachable sources and usage
-documentation. After these checks, validate and resubmit the canceled version using the
-steps below. Keep a record of the exact source commit used for the retry; an existing tag
+documentation. After these checks, validate and submit the candidate using the
+steps below. Keep a record of the exact source commit used for publication; an existing tag
 must not silently be treated as if it referred to a newer commit.
 
 ## Repositories and coordinates

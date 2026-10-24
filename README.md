@@ -9,7 +9,7 @@ See the [Gradle DSL and usage examples](docs/gradle-plugin.md) and
 [supported features and limitations](docs/validation.md).
 
 The Gradle-independent Java parser and extension API completed F1 acceptance for the
-[documented 0.1 scope](docs/validation.md#f1-acceptance). The development
+[documented 0.1 scope](docs/validation.md#f1-acceptance). The
 [Gradle plugin](docs/gradle-plugin.md) adds a specification DSL, validation and generator
 tasks, isolated workers and TestKit coverage. The project also retains a separate compatibility experiment. Java bytecode
 targets 17; the Wrapper uses Gradle 9.8.1.
@@ -19,13 +19,8 @@ Notable changes are recorded in the [changelog](CHANGELOG.md).
 ## Quick start
 
 Requires Gradle 9.0 or newer and a JDK supported by that Gradle version (Java 17 or newer).
-Version `0.1.0` is being prepared for Plugin Portal approval and is not publicly available yet.
-The following setup is for the approved release. To try the plugin from this checkout now,
-run the [development example](examples/gradle-consumer):
-
-```powershell
-.\gradlew.bat -p examples/gradle-consumer check '-PasyncwrightModelRepository=' --configuration-cache-problems=fail
-```
+Version [0.1.0 is available from the Gradle Plugin Portal](https://plugins.gradle.org/plugin/io.github.sjacek.asyncwright/0.1.0).
+The following setup resolves the plugin and its model from public repositories.
 
 For a consuming project, add the public plugin repositories in `settings.gradle`:
 
@@ -88,7 +83,7 @@ Modules:
 - `parser`: document loading, structural validation, local reference resolution and diagnostics;
   F0 has its own source set and dependency graph.
 - `gradle-plugin`: `io.github.sjacek.asyncwright`, with the parser/API included in its JAR;
-  DSL, cacheable tasks, Worker API and consumer TestKit tests. Publication is prepared but pending;
+  DSL, cacheable tasks, Worker API and consumer TestKit tests. Version `0.1.0` is published;
   see the [release guide](docs/releases.md).
 - `extension-examples`: ordinary Java rule/generator examples with their own tests;
   this development module is not part of the plugin's dependency graph.
@@ -103,6 +98,13 @@ the plugin using public dependencies:
 ```
 
 The empty override also disables any development model path in `gradle/local.properties`.
+To try changes to the plugin itself, run the [development consumer](examples/gradle-consumer)
+against the included build:
+
+```powershell
+.\gradlew.bat -p examples/gradle-consumer check '-PasyncwrightModelRepository=' --configuration-cache-problems=fail
+```
+
 The full `check` build includes prepublication HTTP consumer tests that require a staged
 model file repository as a test fixture. For those tests, use a checkout of the model's
 distribution branch and run `tools/install-local.ps1 -Repository C:/path/to/model-repository`
@@ -154,9 +156,10 @@ group; it must contain the parent POM, model POM and model JAR. `mavenLocal()` i
 Distribution changes are separate from the upstream bug-fix branch. The published model
 does not require a sibling checkout or a local repository in a consuming project.
 The [published-consumer example](examples/published-consumer) uses only Maven coordinates and
-public repository defaults, with no local paths or included build. It becomes usable against
-those defaults after the release; TestKit currently verifies the same project over staged HTTP
-repositories. This is separate from the composite-build development example.
+public repository defaults, with no local paths or included build. It resolves plugin
+`0.1.0` from the Portal and model `.3` from Maven Central. TestKit also verifies the same
+project over staged HTTP repositories before publication. This is separate from the
+composite-build development example.
 
 ## Initial Java API
 
@@ -194,8 +197,8 @@ values. Added model defaults are allowed; silent omissions or changed values are
 Ignored reference siblings produce warnings and remain available in the source tree. Example
 data and extension values are not treated as document references. YAML aliases, external
 references, traits and non-default schema formats are currently unsupported. Broader parser
-conformance remains under development; the Gradle DSL and worker integration are implemented,
-and publication is prepared but pending.
+conformance remains under development; the Gradle DSL and worker integration are available
+in the published `0.1.0` plugin.
 Schema-valid constructs that the typed model cannot preserve are rejected with
 `model.preservation` diagnostics; custom binding extensions are one such current limitation.
 

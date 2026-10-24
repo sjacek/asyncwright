@@ -2,9 +2,9 @@
 
 The plugin ID is `io.github.sjacek.asyncwright`. It validates the same
 [AsyncAPI 3.0.0 subset](validation.md) as the parser. It does not require Node.js.
-The plugin has not been released to the Plugin Portal.
-Publication metadata, source/Javadoc artifacts and marker packaging are prepared;
-see [release preparation and the HTTP consumer test](releases.md).
+Version [0.1.0 is available from the Plugin Portal](https://plugins.gradle.org/plugin/io.github.sjacek.asyncwright/0.1.0),
+including the plugin marker, parser/API, source and Javadoc artifacts.
+See the [release guide](releases.md) for publication and consumer verification.
 Start with the [complete minimal consumer setup](../README.md#quick-start), including
 repositories, the plugin version, a contract and the validation command. The model
 distribution `1.0.0-RC4-asyncwright.3` is already available from Maven Central.
@@ -24,7 +24,8 @@ uses Maven Central, with an optional file repository only when a development pat
 Plugin runtime dependencies are resolved in the consumer's plugin-management repositories;
 repositories of the included plugin build are not inherited.
 
-After resolving the plugin from your configured development repository or included build:
+After resolving the plugin using the versioned setup in the quick start, or the included
+build for development:
 
 ```groovy
 plugins {
@@ -109,10 +110,10 @@ asyncwright.specs.platformEvents {
 ```
 
 The extension subproject uses a `compileOnly` dependency on the plugin artifact
-(`io.github.sjacek.asyncwright:asyncwright-gradle-plugin:0.1.0` for the prepared publication).
+(`io.github.sjacek.asyncwright:asyncwright-gradle-plugin:0.1.0` for the current release).
 The plugin JAR includes the parser and public API; its API dependencies provide
-the typed model and Jackson 2. A published development repository must supply the
-plugin and fork model dependencies. TestKit also exercises file-based compilation
+the typed model and Jackson 2. Plugin Portal and Maven Central supply the published
+plugin and model dependencies. TestKit also exercises file-based compilation
 against the plugin-under-test classpath, without relying on a public repository.
 For an included extension build, declare an ordinary module dependency and Gradle
 composite dependency substitution. `buildSrc` is not supported as an extension source.

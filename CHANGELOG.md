@@ -4,7 +4,9 @@ User-visible changes to Asyncwright. Changes under **Unreleased** are not yet pu
 
 ## Unreleased
 
-Planned first public release: **0.1.0**.
+## [0.1.0] - 2026-10-23
+
+First public release.
 
 ### Added
 
@@ -46,3 +48,5 @@ Planned first public release: **0.1.0**.
   the typed model cannot preserve are rejected with diagnostics rather than silently altered.
 - Generation requires a custom generator. This release does not include a Java DTO generator
   or automatically attach generated files to compilation.
+
+[0.1.0]: https://plugins.gradle.org/plugin/io.github.sjacek.asyncwright/0.1.0
