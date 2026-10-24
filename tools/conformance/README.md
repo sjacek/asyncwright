@@ -1,8 +1,8 @@
 # Public parser comparison
 
 The public corpus is checked in under `parser/src/test/resources/conformance/`.
-It contains **80 cases**: 12 unchanged examples from `asyncapi/spec` tag `v3.0.0`
-(commit `d78dcea70c9b094a3df72f9a4e811828cec778cc`) and 68 synthetic fixtures.
+It contains **108 cases**: 12 unchanged examples from `asyncapi/spec` tag `v3.0.0`
+(commit `d78dcea70c9b094a3df72f9a4e811828cec778cc`) and 96 synthetic fixtures.
 The official files retain their original Apache-2.0 LICENSE and NOTICE; synthetic files
 use the project MIT license. No application contracts are included.
 
@@ -31,7 +31,7 @@ Configure the local model repository as described in the root README. From the p
 .\gradlew.bat check assemble --configuration-cache-problems=fail
 ```
 
-This includes `:parser:publicCorpusTest`, with 80 case checks and one manifest integrity check.
+This includes `:parser:publicCorpusTest`, with 108 case checks and one manifest integrity check.
 It needs no Node.js or external application contracts. With Gradle dependencies already
 cached, add `--offline`. The JVM report is `parser/build/reports/conformance/asyncwright.json`.
 
@@ -67,15 +67,15 @@ model graph equality. JavaScript dereferences and composes a document; Asyncwrig
 `$ref` values and exposes a separate resolver. Two rejecting parsers can report different
 diagnostics because Asyncwright stops after structural errors.
 
-The current result is **59 agreements and 21 reviewed differences** across **80 cases**:
+The current result is **59 agreements and 21 reviewed differences** across **108 cases**:
 
 | Classification | Cases | Meaning |
 | --- | ---: | --- |
-| Agreement | 59 | Both accept or both reject. |
+| Agreement | 79 | Both accept or both reject. |
 | Unsupported | 11 | Traits (including a shared definition), YAML aliases, external files, versions 2.6/3.1, component Avro format, foreign schema dialect and schema resource ID. |
 | Model limit | 2 | Unknown `nullable` keyword and custom binding extensions cannot be preserved by the typed Java model. |
-| Reference parser difference | 7 | JavaScript follows reference-like instance values, skips one channel parameter check and rejects four valid boolean-schema cases. |
-| Policy difference | 1 | Asyncwright rejects a pure schema reference cycle that JavaScript accepts. |
+| Reference parser difference | 11 | JavaScript follows reference-like instance values, skips one channel parameter check, rejects four valid boolean-schema cases and accepts three cross-kind binding-map references and an invalid AMQP server field. |
+| Policy difference | 5 | Asyncwright rejects pure schema and binding-map alias cycles that JavaScript accepts. |
 | Implementation gap | 0 | The three identified semantic validation gaps below are fixed. |
 
 Fixed F1 regression cases, rejected by both parsers:
@@ -121,3 +121,34 @@ streetlights examples because they use traits. The fixtures are intentionally un
 The `example-instance-not-validated` case documents that neither parser validates example
 payload instances here. This corpus is a selected regression baseline, not a complete
 AsyncAPI conformance suite or a replacement for payload instance validation.
+
+## Binding-map regression coverage (development)
+
+The 28 new fixtures cover four binding-map kinds, each with direct references, two-hop
+aliases, missing targets, wrong target kinds, alias cycles, malformed pointers and invalid
+protocol definitions. All eight positive cases are accepted by both parsers. Of the 20
+negative cases, both reject 12; eight have reviewed differences: four cycles, three
+cross-kind references and one unknown AMQP server binding field. Channel/operation/message
+protocol errors reject during schema validation; the server field reaches typed mapping.
+
+The existing 80 cases and all upstream fixture bytes are unchanged. Java regression tests
+also check typed protocol values, retained reference URIs, resolver targets, definition/use
+positions, independent extension models and Gradle worker/cache behavior. Matching document
+acceptance alone would not detect a lost or eagerly expanded model reference.
+
+Additional JVM regressions exercise percent-encoded component names, escaped JSON Pointer
+tokens, ignored reference siblings, self-cycles, wrong-kind component aliases and external map references.
+They also mutate a rule's owner and component maps to verify that later generators receive
+fresh models and that the source-backed resolver stays intact. These cases supplement
+the unchanged 108-case cross-parser baseline.
+
+Full-parser positive tests use component names permitted by the specification. Escaped
+slashes, tildes, spaces and plus signs are checked at the resolver level without asserting
+document validity. The selected parser does not yet enforce component-name syntax; this
+separate [validation gap](../../docs/validation.md#known-coverage-and-model-limits) is outside
+the 108-case corpus and is not hidden by the comparison's shared-limitation counter.
+
+The AMQP server negative case is a reference-parser difference, not an additional Java
+model limitation: [AMQP binding 0.3.0](https://github.com/asyncapi/bindings/blob/master/amqp/README.md#server-binding-object)
+requires the server binding to be empty. Asyncwright rejects the unexpected property during
+typed mapping; the pinned JS core validation accepts this fixture.

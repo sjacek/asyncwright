@@ -8,6 +8,7 @@ import java.util.Optional;
 public interface AsyncApiReferences {
     /**
      * Follows validated reference aliases to a concrete source value. Nested references stay intact.
+     * For whole binding-map references, resolve the map position before selecting its protocol.
      * @param pointer document position of an object or Reference Object, not the literal {@code $ref} URI
      * @return target and its decoded JSON Pointer, or empty for a missing or unresolvable target
      * @throws IllegalArgumentException if the pointer is not a JSON Pointer
@@ -15,6 +16,8 @@ public interface AsyncApiReferences {
     Optional<ResolvedReference> resolve(String pointer);
     /**
      * Maps a resolved target to a fresh typed value without expanding its nested references.
+     * An owner's bindings getter retains a whole-map reference; resolving that owner does not
+     * replace its bindings with the target. Resolve the map, then its protocol-specific child.
      * @param <T> requested model type
      * @param pointer document position of an object or Reference Object
      * @param type target Java type, including {@link BooleanSchema} for boolean leaves

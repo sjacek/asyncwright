@@ -12,6 +12,7 @@ parser is a regression result, not proof of complete specification conformance.
 | YAML aliases, including merge aliases | Rejected with `unsupported.yaml-alias` at the alias token and pointer. |
 | AsyncAPI versions other than 3.0.0 | Rejected with `unsupported.version`. |
 | Local JSON Pointer references and aliases | Supported, including URI percent encoding and `~0`/`~1` escapes. |
+| Whole binding-map references (development) | Server/channel/operation/message maps and aliases in `components.*Bindings` are supported with model `.4-SNAPSHOT`; cross-kind targets and alias-only cycles reject. Public `0.1.0` / model `.3` still reject these maps. |
 | Recursive schemas with concrete schema content | Supported without expanding references in the model. Pure reference cycles reject. |
 | External references and named anchors | Outside the resolver scope; rejected, without fetching remote resources. |
 | Traits | Rejected with `unsupported.construct`; no trait merge occurs. |
@@ -33,8 +34,9 @@ These are product limits, not statements that the rejected constructs are invali
 They apply to schema/document positions, not arbitrary instance values or extension data.
 The parser, typed resolver and extension snapshots share model mapping that preserves
 instance objects and arbitrary-precision JSON numbers. This mapping uses local Jackson
-mixins and a boolean-aware schema deserializer; the separately maintained model artifact
-and its source are unchanged.
+mixins and a boolean-aware schema deserializer. Binding-map support in this development
+branch additionally requires the separately maintained model `.4-SNAPSHOT`; see the
+[mapping and resolver example](extensions.md#binding-map-references-development).
 
 ## Boolean schemas
 
@@ -63,6 +65,12 @@ are indexed as schemas; a reference to an arbitrary boolean instance value is st
 
 ## Known coverage and model limits
 
+- The selected schema/parser does not enforce the Components Object name pattern.
+  Use component keys matching `^[a-zA-Z0-9.\-_]+$`, as required by the
+  [Components Object specification](https://www.asyncapi.com/docs/reference/specification/v3.0.0#componentsObject).
+  JSON Pointer support for arbitrary escaped tokens does not relax this document rule.
+  This validation gap was identified outside the selected public comparison corpus and
+  remains a separate semantic-validation fix.
 - Custom binding entries such as `bindings.x-custom` are dropped by the selected typed
   model and therefore rejected by the preservation guard. Source data is never silently
   discarded from a successful document.
@@ -70,10 +78,10 @@ are indexed as schemas; a reference to an arbitrary boolean instance value is st
   mapping. Use the supported draft-07 null union for nullable types. This is a model limit,
   not support for OpenAPI's nullable semantics.
 
-The [recorded comparison](conformance/comparison.json) contains **80 cases: 59 agreements
-and 21 reviewed differences**, with **zero known shared limitations** in this selected corpus.
-The differences comprise 11 capability exclusions, 2 model limits, 7 reference parser
-differences and 1 pure-cycle policy difference. No unreviewed outcome changes remain.
+The [recorded comparison](conformance/comparison.json) contains **108 cases: 79 agreements
+and 29 reviewed differences**, with **zero known shared limitations** in this selected corpus.
+The differences comprise 11 capability exclusions, 2 model limits, 11 reference parser
+differences and 5 pure-cycle policy differences. No unreviewed outcome changes remain.
 
 The former `schema-boolean` limitation is now a valid JVM case and a JS difference. The
 pinned JS parser rejects it, direct boolean payloads, reference aliases to `false` and a

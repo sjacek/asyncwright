@@ -147,10 +147,14 @@ In IntelliJ IDEA, exclude this file from the `JsonSchemaRefReference` and
 `RegExpRedundantEscape` inspections using a file scope if they report unresolved example
 references or redundant escapes. Keep these IDE preferences local rather than editing the schema.
 
-The selected coordinates for the separately maintained model fork are
+The public `0.1.0` release uses the separately maintained model fork
 `io.github.sjacek.jasyncapi:asyncapi-core:1.0.0-RC4-asyncwright.3`, based on
 [`sjacek/jasyncapi` at `05116f0d`](https://github.com/sjacek/jasyncapi/commit/05116f0d99f9e3f3c1b7d1aa8491f120364acf91).
-The parser resolves this artifact from Maven Central by default. An explicit
+That release resolves its model from Maven Central. This development branch builds
+`0.1.1-SNAPSHOT` against model `1.0.0-RC4-asyncwright.4-SNAPSHOT` with the binding-map
+reference fix. Build the matching `build/binding-map-references-distribution` branch of
+the fork and install it into an explicit file repository before building this checkout.
+The development artifacts have not been published. An explicit
 `asyncwrightModelRepository` selects a development file repository restricted to the fork
 group; it must contain the parent POM, model POM and model JAR. `mavenLocal()` is not consulted.
 Distribution changes are separate from the upstream bug-fix branch. The published model
@@ -160,6 +164,10 @@ public repository defaults, with no local paths or included build. It resolves p
 `0.1.0` from the Portal and model `.3` from Maven Central. TestKit also verifies the same
 project over staged HTTP repositories before publication. This is separate from the
 composite-build development example.
+
+The development parser accepts references to whole server, channel, operation and message
+binding maps. Models keep `$ref`; follow the map first, then select its protocol through
+the separate resolver. See the [binding-map example](docs/extensions.md#binding-map-references-development).
 
 ## Initial Java API
 
@@ -218,10 +226,10 @@ The public extension contracts are in `io.github.sjacek.asyncwright.api`: `Async
 parse → project rules → generators sequence without Gradle. Each invocation receives its
 own model; references stay in the document and are followed through the resolver.
 
-Run the checked-in Java extension example with the public model:
+Run the checked-in Java extension example with the matching development model repository:
 
 ```powershell
-.\gradlew.bat :extension-examples:runExample '-PasyncwrightModelRepository=' --configuration-cache-problems=fail
+.\gradlew.bat :extension-examples:runExample '-PasyncwrightModelRepository=C:/path/to/model-repository' --configuration-cache-problems=fail
 ```
 
 This validates channel address prefixes and writes
@@ -246,7 +254,7 @@ source checksums and diagnostics. Ordinary `check` does not require the external
 
 `check` also runs `:parser:publicCorpusTest` against checked-in public fixtures without
 Node.js or network access. The corpus contains 12 unmodified examples from the AsyncAPI
-3.0.0 specification release and 68 synthetic positive, negative and capability cases.
+3.0.0 specification release and 96 synthetic positive, negative and capability cases.
 The manifest pins fixture hashes, upstream provenance and each parser's reviewed outcome.
 
 An optional comparison uses `@asyncapi/parser` 3.6.6 with core rules enabled and recommended

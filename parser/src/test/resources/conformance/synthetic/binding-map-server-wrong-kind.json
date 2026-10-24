@@ -1,0 +1,131 @@
+{
+  "asyncapi": "3.0.0",
+  "info": {
+    "title": "Public binding map reference regression",
+    "version": "1.0.0"
+  },
+  "servers": {
+    "broker": {
+      "host": "localhost",
+      "protocol": "amqp",
+      "bindings": {
+        "$ref": "#/components/channelBindings/Shared"
+      }
+    }
+  },
+  "channels": {
+    "events": {
+      "address": "events",
+      "messages": {
+        "event": {
+          "$ref": "#/components/messages/Event"
+        }
+      },
+      "bindings": {
+        "amqp": {
+          "is": "routingKey",
+          "exchange": {
+            "name": "events",
+            "type": "topic",
+            "durable": true
+          },
+          "bindingVersion": "0.3.0"
+        }
+      }
+    }
+  },
+  "operations": {
+    "send": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/events"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/events/messages/event"
+        }
+      ],
+      "bindings": {
+        "amqp": {
+          "ack": true,
+          "bindingVersion": "0.3.0"
+        }
+      }
+    }
+  },
+  "components": {
+    "messages": {
+      "Event": {
+        "payload": {
+          "type": "object"
+        },
+        "bindings": {
+          "amqp": {
+            "contentEncoding": "utf-8",
+            "messageType": "event",
+            "bindingVersion": "0.3.0"
+          }
+        }
+      }
+    },
+    "serverBindings": {
+      "Shared": {
+        "amqp": {}
+      },
+      "Alias": {
+        "$ref": "#/components/serverBindings/Shared"
+      },
+      "Alias2": {
+        "$ref": "#/components/serverBindings/Alias"
+      }
+    },
+    "channelBindings": {
+      "Shared": {
+        "amqp": {
+          "is": "routingKey",
+          "exchange": {
+            "name": "events",
+            "type": "topic",
+            "durable": true
+          },
+          "bindingVersion": "0.3.0"
+        }
+      },
+      "Alias": {
+        "$ref": "#/components/channelBindings/Shared"
+      },
+      "Alias2": {
+        "$ref": "#/components/channelBindings/Alias"
+      }
+    },
+    "operationBindings": {
+      "Shared": {
+        "amqp": {
+          "ack": true,
+          "bindingVersion": "0.3.0"
+        }
+      },
+      "Alias": {
+        "$ref": "#/components/operationBindings/Shared"
+      },
+      "Alias2": {
+        "$ref": "#/components/operationBindings/Alias"
+      }
+    },
+    "messageBindings": {
+      "Shared": {
+        "amqp": {
+          "contentEncoding": "utf-8",
+          "messageType": "event",
+          "bindingVersion": "0.3.0"
+        }
+      },
+      "Alias": {
+        "$ref": "#/components/messageBindings/Shared"
+      },
+      "Alias2": {
+        "$ref": "#/components/messageBindings/Alias"
+      }
+    }
+  }
+}

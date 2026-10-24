@@ -1526,6 +1526,524 @@
           "asyncapi-document-resolved"
         ]
       }
+    },
+    {
+      "id": "binding-map-server-direct",
+      "file": "synthetic/binding-map-server-direct.json",
+      "group": "synthetic",
+      "sha256": "8bd6e2b40c71644d104e283c69a3173b9b38540dd69388c7295ca936e276edaf",
+      "classification": "agreement",
+      "reason": "Both parsers accept a reusable binding map without changing its reference semantics.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-map-server-aliases",
+      "file": "synthetic/binding-map-server-aliases.json",
+      "group": "synthetic",
+      "sha256": "e6a865f2f3ddd0fccea5ab7d049eb82edc4e9c31967e7dfdcd00f5c8d18b56cf",
+      "classification": "agreement",
+      "reason": "Both parsers accept a reusable binding map without changing its reference semantics.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-map-server-missing",
+      "file": "synthetic/binding-map-server-missing.json",
+      "group": "synthetic",
+      "sha256": "24b2290ea5dee9e2c4bef13c360d559dc1c948c91ea9708a21393b18c4163f97",
+      "classification": "agreement",
+      "reason": "Both parsers reject the invalid binding map; diagnostic codes may differ.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "reference.missing"
+        ]
+      },
+      "javascript": {
+        "successful": false,
+        "errorCodes": [
+          "invalid-ref"
+        ]
+      }
+    },
+    {
+      "id": "binding-map-server-wrong-kind",
+      "file": "synthetic/binding-map-server-wrong-kind.json",
+      "group": "synthetic",
+      "sha256": "8a66cabf22165363be17ccfc5a9689f5e1f748991d84e7f91a5c4586ba3bcc1f",
+      "classification": "reference-parser-difference",
+      "reason": "Asyncwright checks the binding-map kind at the reference target; JS accepts this cross-kind target.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "reference.type"
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-map-server-cycle",
+      "file": "synthetic/binding-map-server-cycle.json",
+      "group": "synthetic",
+      "sha256": "7c57bf570115728362853a9472832b520d9a77dcd26350ee0298b4f91fd1f428",
+      "classification": "policy-difference",
+      "reason": "Asyncwright rejects a binding alias cycle with no concrete definition; JS accepts it.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "reference.cycle"
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-map-server-bad-pointer",
+      "file": "synthetic/binding-map-server-bad-pointer.json",
+      "group": "synthetic",
+      "sha256": "eae9d8034c6d9c5b35deca02fd63da2635d62b60251d0f5a352b239e4e18170f",
+      "classification": "agreement",
+      "reason": "Both parsers reject the invalid binding map; diagnostic codes may differ.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "reference.pointer"
+        ]
+      },
+      "javascript": {
+        "successful": false,
+        "errorCodes": [
+          "invalid-ref"
+        ]
+      }
+    },
+    {
+      "id": "binding-map-server-bad-definition",
+      "file": "synthetic/binding-map-server-bad-definition.json",
+      "group": "synthetic",
+      "sha256": "bcf9dc8553d731d40d2c7d20bb27ea1d53874566f5ca43f291838284e8916476",
+      "classification": "reference-parser-difference",
+      "reason": "AMQP 0.3.0 reserves the server binding as an empty object. Asyncwright rejects the unexpected property during typed mapping; JS accepts it.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "model.mapping"
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-map-channel-direct",
+      "file": "synthetic/binding-map-channel-direct.json",
+      "group": "synthetic",
+      "sha256": "a2901c12aefcb98f33f1ab5281516f568dabf04d87f01cb30cc41cec498bbedd",
+      "classification": "agreement",
+      "reason": "Both parsers accept a reusable binding map without changing its reference semantics.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-map-channel-aliases",
+      "file": "synthetic/binding-map-channel-aliases.json",
+      "group": "synthetic",
+      "sha256": "793a08b92f410349504d88964b73e1d3ffe4a8544ef3d8994f5a9ef3912ec177",
+      "classification": "agreement",
+      "reason": "Both parsers accept a reusable binding map without changing its reference semantics.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-map-channel-missing",
+      "file": "synthetic/binding-map-channel-missing.json",
+      "group": "synthetic",
+      "sha256": "acc7714907ec99a391150b5080a53b04dadee64d7b02fd0809b218607da07261",
+      "classification": "agreement",
+      "reason": "Both parsers reject the invalid binding map; diagnostic codes may differ.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "reference.missing"
+        ]
+      },
+      "javascript": {
+        "successful": false,
+        "errorCodes": [
+          "invalid-ref"
+        ]
+      }
+    },
+    {
+      "id": "binding-map-channel-wrong-kind",
+      "file": "synthetic/binding-map-channel-wrong-kind.json",
+      "group": "synthetic",
+      "sha256": "9d295371dd0a99e0bd86db135eb0bcf93e745ca704f35b7fba7b288af4272912",
+      "classification": "agreement",
+      "reason": "Both parsers reject the invalid binding map; diagnostic codes may differ.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "reference.type"
+        ]
+      },
+      "javascript": {
+        "successful": false,
+        "errorCodes": [
+          "asyncapi-document-resolved"
+        ]
+      }
+    },
+    {
+      "id": "binding-map-channel-cycle",
+      "file": "synthetic/binding-map-channel-cycle.json",
+      "group": "synthetic",
+      "sha256": "c942b4d679449dcf3edecd14f6be8d4fb5cd8cbebe8ffa645ae5fe4962c8ee05",
+      "classification": "policy-difference",
+      "reason": "Asyncwright rejects a binding alias cycle with no concrete definition; JS accepts it.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "reference.cycle"
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-map-channel-bad-pointer",
+      "file": "synthetic/binding-map-channel-bad-pointer.json",
+      "group": "synthetic",
+      "sha256": "cfd9f302d9fdfc5b3a0450de835e66f214e347c14162c33db056e14937e7e52f",
+      "classification": "agreement",
+      "reason": "Both parsers reject the invalid binding map; diagnostic codes may differ.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "reference.pointer"
+        ]
+      },
+      "javascript": {
+        "successful": false,
+        "errorCodes": [
+          "invalid-ref"
+        ]
+      }
+    },
+    {
+      "id": "binding-map-channel-bad-definition",
+      "file": "synthetic/binding-map-channel-bad-definition.json",
+      "group": "synthetic",
+      "sha256": "db9fd4e24fe11546bfc4a198f51c620375993e98b531aa3475f2ecf5ca2b9029",
+      "classification": "agreement",
+      "reason": "Both parsers reject the invalid binding map; diagnostic codes may differ.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "schema.additionalProperties",
+          "schema.oneOf",
+          "schema.required"
+        ]
+      },
+      "javascript": {
+        "successful": false,
+        "errorCodes": [
+          "asyncapi-document-resolved"
+        ]
+      }
+    },
+    {
+      "id": "binding-map-operation-direct",
+      "file": "synthetic/binding-map-operation-direct.json",
+      "group": "synthetic",
+      "sha256": "8aaea292c08da8bff7535002b0f60109ed2b680ed396051a6c441318ff6dd06d",
+      "classification": "agreement",
+      "reason": "Both parsers accept a reusable binding map without changing its reference semantics.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-map-operation-aliases",
+      "file": "synthetic/binding-map-operation-aliases.json",
+      "group": "synthetic",
+      "sha256": "9e50614a0654f6c9a3e9e6e0844d8de5f2f1b8d2a576af22069e4eced43b2fdd",
+      "classification": "agreement",
+      "reason": "Both parsers accept a reusable binding map without changing its reference semantics.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-map-operation-missing",
+      "file": "synthetic/binding-map-operation-missing.json",
+      "group": "synthetic",
+      "sha256": "81e1c1d23922954ad915f528f149467a402caa26fe82afdd11dd1a5cbe33aaa2",
+      "classification": "agreement",
+      "reason": "Both parsers reject the invalid binding map; diagnostic codes may differ.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "reference.missing"
+        ]
+      },
+      "javascript": {
+        "successful": false,
+        "errorCodes": [
+          "invalid-ref"
+        ]
+      }
+    },
+    {
+      "id": "binding-map-operation-wrong-kind",
+      "file": "synthetic/binding-map-operation-wrong-kind.json",
+      "group": "synthetic",
+      "sha256": "eb3718046365217f690d23b5cea03dc9bcba7d4369da905dbd92d2fe242f2eb9",
+      "classification": "reference-parser-difference",
+      "reason": "Asyncwright checks the binding-map kind at the reference target; JS accepts this cross-kind target.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "reference.type"
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-map-operation-cycle",
+      "file": "synthetic/binding-map-operation-cycle.json",
+      "group": "synthetic",
+      "sha256": "69e0595deb7bcfb962facb652942c93c1a3a7c472608d4018d5e825aefac10c9",
+      "classification": "policy-difference",
+      "reason": "Asyncwright rejects a binding alias cycle with no concrete definition; JS accepts it.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "reference.cycle"
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-map-operation-bad-pointer",
+      "file": "synthetic/binding-map-operation-bad-pointer.json",
+      "group": "synthetic",
+      "sha256": "2aadff42509715240f40d7810269e152dbe5c8bfda74e790f5899f3697cd200f",
+      "classification": "agreement",
+      "reason": "Both parsers reject the invalid binding map; diagnostic codes may differ.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "reference.pointer"
+        ]
+      },
+      "javascript": {
+        "successful": false,
+        "errorCodes": [
+          "invalid-ref"
+        ]
+      }
+    },
+    {
+      "id": "binding-map-operation-bad-definition",
+      "file": "synthetic/binding-map-operation-bad-definition.json",
+      "group": "synthetic",
+      "sha256": "aadd46039e8062cf694d91d5007009c4d8cd64e0061f1b94865476b24861b013",
+      "classification": "agreement",
+      "reason": "Both parsers reject the invalid binding map; diagnostic codes may differ.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "schema.additionalProperties",
+          "schema.oneOf",
+          "schema.required"
+        ]
+      },
+      "javascript": {
+        "successful": false,
+        "errorCodes": [
+          "asyncapi-document-resolved"
+        ]
+      }
+    },
+    {
+      "id": "binding-map-message-direct",
+      "file": "synthetic/binding-map-message-direct.json",
+      "group": "synthetic",
+      "sha256": "2e28804fd577282a42bbffe589874bf6b0046904e71201b86844d9b65dc3b943",
+      "classification": "agreement",
+      "reason": "Both parsers accept a reusable binding map without changing its reference semantics.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-map-message-aliases",
+      "file": "synthetic/binding-map-message-aliases.json",
+      "group": "synthetic",
+      "sha256": "b8772f48b88dfb9afc1406d8ae1097f9b6348f194fc83b2489d9e043e01f87a2",
+      "classification": "agreement",
+      "reason": "Both parsers accept a reusable binding map without changing its reference semantics.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-map-message-missing",
+      "file": "synthetic/binding-map-message-missing.json",
+      "group": "synthetic",
+      "sha256": "4c0ea52c2e621a31c5dc2d88a6c7bdaff65493ca2a6bb9a7adb92663ab9599f9",
+      "classification": "agreement",
+      "reason": "Both parsers reject the invalid binding map; diagnostic codes may differ.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "reference.missing"
+        ]
+      },
+      "javascript": {
+        "successful": false,
+        "errorCodes": [
+          "invalid-ref"
+        ]
+      }
+    },
+    {
+      "id": "binding-map-message-wrong-kind",
+      "file": "synthetic/binding-map-message-wrong-kind.json",
+      "group": "synthetic",
+      "sha256": "a7841ee6102aa1b380d5f12e5586dd4945901338c6ea886c09895a0a0dfbf5b8",
+      "classification": "reference-parser-difference",
+      "reason": "Asyncwright checks the binding-map kind at the reference target; JS accepts this cross-kind target.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "reference.type"
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-map-message-cycle",
+      "file": "synthetic/binding-map-message-cycle.json",
+      "group": "synthetic",
+      "sha256": "07046b73414a330752daadce9b89c6cdddd927d1dd47dd7bd8e9cca196eee0f0",
+      "classification": "policy-difference",
+      "reason": "Asyncwright rejects a binding alias cycle with no concrete definition; JS accepts it.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "reference.cycle"
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-map-message-bad-pointer",
+      "file": "synthetic/binding-map-message-bad-pointer.json",
+      "group": "synthetic",
+      "sha256": "79bd0e1f86b430d6c6f000aee991a2a725582d5d966bf9c4d1b3d30b09cc2b66",
+      "classification": "agreement",
+      "reason": "Both parsers reject the invalid binding map; diagnostic codes may differ.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "reference.pointer"
+        ]
+      },
+      "javascript": {
+        "successful": false,
+        "errorCodes": [
+          "invalid-ref"
+        ]
+      }
+    },
+    {
+      "id": "binding-map-message-bad-definition",
+      "file": "synthetic/binding-map-message-bad-definition.json",
+      "group": "synthetic",
+      "sha256": "d0e1b743e9dca3e3663c7aa4b9246d3db96a04f932140018f65c63fe0dc3c0be",
+      "classification": "agreement",
+      "reason": "Both parsers reject the invalid binding map; diagnostic codes may differ.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "schema.additionalProperties",
+          "schema.oneOf",
+          "schema.required"
+        ]
+      },
+      "javascript": {
+        "successful": false,
+        "errorCodes": [
+          "asyncapi-document-resolved"
+        ]
+      }
     }
   ],
   "assets": [

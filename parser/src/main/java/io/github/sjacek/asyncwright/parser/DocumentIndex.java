@@ -10,10 +10,29 @@ import io.github.sjacek.asyncwright.api.Severity;
 
 import java.util.*;
 
-/** Indexes schema-bearing positions, excluding example/default data and extension values. */
+/**
+ * Indexes document positions whose references carry a model kind, plus graph containment edges.
+ * Binding maps carry their owner's kind, while protocol values are not reusable component names.
+ * Instance values and extension data are excluded so a literal {@code $ref} cannot become an edge.
+ */
 final class DocumentIndex {
-    enum Kind { ROOT, COMPONENTS, CHANNEL, OPERATION, MESSAGE, SERVER, SCHEMA, PARAMETER,
-        SECURITY, TAG, CORRELATION, REPLY, BINDING, OTHER }
+    /** Distinct binding-map kinds prevent structurally similar maps from crossing owner boundaries. */
+    enum Kind {
+        SERVER_BINDINGS, CHANNEL_BINDINGS, OPERATION_BINDINGS, MESSAGE_BINDINGS,
+        ROOT, COMPONENTS, CHANNEL(CHANNEL_BINDINGS), OPERATION(OPERATION_BINDINGS),
+        MESSAGE(MESSAGE_BINDINGS), SERVER(SERVER_BINDINGS), SCHEMA, PARAMETER,
+        SECURITY, TAG, CORRELATION, REPLY, OTHER;
+
+        /** Associated map kind for an owner, or null for nodes without an owned binding map. */
+        private final Kind bindings;
+
+        Kind() { this.bindings = null; }
+        Kind(Kind bindings) { this.bindings = bindings; }
+
+        /** Returns the owned binding-map kind, or OTHER when this kind does not own bindings. */
+        Kind bindingsKind() { return bindings == null ? OTHER : bindings; }
+    }
+    /** Source position of a reference and the kind required at its immediate target. */
     record Use(String pointer, Kind kind) { }
     final Map<String, Kind> kinds = new LinkedHashMap<>();
     final Map<String, List<String>> children = new LinkedHashMap<>();
@@ -96,7 +115,8 @@ final class DocumentIndex {
                 case CORRELATION_ID -> Kind.CORRELATION;
                 case REPLY -> Kind.REPLY;
                 case TAGS -> Kind.TAG;
-                case BINDINGS -> Kind.BINDING;
+                // Whole-map references must retain the owning kind; a channel map is not a server map.
+                case BINDINGS -> kind.bindingsKind();
                 default -> Kind.OTHER;
             };
             if (key.equals(MESSAGES) && (kind == Kind.OPERATION || kind == Kind.REPLY)) childKind = Kind.MESSAGE;
@@ -117,7 +137,10 @@ final class DocumentIndex {
             case SECURITY_SCHEMES -> Kind.SECURITY;
             case CORRELATION_IDS -> Kind.CORRELATION;
             case TAGS -> Kind.TAG;
-            case CHANNEL_BINDINGS, OPERATION_BINDINGS, MESSAGE_BINDINGS, SERVER_BINDINGS -> Kind.BINDING;
+            case SERVER_BINDINGS -> Kind.SERVER_BINDINGS;
+            case CHANNEL_BINDINGS -> Kind.CHANNEL_BINDINGS;
+            case OPERATION_BINDINGS -> Kind.OPERATION_BINDINGS;
+            case MESSAGE_BINDINGS -> Kind.MESSAGE_BINDINGS;
             default -> null;
         };
         if (parent == Kind.CHANNEL && field.equals(MESSAGES)) return Kind.MESSAGE;

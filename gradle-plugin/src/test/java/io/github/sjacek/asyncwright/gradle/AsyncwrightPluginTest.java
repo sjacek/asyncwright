@@ -410,6 +410,48 @@ class AsyncwrightPluginTest {
         assertTrue(Files.exists(root.resolve("build.gradle")));
     }
 
+    /** Covers the public whole-map resolver flow, both caches and stale-output cleanup on invalid input. */
+    @Test void bindingMapAliasesReachTypedGeneratorsAcrossWorkerIsolationAndCacheReuse() throws Exception {
+        Path root = fixture("binding-maps", PLUGIN + SPEC);
+        projectExtension(root);
+        append(root, "build.gradle", REGISTRATION);
+        write(root, "contracts/events.yaml", DOCUMENT.replace("address: events.created", """
+                address: events.created
+                      bindings: {$ref: '#/components/channelBindings/Alias'}""") + """
+                  channelBindings:
+                    Shared:
+                      amqp:
+                        is: routingKey
+                        exchange: {name: events, type: topic}
+                        bindingVersion: 0.3.0
+                    Alias: {$ref: '#/components/channelBindings/Shared'}
+                """);
+        write(root, "extensions/src/main/java/fixture/Catalog.java", generator().replace(
+                "context.output().writeUtf8(context.requireParameter(\"name\"), channel.getAddress());", """
+                if (channel.getBindings() == null || !channel.getBindings().containsKey("$ref"))
+                    throw new IllegalStateException("Binding reference was lost or expanded");
+                var channelTarget = context.document().references().resolve("/channels/events").orElseThrow();
+                var target = context.document().references().resolve(channelTarget.pointer() + "/bindings").orElseThrow();
+                var binding = context.document().references().resolve(target.pointer() + "/amqp",
+                    com.asyncapi.bindings.amqp.v0._3_0.channel.AMQPChannelBinding.class).orElseThrow();
+                context.output().writeUtf8(context.requireParameter("name"), binding.getExchange().getName());
+                """));
+        assertEquals(SUCCESS, outcome(run(root, "asyncApiGenerateEventsCatalog"), ":asyncApiGenerateEventsCatalog"));
+        assertEquals("events", read(root, "build/generated/asyncapi/events/catalog/channels.txt"));
+        var repeated = run(root, "asyncApiGenerateEventsCatalog");
+        assertEquals(UP_TO_DATE, outcome(repeated, ":asyncApiGenerateEventsCatalog"));
+        assertTrue(repeated.getOutput().contains("Reusing configuration cache"));
+        assertEquals(FROM_CACHE, outcome(run(root, "clean", "asyncApiGenerateEventsCatalog"), ":asyncApiGenerateEventsCatalog"));
+        write(root, "contracts/events.yaml", read(root, "contracts/events.yaml")
+                .replace("#/components/channelBindings/Shared", "#/components/channelBindings/Missing"));
+        var invalid = fail(root, "asyncApiGenerateEventsCatalog");
+        assertEquals(FAILED, outcome(invalid, ":asyncApiGenerateEventsCatalog"));
+        assertTrue(invalid.getOutput().contains("reference.missing"));
+        assertFalse(Files.exists(root.resolve("build/generated/asyncapi/events/catalog/channels.txt")));
+        assertEquals(FAILED, outcome(fail(root, "check"), ":asyncApiValidateEvents"));
+        assertTrue(read(root, "build/reports/asyncapi/events.json").contains("reference.missing"));
+    }
+
     private Path fixture(String name, String build) throws IOException {
         Path root = temporary.resolve(name);
         write(root, "settings.gradle", settings(""));

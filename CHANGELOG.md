@@ -4,6 +4,17 @@ User-visible changes to Asyncwright. Changes under **Unreleased** are not yet pu
 
 ## Unreleased
 
+### Fixed
+
+- Reuse server, channel, operation and message binding maps through local `$ref` values,
+  including aliases in `components.*Bindings`. Rules and generators can follow these
+  references with the separate resolver while the typed model retains the original URI.
+- Report missing binding maps, incompatible target kinds and alias cycles at their source
+  locations. Invalid protocol definitions retain their full path and related reference uses.
+
+These changes are being tested as `0.1.1-SNAPSHOT` with model `.4-SNAPSHOT` in a local
+development repository. They are not available in the public `0.1.0` / model `.3` release.
+
 ## [0.1.0] - 2026-10-23
 
 First public release.

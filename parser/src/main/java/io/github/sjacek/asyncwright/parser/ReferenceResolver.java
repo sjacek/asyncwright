@@ -16,7 +16,12 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.*;
 
-/** Resolves document positions without replacing references in the source or model. */
+/**
+ * Resolves validated document positions independently of the mutable typed model.
+ * Alias traversal retains source URIs and never expands nested references. For bindings,
+ * callers resolve the whole map first, then map the protocol value under its concrete pointer.
+ * Definition/use locations come from the original source even after a model mutation.
+ */
 public final class ReferenceResolver implements AsyncApiReferences {
     private static final ObjectMapper MAPPER = ModelMapping.mapper();
     private final SourceDocument source;
@@ -29,6 +34,7 @@ public final class ReferenceResolver implements AsyncApiReferences {
         this.index = index;
     }
 
+    /** Records valid immediate edges, rejects incompatible target kinds, then checks graph cycles. */
     List<Diagnostic> validate() {
         List<Diagnostic> errors = new ArrayList<>();
         for (var use : index.references) {
@@ -39,7 +45,7 @@ public final class ReferenceResolver implements AsyncApiReferences {
                     fail(errors, use.pointer(), BuiltinRuleId.REFERENCE_MISSING, "Reference target does not exist: " + ref);
                 } else if (use.kind() != DocumentIndex.Kind.OTHER && index.kinds.get(target) != use.kind()) {
                     fail(errors, use.pointer(), BuiltinRuleId.REFERENCE_TYPE, "Reference must target a "
-                            + use.kind().name().toLowerCase(Locale.ROOT) + " object");
+                            + use.kind().name().toLowerCase(Locale.ROOT).replace('_', ' ') + " object");
                 } else targets.put(use.pointer(), target);
             } catch (IllegalArgumentException exception) {
                 fail(errors, use.pointer(), ref.startsWith("#") || ref.isEmpty()
@@ -99,7 +105,13 @@ public final class ReferenceResolver implements AsyncApiReferences {
         return invalid.contains(pointer) ? Optional.empty() : Optional.ofNullable(targets.get(pointer));
     }
 
-    /** Accepts the pointer of a Reference Object (not the literal contents of $ref). */
+    /**
+     * Follows an object or Reference Object position to a concrete source value.
+     * The result and its node are defensive copies; nested references remain unresolved.
+     * @param pointer document JSON Pointer, not the literal contents of {@code $ref}
+     * @return concrete target or empty for a missing, invalid or cyclic alias
+     * @throws IllegalArgumentException if the input is not a JSON Pointer
+     */
     public Optional<ResolvedReference> resolve(String pointer) {
         Set<String> visited = new HashSet<>();
         String current = pointer;
@@ -112,6 +124,15 @@ public final class ReferenceResolver implements AsyncApiReferences {
         return Optional.of(new ResolvedReference(current, value));
     }
 
+    /**
+     * Maps a concrete target into a fresh model without modifying the source or other callers.
+     * For a protocol-specific binding, resolve its map and append the protocol name first.
+     * @param <T> requested model type
+     * @param pointer object or reference position in the document
+     * @param type Java type, including a versioned binding type when accessing versioned fields
+     * @return fresh typed target or empty when reference resolution fails
+     * @throws IOException if the target cannot be mapped to the requested model type
+     */
     public <T> Optional<T> resolve(String pointer, Class<T> type) throws IOException {
         Optional<ResolvedReference> target = resolve(pointer);
         return target.isPresent() ? Optional.of(MAPPER.treeToValue(

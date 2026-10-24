@@ -79,6 +79,72 @@ in the context. Use `requireParameter(name)` for required values and
 `parameters().getOrDefault(name, defaultValue)` for optional values. Missing required parameters
 are configuration/execution failures, not invalid-contract diagnostics.
 
+## Binding-map references (development)
+
+This support requires the development `0.1.1-SNAPSHOT` / model `.4-SNAPSHOT` pair.
+It is not present in public `0.1.0` / model `.3`. Existing `Map<String, Object>` getters
+retain their signatures. An owner's whole-map reference is represented as
+`Map.of("$ref", originalUri)`; concrete maps hold protocol names and typed protocol bindings.
+In `components.*Bindings`, each name holds a protocol map or a model `Reference` alias.
+This corrects the previous flat interpretation of component entries.
+
+The reference map belongs to the current invocation just like the rest of its typed model.
+Clearing or changing it in a rule does not alter the original source, the resolver or the
+fresh maps supplied to the next generator. Ignored siblings remain visible in `source()`
+and produce a warning; they are excluded from the typed reference map and reference graph.
+
+For example, a channel can declare:
+
+```yaml
+bindings:
+  $ref: '#/components/channelBindings/Alias'
+```
+
+with reusable definitions under the document's `components`:
+
+```yaml
+channelBindings:
+  Shared:
+    amqp:
+      is: routingKey
+      exchange: {name: events, type: topic}
+      bindingVersion: 0.3.0
+  Alias:
+    $ref: '#/components/channelBindings/Shared'
+```
+
+This complete generator resolves the owner's map position, then its protocol:
+
+```java
+import com.asyncapi.bindings.amqp.v0._3_0.channel.AMQPChannelBinding;
+import io.github.sjacek.asyncwright.api.AsyncApiGenerator;
+import io.github.sjacek.asyncwright.api.Diagnostic;
+import io.github.sjacek.asyncwright.api.GeneratorContext;
+
+import java.util.List;
+import java.util.Objects;
+
+public final class ExchangeNameGenerator implements AsyncApiGenerator {
+    @Override
+    public List<Diagnostic> generate(GeneratorContext context) throws Exception {
+        var references = context.document().references();
+        var channel = references.resolve("/channels/events").orElseThrow();
+        var map = references.resolve(channel.pointer() + "/bindings").orElseThrow();
+        var binding = references.resolve(map.pointer() + "/amqp", AMQPChannelBinding.class).orElseThrow();
+        var exchange = Objects.requireNonNull(binding.getExchange(), "Expected an AMQP exchange");
+        String name = Objects.requireNonNull(exchange.getName(), "Expected an exchange name");
+        context.output().writeUtf8("exchange.txt", name);
+        return List.of();
+    }
+}
+```
+
+The same pattern applies to server, operation and message maps with their protocol types.
+Resolving the map first handles both inline definitions and alias chains. Mapping does not
+dereference URIs, fetch resources or merge traits. Missing targets, wrong map kinds and pure
+alias cycles remain validation errors. Tests exercise this flow through isolated Gradle
+workers, configuration-cache reuse and build-cache restoration.
+
 ## Diagnostics and stages
 
 Use `context.diagnostic(ruleId, severity, message, definitionPointer)` to preserve source

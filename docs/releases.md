@@ -5,6 +5,13 @@ The model `1.0.0-RC4-asyncwright.3` is published in Maven Central. The release t
 `v0.1.0` identifies source commit `62608abc66f8c7c3f9f5a5c48ff31f23782cf115`.
 Model `.2` remains an unchanged local baseline.
 
+The current binding-map development work uses `0.1.1-SNAPSHOT` and model
+`1.0.0-RC4-asyncwright.4-SNAPSHOT`; neither has been uploaded. Use the explicit local model
+repository for its tests. Before a release, replace working-tree model provenance with an
+immutable source commit, prepare stable versions and pin the matching distribution commit
+for CI (`model_ref` / `ASYNCWRIGHT_MODEL_REF`). The existing `.3` CI pin cannot supply `.4`.
+The published-consumer example's default still selects the accepted public `0.1.0` release.
+
 The public release was verified on 2026-10-24 with Gradle 9.8.1 and JDK 21 using
 `examples/published-consumer` outside the checkout, empty Gradle and Maven caches, and
 no repository overrides or included plugin build. Validation, custom rules, typed-model
