@@ -1,11 +1,10 @@
 # Changelog
 
-User-visible changes to Asyncwright. Prepared releases are not publicly available until
-publication is confirmed.
+User-visible changes to Asyncwright. Changes under **Unreleased** are not yet published.
 
 ## Unreleased
 
-## 0.1.1 — prepared, not published
+## [0.1.1] - 2026-10-25
 
 ### Fixed
 
@@ -23,8 +22,9 @@ publication is confirmed.
   [extension API example](docs/extensions.md#binding-map-references).
 - Requirements remain Java 17+ and Gradle 9.0+ on a compatible JDK.
 
-The stable version numbers are prepared for release. Model `.4` and plugin `0.1.1` have
-not been published; the public `0.1.0` / model `.3` release remains unchanged.
+Plugin `0.1.1` is available from the Gradle Plugin Portal and model `.4` from Maven Central.
+Consumers do not need a local model repository. Earlier `0.1.0` / model `.3` coordinates
+remain available without being overwritten.
 
 ## [0.1.0] - 2026-10-23
 
@@ -71,4 +71,5 @@ First public release.
 - Generation requires a custom generator. This release does not include a Java DTO generator
   or automatically attach generated files to compilation.
 
+[0.1.1]: https://plugins.gradle.org/plugin/io.github.sjacek.asyncwright/0.1.1
 [0.1.0]: https://plugins.gradle.org/plugin/io.github.sjacek.asyncwright/0.1.0

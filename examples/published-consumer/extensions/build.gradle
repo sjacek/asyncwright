@@ -6,5 +6,5 @@ java {
 }
 tasks.withType(JavaCompile).configureEach { options.release = 17 }
 dependencies {
-    compileOnly "io.github.sjacek.asyncwright:asyncwright-gradle-plugin:${providers.gradleProperty('asyncwrightVersion').getOrElse('0.1.0')}"
+    compileOnly "io.github.sjacek.asyncwright:asyncwright-gradle-plugin:${providers.gradleProperty('asyncwrightVersion').getOrElse('0.1.1')}"
 }

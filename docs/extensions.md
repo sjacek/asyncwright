@@ -81,8 +81,8 @@ are configuration/execution failures, not invalid-contract diagnostics.
 
 ## Binding-map references
 
-This support requires the prepared `0.1.1` / model `.4` pair, which is not yet published.
-It is not present in public `0.1.0` / model `.3`. Existing `Map<String, Object>` getters
+This support is available in the published `0.1.1` / model `.4` pair.
+Earlier `0.1.0` / model `.3` do not support these maps. Existing `Map<String, Object>` getters
 retain their signatures. An owner's whole-map reference is represented as
 `Map.of("$ref", originalUri)`; concrete maps hold protocol names and typed protocol bindings.
 In `components.*Bindings`, each name holds a protocol map or a model `Reference` alias.
@@ -194,7 +194,7 @@ output directory, and generators must put their outputs there.
 P6's `asyncwrightExtensions` configuration, project/included-build resolution, worker
 classpath (`API/parser + extension dependencies`), `@Classpath` input tracking,
 configuration/build cache integration, generator tasks and TestKit checks are implemented
-in the development Gradle plugin. See the [DSL and task documentation](gradle-plugin.md).
+in the published Gradle plugin. See the [DSL and task documentation](gradle-plugin.md).
 `buildSrc` is outside the agreed 0.1 extension mechanism. The parser/API and development
 example module do not publish artifacts or modify consumer builds.
 

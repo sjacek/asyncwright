@@ -2,26 +2,25 @@
 
 The plugin ID is `io.github.sjacek.asyncwright`. It validates the same
 [AsyncAPI 3.0.0 subset](validation.md) as the parser. It does not require Node.js.
-Version [0.1.0 is available from the Plugin Portal](https://plugins.gradle.org/plugin/io.github.sjacek.asyncwright/0.1.0),
+Version [0.1.1 is available from the Plugin Portal](https://plugins.gradle.org/plugin/io.github.sjacek.asyncwright/0.1.1),
 including the plugin marker, parser/API, source and Javadoc artifacts.
 See the [release guide](releases.md) for publication and consumer verification.
 Start with the [complete minimal consumer setup](../README.md#quick-start), including
 repositories, the plugin version, a contract and the validation command. The model
-distribution `1.0.0-RC4-asyncwright.3` is already available from Maven Central.
+distribution `1.0.0-RC4-asyncwright.4` is already available from Maven Central.
 
 ## Validation DSL
 
 The runnable `examples/gradle-consumer` build resolves the plugin directly from this
-checkout through `pluginManagement.includeBuild`. This branch prepares `0.1.1` with
-model `.4`, which is not yet published. Build and stage that model as described in the
-[build instructions](../README.md#build), then run from the repository root:
+checkout through `pluginManagement.includeBuild`, while its model `.4` resolves from
+Maven Central. Run from the repository root:
 
 ```powershell
-.\gradlew.bat -p examples/gradle-consumer check '-PasyncwrightModelRepository=C:/path/to/model-repository' --configuration-cache-problems=fail
+.\gradlew.bat -p examples/gradle-consumer check '-PasyncwrightModelRepository=' --configuration-cache-problems=fail
 ```
 
-The explicit override selects the prepared model repository for the included plugin build. The example
-uses Maven Central, with an optional file repository only when a development path is set.
+The empty override disables a local development model path. A file repository is optional
+when working on the model itself; it is not required for this released version.
 Plugin runtime dependencies are resolved in the consumer's plugin-management repositories;
 repositories of the included plugin build are not inherited.
 
@@ -111,7 +110,7 @@ asyncwright.specs.platformEvents {
 ```
 
 The extension subproject uses a `compileOnly` dependency on the plugin artifact
-(`io.github.sjacek.asyncwright:asyncwright-gradle-plugin:0.1.0` for the current release).
+(`io.github.sjacek.asyncwright:asyncwright-gradle-plugin:0.1.1` for the current release).
 The plugin JAR includes the parser and public API; its API dependencies provide
 the typed model and Jackson 2. Plugin Portal and Maven Central supply the published
 plugin and model dependencies. TestKit also exercises file-based compilation

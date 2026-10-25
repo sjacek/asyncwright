@@ -12,7 +12,7 @@ parser is a regression result, not proof of complete specification conformance.
 | YAML aliases, including merge aliases | Rejected with `unsupported.yaml-alias` at the alias token and pointer. |
 | AsyncAPI versions other than 3.0.0 | Rejected with `unsupported.version`. |
 | Local JSON Pointer references and aliases | Supported, including URI percent encoding and `~0`/`~1` escapes. |
-| Whole binding-map references (0.1.1, prepared) | Server/channel/operation/message maps and aliases in `components.*Bindings` are supported with prepared model `.4` (not yet published); cross-kind targets and alias-only cycles reject. Public `0.1.0` / model `.3` still reject these maps. |
+| Whole binding-map references (since 0.1.1) | Server/channel/operation/message maps and aliases in `components.*Bindings` are supported with published model `.4`; cross-kind targets and alias-only cycles reject. Public `0.1.0` / model `.3` still reject these maps. |
 | Recursive schemas with concrete schema content | Supported without expanding references in the model. Pure reference cycles reject. |
 | External references and named anchors | Outside the resolver scope; rejected, without fetching remote resources. |
 | Traits | Rejected with `unsupported.construct`; no trait merge occurs. |
@@ -34,8 +34,8 @@ These are product limits, not statements that the rejected constructs are invali
 They apply to schema/document positions, not arbitrary instance values or extension data.
 The parser, typed resolver and extension snapshots share model mapping that preserves
 instance objects and arbitrary-precision JSON numbers. This mapping uses local Jackson
-mixins and a boolean-aware schema deserializer. Binding-map support in prepared `0.1.1`
-requires the separately maintained model `.4`; neither version is published yet. See the
+mixins and a boolean-aware schema deserializer. Binding-map support in published `0.1.1`
+uses the separately maintained model `.4` from Maven Central. See the
 [mapping and resolver example](extensions.md#binding-map-references).
 
 ## Boolean schemas

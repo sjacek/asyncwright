@@ -1,121 +1,122 @@
-# Preparing and publishing a release
+# Releases and verification
 
-## Current status
+## Published versions
 
-Asyncwright [0.1.0 is published in the Gradle Plugin Portal](https://plugins.gradle.org/plugin/io.github.sjacek.asyncwright/0.1.0),
-and model `1.0.0-RC4-asyncwright.3` is published in Maven Central. Tag `v0.1.0` identifies
-source commit `62608abc66f8c7c3f9f5a5c48ff31f23782cf115`; those public artifacts stay unchanged.
+**Asyncwright 0.1.1** and model **1.0.0-RC4-asyncwright.4** were published on
+**2026-10-25** and verified from the public repositories.
 
-This branch prepares **Asyncwright 0.1.1** with stable model
-**1.0.0-RC4-asyncwright.4**. Neither candidate has been uploaded or published.
-The [changelog](../CHANGELOG.md) describes binding-map references, diagnostics and upgrading.
-The model retains source provenance `a6ac111a10f6e18fd26c7b4820bf262125054b66`.
-
-The model distribution branch is `build/binding-map-references-distribution` in
-`sjacek/jasyncapi`; the plugin branch is `fix/binding-map-references` in `sjacek/asyncwright`.
-The source fix and distribution are separate worktrees of the same model repository.
-Keep source fixes separate from Maven distribution metadata. Do not include local `.idea`
-changes in release commits. Commits, pushes and release tags belong to the maintainer.
-
-| Prepared artifact | Coordinates | Intended destination |
+| Artifact | Coordinates | Repository |
 | --- | --- | --- |
 | Model parent POM | `io.github.sjacek.jasyncapi:asyncapi:1.0.0-RC4-asyncwright.4` | Maven Central |
 | Model JAR, sources and Javadoc | `io.github.sjacek.jasyncapi:asyncapi-core:1.0.0-RC4-asyncwright.4` | Maven Central |
-| Plugin implementation, sources and Javadoc | `io.github.sjacek.asyncwright:asyncwright-gradle-plugin:0.1.1` | Gradle Plugin Portal |
-| Plugin marker POM | `io.github.sjacek.asyncwright:io.github.sjacek.asyncwright.gradle.plugin:0.1.1` | Gradle Plugin Portal |
+| Plugin implementation, sources and Javadoc | `io.github.sjacek.asyncwright:asyncwright-gradle-plugin:0.1.1` | [Plugin Portal](https://plugins.gradle.org/plugin/io.github.sjacek.asyncwright/0.1.1) |
+| Plugin marker POM | `io.github.sjacek.asyncwright:io.github.sjacek.asyncwright.gradle.plugin:0.1.1` | Plugin Portal |
+
+Tag **`v0.1.1`** identifies plugin source commit
+`d0380742d9cfc1c14076d68948252fa1d412520f`. Model distribution commit
+`dac5a9703a9a0f82a7d25a2b78789e1d109da41d` identifies the released `.4` packaging;
+its embedded model-source provenance is `a6ac111a10f6e18fd26c7b4820bf262125054b66`.
+Documentation changes after publication do not move those release references.
 
 The parser/API ships inside the plugin JAR, sources and Javadoc, without a separate parser
 publication. The model retains Apache-2.0 and upstream attribution; Asyncwright retains
-MIT and the bundled schema's separate notices.
+MIT and the bundled schema's separate notices. The [changelog](../CHANGELOG.md) describes
+binding-map references and upgrading. Earlier `0.1.0` / model `.3` remain unchanged;
+`v0.1.0` identifies `62608abc66f8c7c3f9f5a5c48ff31f23782cf115`.
 
-## Prepare without uploading
+## Verify the released consumer
 
-1. In the model distribution checkout, configure JDK 21 and a matching Maven Toolchains
-   entry. Run `tools/prepare-release.ps1 -Unsigned`, then
-   `python tools/verify-release-bundle.py --allow-unsigned`. The preparation script runs
-   tests and packages `target/central-publishing/central-bundle.zip` with
-   `central.skipUpload=true` and installation into Maven Local disabled. It cleans previous
-   staging and signatures. An unsigned bundle is for verification only.
-2. Inspect the parent/core POMs, binary, sources, Javadoc, checksums, LICENSE, NOTICE and
-   `META-INF/asyncwright-fork.properties`. The version must be `.4`, the source SHA must
-   be `a6ac111a10f6e18fd26c7b4820bf262125054b66`, and there must be no working-tree marker.
-   A future signed preparation uses the real release key configured outside version control;
-   it still does not upload. `--gpg PATH` optionally verifies every detached signature.
-3. Install the tested model into a new explicit file repository with
-   `tools/install-local.ps1 -SkipBuild -Repository C:/path/to/model-repository`.
-   Existing versions with different contents are rejected; do not overwrite an earlier
-   local or public artifact. Never use Maven Local as a substitute for the consumer test.
-4. In Asyncwright, run:
+The [public consumer](../examples/published-consumer) defaults to `0.1.1` and resolves
+model `.4` from Maven Central. From the repository root, run:
 
-   ```powershell
-   .\gradlew.bat check assemble :extension-examples:runExample :parser:contractCorpusTest `
-     verifyReleaseTag '-PreleaseTag=v0.1.1' `
-     '-PasyncwrightModelRepository=C:/path/to/model-repository' `
-     '-PcontractsDir=C:/path/to/f1-acceptance-corpus' `
-     --configuration-cache-problems=fail
-   ```
+```powershell
+.\gradlew.bat -p examples/published-consumer check asyncApiGenerateEventsCatalog --configuration-cache-problems=fail
+```
 
-   `verifyReleaseTag` validates the candidate tag string against `project.version`; it does
-   not create a Git tag. The optional `contractCorpusTest` uses the five preserved F1
-   acceptance inputs (91 local references and 13 typed AMQP channel bindings); select that
-   corpus with `contractsDir`. Evolving application contracts can have different totals.
-   Do not change the fixed assertions to make a changed input corpus pass. The ordinary
-   `check` uses only the checked-in public/synthetic corpus and needs no application contracts.
-   Do not run `verifyReleaseModel` or `publishPlugins` during local preparation: the model
-   must become publicly available before Portal submission.
-5. Review `gradle-plugin/build/staging-repository`: it contains the implementation, marker,
-   sources, Javadoc and metadata under stable `0.1.1` coordinates. The test build writes
-   only this local output, with no remote deployment. `PublishedConsumerTest` serves it and
-   the staged model over loopback HTTP. It copies the real example outside the checkout,
-   uses a cold TestKit home, and checks resolution, typed extensions, validation, generation,
-   configuration-cache reuse, diagnostics and failure cleanup. It uses no included plugin
-   build, `withPluginClasspath`, file dependencies or Maven Local. Tests inspect the source
-   and Javadoc artifacts and license entries. HTTP access to third-party dependencies is
-   required, so this test cannot run with Gradle's `--offline` option.
-6. After committing and pushing the preparation, run CI with the **new full distribution
-   SHA** as `model_ref`. The old `5fe89cf4...` commit contains `.4-SNAPSHOT`, so it cannot
-   supply stable `.4`. The eight Gradle/JDK combinations must pass on the stable candidates.
-   The manual **Prepare release (no upload)** workflow also prepares a publication preview
-   after that matrix and has no publishing credentials or remote publication steps.
+It uses no included plugin build, local model repository, Maven Local or injected plugin
+classpath. Copy the example outside the checkout to verify the same behavior independently,
+using an installed Gradle 9.0+ and a supported JDK 17+. No version override is required.
+`-PasyncwrightVersion=...` can explicitly select another published version for comparison.
 
-Do not change the global `ASYNCWRIGHT_MODEL_REF` while `main` still requires `.3`.
-Coordinate that variable with integration of the `.4` dependency on `main`, then verify CI
-of the actual integrated commit. Keep the immutable source SHA and distribution SHA distinct.
-Do not declare the stable candidate remotely tested using an earlier SNAPSHOT run.
+The release was accepted with Gradle 9.8.1 / Temurin 21.0.12.1, initially empty Gradle and
+Maven caches, and public repository defaults. Checks covered extension compilation, typed
+model use, validation, generation, configuration-cache reuse, rule failure cleanup and
+build-cache restoration. The generated catalog contains `events.created` followed by LF.
+Public implementation, sources, Javadoc, POM and Gradle metadata matched the publication
+outputs. All five model signatures and 20 checksums were verified from Central.
 
-## Publish after integration and explicit authorization
+## Build and test the checkout
 
-1. Bring the reviewed plugin sources, README and linked documentation onto GitHub's default
-   `main` branch. Check that `website` and `vcsUrl` open the complete public project, including
-   parser/API and Gradle plugin sources. Review the candidate's exact distribution and plugin
-   commits and record the matching tags. Local preparation does not merge or tag anything.
-2. Verify the Central namespace `io.github.sjacek.jasyncapi`, the real release GPG key and
-   public key availability. Keep Central credentials in private Maven settings and signing
-   secrets outside the repository. Build and inspect the signed model bundle from the
-   intended immutable distribution commit. Never release an unsigned preview or a bundle
-   signed with a disposable test key.
-3. Only after authorization, invoke Maven with profile `central-release`, `clean deploy`,
-   and explicit `'-Dcentral.skipUpload=false'`. Quote each `-D...` argument in PowerShell.
-   `autoPublish=false` leaves final release to the maintainer in Central Portal. Wait for
-   the parent POM, core POM and JAR of `.4` to resolve from Maven Central.
-4. Create the plugin's matching `v0.1.1` tag on the reviewed source commit. With credentials
-   configured privately, Portal validation uses
-   `:gradle-plugin:publishPlugins --validate-only -PreleaseTag=v0.1.1`; submission uses
-   `:gradle-plugin:publishPlugins -PreleaseTag=v0.1.1`. Both depend on `verifyReleaseModel`,
-   which checks the model's availability in Maven Central. These commands contact external
-   services and are not part of the no-upload preparation. There is no automatic
-   tag-triggered publication.
-5. When `0.1.1` is available in the Portal, run the copied
-   [published-consumer example](../examples/published-consumer) outside the checkout with
-   `-PasyncwrightVersion=0.1.1`, a fresh Gradle user home and no repository overrides.
-   Check validation, generation, configuration/build caches, diagnostics and cleanup.
-   Then update the public quick-start and example defaults from `0.1.0`, replace the
-   changelog's prepared status with the actual release date, and record release acceptance.
+`assemble` and the development examples can use public model `.4`; the empty repository
+override disables a machine-specific path in ignored `gradle/local.properties`:
 
-The public consumer defaults intentionally stay at `0.1.0` / model `.3` until publication is
-confirmed. Prepublication HTTP tests override the plugin version to the candidate and serve
-the exact `.4` model. They verify packaging and resolution but do not establish acceptance
-or availability in Central or the Portal. Never overwrite a published version.
+```powershell
+.\gradlew.bat assemble :extension-examples:runExample '-PasyncwrightModelRepository=' --configuration-cache-problems=fail
+.\gradlew.bat -p examples/gradle-consumer check '-PasyncwrightModelRepository=' --configuration-cache-problems=fail
+```
+
+The complete `check` also contains HTTP publication tests. These deliberately need an
+explicit model file repository as a fixture, not as a consumer requirement. See the
+[build instructions](../README.md#build). The fixture is served over loopback HTTP alongside
+`gradle-plugin/build/staging-repository`; it never uploads to a remote repository.
+Tests copy the public example to another directory and use a cold TestKit home without
+`withPluginClasspath` or `includeBuild`.
+
+The optional `:parser:contractCorpusTest` expects the five preserved F1 acceptance inputs
+(91 references and 13 typed AMQP channel bindings). Select them with
+`-PcontractsDir=C:/path/to/f1-acceptance-corpus`. Ordinary `check` uses checked-in public and
+synthetic fixtures and does not depend on evolving application contracts.
+
+## Prepare a future version without uploading
+
+The current versions are already published. Choose new model/plugin versions before a
+future release; never resubmit, overwrite or retag `.4` or `0.1.1`.
+
+1. Keep model fixes separate from distribution metadata. The distribution lives on
+   `build/asyncwright-distribution` in `sjacek/jasyncapi`; the released plugin is on `main`
+   in `sjacek/asyncwright`. Use development branches for the next changes. Commits, pushes
+   and tags belong to the maintainer; keep local `.idea` changes out of them.
+2. With JDK 21 and Maven Toolchains, `tools/prepare-release.ps1 -Unsigned` in the model
+   checkout runs tests and prepares a local preview with `central.skipUpload=true` and
+   Maven Local installation disabled. Inspect it with
+   `python tools/verify-release-bundle.py --allow-unsigned`. The unsigned ZIP is only for
+   verification. Review parent/core versions, source provenance, source/Javadoc artifacts,
+   LICENSE, NOTICE and checksums. Signed preparation uses the real GPG key configured
+   outside the repository; it still does not upload. `--gpg PATH` verifies signatures.
+3. Stage the tested model in a new explicit file repository with `tools/install-local.ps1`.
+   Existing artifacts with different contents are rejected. Configure that repository
+   for the full plugin `check assemble` and HTTP publication tests.
+4. After the maintainer's commit/push, pin the new full distribution SHA in CI and require
+   the complete eight-pair Gradle/JDK matrix. The manual **Prepare release (no upload)**
+   workflow also creates a local publication preview and has no publication credentials.
+   Coordinate the global `ASYNCWRIGHT_MODEL_REF` with the dependency version on `main`.
+   Its current released pin is `dac5a9703a9a0f82a7d25a2b78789e1d109da41d`; update it only
+   when integrating a different model revision. Keep source and distribution SHAs distinct.
+
+## Publish a future version after authorization
+
+Replace `X.Y.Z` below with the new stable plugin version. These commands describe a future
+release; they are not instructions to republish `0.1.1`.
+
+1. Integrate reviewed sources and public usage documentation onto the default `main`
+   branch, then verify its CI with the matching model pin. Check that `website` and
+   `vcsUrl` open the complete project. Record the exact source commits and immutable tags.
+2. Build and inspect a model bundle signed with the real release key. Keep Central tokens
+   in private settings and signing secrets outside version control. For authorized upload,
+   the model's `central-release` profile uses `clean deploy` with explicit
+   `'-Dcentral.skipUpload=false'`; `autoPublish=false` leaves final release to the maintainer
+   in Central Portal. Alternatively, upload the verified signed ZIP manually in Portal.
+   Wait for the model parent/core POMs and JAR to resolve from Maven Central.
+3. Create the matching plugin tag on the reviewed commit. `verifyReleaseTag` rejects a
+   snapshot or a tag string that differs from `project.version`. With credentials configured
+   privately, `:gradle-plugin:publishPlugins --validate-only -PreleaseTag=vX.Y.Z` performs
+   preflight validation; `:gradle-plugin:publishPlugins -PreleaseTag=vX.Y.Z` submits the
+   release. Both depend on `verifyReleaseModel`, which checks the public model. There is
+   no automatic tag-triggered publication.
+4. After Portal availability, run the copied public consumer with empty caches, public
+   repositories and the new version, including positive, failure and cache scenarios.
+   Then update the examples, release dates and documentation. A prepublication HTTP test
+   proves packaging and resolution, not acceptance or availability in public services.
 
 Official references: [Gradle plugin publishing](https://docs.gradle.org/current/userguide/publishing_gradle_plugins.html),
 [Central publishing and skipUpload](https://central.sonatype.org/publish/publish-portal-maven/).
