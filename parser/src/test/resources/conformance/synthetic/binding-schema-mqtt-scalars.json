@@ -1,0 +1,34 @@
+{
+  "asyncapi": "3.0.0",
+  "info": {
+    "title": "MQTT scalar alternatives",
+    "version": "1.0.0"
+  },
+  "components": {
+    "serverBindings": {
+      "Shared": {
+        "mqtt": {
+          "bindingVersion": "0.2.0",
+          "sessionExpiryInterval": 12,
+          "maximumPacketSize": 1024
+        }
+      }
+    },
+    "operationBindings": {
+      "Shared": {
+        "mqtt": {
+          "bindingVersion": "0.2.0",
+          "messageExpiryInterval": 30
+        }
+      }
+    },
+    "messageBindings": {
+      "Shared": {
+        "mqtt": {
+          "bindingVersion": "0.2.0",
+          "responseTopic": "reply/orders"
+        }
+      }
+    }
+  }
+}

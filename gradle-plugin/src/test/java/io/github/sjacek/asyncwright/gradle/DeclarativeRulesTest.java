@@ -6,9 +6,11 @@ import io.github.sjacek.asyncwright.parser.ExtensionExecutor;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.List;
 import java.util.Map;
+import java.util.LinkedHashMap;
 
 import static io.github.sjacek.asyncwright.gradle.DeclarativeRules.Parameter.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -66,6 +68,80 @@ class DeclarativeRulesTest {
         var flags = assertThrows(ExtensionExecutionException.class,
                 () -> validate("", "events", Integer.MIN_VALUE, "", ""));
         assertInstanceOf(IllegalArgumentException.class, flags.getCause());
+    }
+
+    @Test
+    void protocolListsAllowBothKafkaTransportsAndLocateRejectedResolvedServers() throws Exception {
+        String body = """
+                servers:
+                  public: {host: localhost, protocol: kafka}
+                  secure: {$ref: '#/components/servers/secure'}
+                components:
+                  servers:
+                    secure: {host: localhost, protocol: kafka-secure}
+                """;
+        var result = validateProtocols(body, "[\"kafka\",\"kafka-secure\"]");
+        assertTrue(result.successful(), result.diagnostics()::toString);
+        var rejected = validateProtocols(body, "[\"kafka\"]");
+        assertEquals(1, rejected.diagnostics().size());
+        var finding = rejected.diagnostics().get(0);
+        assertEquals(BuiltinRuleId.PROJECT_PROTOCOL.id(), finding.ruleId());
+        assertEquals("/components/servers/secure/protocol", finding.pointer());
+        assertEquals("/servers/secure/$ref", finding.related().get(0).pointer());
+        assertTrue(validateProtocols(body, "[]").successful());
+        assertTrue(validateProtocols("", "[\"kafka\"]").successful());
+    }
+
+    @ParameterizedTest @ValueSource(strings = {"{}", "null", "[1]", "[null]", "[\"\"]", "[\" \"]", "[",
+            "", "  ", "false", "\"kafka\"", "[[]]", "[\"kafka\"] true", "[\"kafka\"] {}"})
+    void malformedProtocolListsAreExecutionFailures(String encoded) {
+        var failure = assertThrows(ExtensionExecutionException.class, () -> validateProtocols("", encoded));
+        assertInstanceOf(IllegalArgumentException.class, failure.getCause());
+    }
+
+    /** List presence, not its contents, decides precedence over old ExtensionSpec parameters. */
+    @Test
+    void explicitProtocolListsOverrideLegacyParametersAndPreserveExactWireNames() throws Exception {
+        String body = "servers: {broker: {host: localhost, protocol: 'custom,transport'}}\n";
+        assertTrue(validateProtocols(body, "[\"custom,transport\",\"kafka\",\"custom,transport\"]", "amqp").successful());
+        assertTrue(validateProtocols(body, "[]", "amqp").successful());
+        for (String encoded : List.of("[\"CUSTOM,TRANSPORT\"]", "[\" custom,transport \"]")) {
+            var rejected = validateProtocols(body, encoded, "");
+            assertEquals(1, rejected.diagnostics().size());
+            assertEquals(BuiltinRuleId.PROJECT_PROTOCOL.id(), rejected.diagnostics().get(0).ruleId());
+        }
+    }
+
+    /** Repeated root aliases should not multiply one definition's protocol violation. */
+    @Test
+    void protocolFindingsDeduplicateDefinitionsAndKeepEveryRelatedAlias() throws Exception {
+        var result = validateProtocols("""
+                servers:
+                  first: {$ref: '#/components/servers/shared'}
+                  second: {$ref: '#/components/servers/shared'}
+                components:
+                  servers:
+                    shared: {host: localhost, protocol: amqp}
+                """, "[\"kafka\",\"kafka-secure\",\"kafka\"]");
+        assertEquals(1, result.diagnostics().size());
+        var finding = result.diagnostics().get(0);
+        assertEquals("/components/servers/shared/protocol", finding.pointer());
+        assertEquals(List.of("/servers/first/$ref", "/servers/second/$ref"),
+                finding.related().stream().map(SourceLocation::pointer).toList());
+    }
+
+    private static ExtensionResult validateProtocols(String body, String encoded) throws Exception {
+        return validateProtocols(body, encoded, null);
+    }
+
+    private static ExtensionResult validateProtocols(String body, String encoded, String legacy) throws Exception {
+        var parsed = new AsyncApiParser().parse("contracts/events.yaml",
+                "asyncapi: 3.0.0\ninfo: {title: Rules, version: 1.0.0}\n" + body);
+        assertTrue(parsed.successful(), parsed.diagnostics()::toString);
+        Map<String, String> parameters = new LinkedHashMap<>(Map.of(CHANNEL_ADDRESS.key(), "",
+                CHANNEL_ADDRESS_FLAGS.key(), "0", CONTENT_TYPE.key(), "", PROTOCOLS.key(), encoded));
+        if (legacy != null) parameters.put(PROTOCOL.key(), legacy);
+        return new ExtensionExecutor().validate(parsed, List.of(new ExtensionSpec(DeclarativeRules.class.getName(), parameters)));
     }
 
     private static ExtensionResult validate(String body, String regex, int flags, String contentType, String protocol)

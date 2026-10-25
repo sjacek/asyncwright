@@ -3,6 +3,27 @@
 Asyncwright validates a defined subset of AsyncAPI 3.0.0. A passing comparison with another
 parser is a regression result, not proof of complete specification conformance.
 
+## Unreleased binding-schema and component-name changes
+
+The development branch adds schema context for Kafka `key` / `groupId` / `clientId`,
+HTTP headers and query schemas, WebSockets query/header schemas, JMS and Anypoint MQ
+headers, and the five MQTT 0.2.0 schema-valued fields. MQTT scalar alternatives remain
+scalars. Schema references are checked for target kind, missing targets and cycles;
+concrete recursive schemas are supported and references stay in the model. Arbitrary
+binding configuration and schema instance data do not become reference edges.
+
+Nine overlapping Reference/Schema alternatives are corrected from `oneOf` to `anyOf`
+in memory. The pinned schema resource and its checksum remain unchanged; tests verify
+the complete correction allowlist, scalar constraints and the protocol position registry.
+
+Reusable component keys must match `^[a-zA-Z0-9.\-_]+$`. Invalid keys produce
+`component.name` at the key, including its escaped JSON Pointer. This includes binding-map
+components and trait component maps; traits themselves remain unsupported. Arbitrary
+payload property names and extension data are unaffected.
+
+These changes are **not part of published 0.1.1**. Full Kafka acceptance, Registry
+dependencies, Avro, local `.avsc` references and the Kafka example are still pending.
+
 ## P3 capability boundary
 
 | Construct | Current behavior |
@@ -65,12 +86,11 @@ are indexed as schemas; a reference to an arbitrary boolean instance value is st
 
 ## Known coverage and model limits
 
-- The selected schema/parser does not enforce the Components Object name pattern.
+- Published 0.1.1 does not enforce the Components Object name pattern.
   Use component keys matching `^[a-zA-Z0-9.\-_]+$`, as required by the
   [Components Object specification](https://www.asyncapi.com/docs/reference/specification/v3.0.0#componentsObject).
   JSON Pointer support for arbitrary escaped tokens does not relax this document rule.
-  This validation gap was identified outside the selected public comparison corpus and
-  remains a separate semantic-validation fix.
+  The development parser closes this gap with `component.name` and dedicated regressions.
 - Custom binding entries such as `bindings.x-custom` are dropped by the selected typed
   model and therefore rejected by the preservation guard. Source data is never silently
   discarded from a successful document.
@@ -78,9 +98,9 @@ are indexed as schemas; a reference to an arbitrary boolean instance value is st
   mapping. Use the supported draft-07 null union for nullable types. This is a model limit,
   not support for OpenAPI's nullable semantics.
 
-The [recorded comparison](conformance/comparison.json) contains **108 cases: 79 agreements
-and 29 reviewed differences**, with **zero known shared limitations** in this selected corpus.
-The differences comprise 11 capability exclusions, 2 model limits, 11 reference parser
+The development [recorded comparison](conformance/comparison.json) contains **154 cases: 109 agreements
+and 45 reviewed differences**, with **zero known shared limitations** in this selected corpus.
+The differences comprise 11 capability exclusions, 2 model limits, 27 reference parser
 differences and 5 pure-cycle policy differences. No unreviewed outcome changes remain.
 
 The former `schema-boolean` limitation is now a valid JVM case and a JS difference. The

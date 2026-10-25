@@ -9,10 +9,13 @@ import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.Nested;
 import javax.inject.Inject;
 import java.util.List;
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 /**
- * Project validation policy. Empty strings disable individual declarative requirements.
+ * Project validation policy. Empty strings disable individual scalar requirements; an empty
+ * protocol list disables the server protocol requirement. Protocol matching is exact and case-sensitive.
  * All properties are task inputs; custom rules run after built-in validation succeeds.
  */
 public abstract class AsyncApiRules {
@@ -27,6 +30,8 @@ public abstract class AsyncApiRules {
         getChannelAddressFlags().convention(0);
         getDefaultContentType().convention("");
         getProtocol().convention("");
+        // Keep this lazy: existing build scripts may configure the old provider after plugin application.
+        getProtocols().convention(getProtocol().map(value -> value.isEmpty() ? List.of() : List.of(value)));
         getCustomRules().convention(List.of());
     }
     /**
@@ -45,10 +50,18 @@ public abstract class AsyncApiRules {
      */
     @Input public abstract Property<String> getDefaultContentType();
     /**
-     * Returns the protocol required of every declared root server.
+     * Returns the legacy single-protocol requirement, still usable by existing build scripts.
+     * The effective list follows this provider unless {@link #getProtocols()} is explicitly set.
      * @return exact required protocol; empty disables the requirement; no server is required to exist
      */
     @Input public abstract Property<String> getProtocol();
+    /**
+     * Returns the allowed protocols for every declared root server. An explicit list
+     * takes precedence over the legacy single-value property; otherwise it follows that property.
+     * Values are not trimmed or case-folded. Protocol configuration does not require a server to exist.
+     * @return exact protocol names; an empty list disables the requirement
+     */
+    @Input public abstract ListProperty<String> getProtocols();
     /**
      * Returns ordered declarations of additional rules.
      * @return rule classes and their explicit parameters
@@ -76,11 +89,35 @@ public abstract class AsyncApiRules {
     @SuppressWarnings("unused") // Public DSL entry point invoked by Gradle build scripts.
     public void requireDefaultContentType(String value) { getDefaultContentType().set(value); }
     /**
-     * Requires every declared root server to use the given protocol.
+     * Requires every declared root server to use the given protocol. Resets an explicit list
+     * to the convention backed by {@link #getProtocol()}, so a later call replaces prior policy.
      * @param value required protocol, or empty to disable the rule
+     * @throws NullPointerException if the protocol is null
      */
     @SuppressWarnings("unused") // Public DSL entry point invoked by Gradle build scripts.
-    public void requireProtocol(String value) { getProtocol().set(value); }
+    public void requireProtocol(String value) {
+        getProtocol().set(Objects.requireNonNull(value, "protocol"));
+        getProtocols().unset();
+    }
+    /**
+     * Requires every declared root server to use one of the given protocols.
+     * Replaces a previous requirement; no arguments disable it. A server is not required to exist.
+     * Values are copied before storing: mutating the caller's array cannot change task inputs.
+     * The one-String overload retains its existing empty-string disable behavior.
+     * @param values exact, nonblank protocol names; duplicates are removed in declaration order
+     * @throws IllegalArgumentException if any supplied protocol is blank
+     * @throws NullPointerException if the array or any entry is null
+     */
+    @SuppressWarnings("unused") // Public DSL overload invoked by Groovy and Kotlin build scripts.
+    public void requireProtocol(String... values) {
+        Objects.requireNonNull(values, "protocols");
+        List<String> protocols = Arrays.stream(values).map(value -> Objects.requireNonNull(value, "protocol"))
+                .distinct().toList();
+        if (protocols.stream().anyMatch(String::isBlank))
+            throw new IllegalArgumentException("Allowed protocols must not be blank");
+        getProtocol().set("");
+        getProtocols().set(protocols);
+    }
     /**
      * Appends a rule whose class may be supplied later by an extension dependency.
      * @param className binary Java name of a public {@code AsyncApiRule} with a public no-argument constructor

@@ -1,0 +1,46 @@
+{
+  "asyncapi": "3.0.0",
+  "info": {
+    "title": "Protocol binding schema regression",
+    "version": "1.0.0"
+  },
+  "components": {
+    "servers": {
+      "Broker": {
+        "host": "localhost",
+        "protocol": "kafka"
+      }
+    },
+    "schemas": {
+      "Value": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "Alias": {
+        "$ref": "#/components/schemas/Value"
+      }
+    },
+    "messageBindings": {
+      "Shared": {
+        "mqtt": {
+          "bindingVersion": "0.2.0",
+          "correlationData": {
+            "type": "object",
+            "properties": {
+              "next": {
+                "$ref": "#/components/messageBindings/Shared/mqtt/correlationData"
+              }
+            }
+          }
+        }
+      },
+      "Alias": {
+        "$ref": "#/components/messageBindings/Shared"
+      }
+    }
+  }
+}

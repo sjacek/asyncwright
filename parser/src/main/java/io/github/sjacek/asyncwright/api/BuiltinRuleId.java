@@ -59,6 +59,10 @@ public enum BuiltinRuleId {
      */
     MODEL_PRESERVATION("model.preservation"),
     /**
+     * A reusable component key violates the AsyncAPI component naming pattern.
+     */
+    COMPONENT_NAME("component.name"),
+    /**
      * Channel parameter declaration and address template disagree.
      */
     CHANNEL_PARAMETER("channel.parameter"),

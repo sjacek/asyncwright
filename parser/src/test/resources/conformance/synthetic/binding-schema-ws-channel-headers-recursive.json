@@ -1,0 +1,46 @@
+{
+  "asyncapi": "3.0.0",
+  "info": {
+    "title": "Protocol binding schema regression",
+    "version": "1.0.0"
+  },
+  "components": {
+    "servers": {
+      "Broker": {
+        "host": "localhost",
+        "protocol": "kafka"
+      }
+    },
+    "schemas": {
+      "Value": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "Alias": {
+        "$ref": "#/components/schemas/Value"
+      }
+    },
+    "channelBindings": {
+      "Shared": {
+        "ws": {
+          "bindingVersion": "0.1.0",
+          "headers": {
+            "type": "object",
+            "properties": {
+              "next": {
+                "$ref": "#/components/channelBindings/Shared/ws/headers"
+              }
+            }
+          }
+        }
+      },
+      "Alias": {
+        "$ref": "#/components/channelBindings/Shared"
+      }
+    }
+  }
+}

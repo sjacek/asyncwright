@@ -2044,6 +2044,774 @@
           "asyncapi-document-resolved"
         ]
       }
+    },
+    {
+      "id": "binding-schema-kafka-message-key-reference",
+      "file": "synthetic/binding-schema-kafka-message-key-reference.json",
+      "group": "synthetic",
+      "sha256": "bfd73869da2e7cd63e39ea51b1927d0d370e5a2b2648abab4ba8a8782e83bcd6",
+      "classification": "agreement",
+      "reason": "Protocol schema positions retain local references and validate their semantic target kind.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-schema-kafka-message-key-wrong-kind",
+      "file": "synthetic/binding-schema-kafka-message-key-wrong-kind.json",
+      "group": "synthetic",
+      "sha256": "815c8b338fa1e65a0dd92786933f39b1b1f1a207fb34ca97edd87572b719a016",
+      "classification": "reference-parser-difference",
+      "reason": "Asyncwright requires a schema target at this protocol binding position; JS core accepts a server target.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "reference.type"
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-schema-kafka-message-key-recursive",
+      "file": "synthetic/binding-schema-kafka-message-key-recursive.json",
+      "group": "synthetic",
+      "sha256": "1288702cdf81bd79ab1a52a00e658d15f99eb8461fd9ce6bd100182e2912a3cf",
+      "classification": "agreement",
+      "reason": "Both parsers accept a concrete recursive schema inside the protocol binding; Asyncwright retains the reference.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-schema-kafka-operation-groupId-reference",
+      "file": "synthetic/binding-schema-kafka-operation-groupId-reference.json",
+      "group": "synthetic",
+      "sha256": "022edccfdd7d44c1293f17375daa66474fdeb4089035bdc3584680c90b79f022",
+      "classification": "agreement",
+      "reason": "Protocol schema positions retain local references and validate their semantic target kind.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-schema-kafka-operation-groupId-wrong-kind",
+      "file": "synthetic/binding-schema-kafka-operation-groupId-wrong-kind.json",
+      "group": "synthetic",
+      "sha256": "f0d57c9889ea09b280982504d63ffe7d4afc5db3847a7482cf8ae1b4be94b4f9",
+      "classification": "reference-parser-difference",
+      "reason": "Asyncwright requires a schema target at this protocol binding position; JS core accepts a server target.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "reference.type"
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-schema-kafka-operation-groupId-recursive",
+      "file": "synthetic/binding-schema-kafka-operation-groupId-recursive.json",
+      "group": "synthetic",
+      "sha256": "3a0c909faf1b48c9f17e92f28d63f6997fc2a45b1dbdd21a1325ff125cf98374",
+      "classification": "agreement",
+      "reason": "Both parsers accept a concrete recursive schema inside the protocol binding; Asyncwright retains the reference.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-schema-kafka-operation-clientId-reference",
+      "file": "synthetic/binding-schema-kafka-operation-clientId-reference.json",
+      "group": "synthetic",
+      "sha256": "2d7654b2960bba00a5f8a2b71d7602d3f3c28a59c5a3e27a67461ac3b65d00e1",
+      "classification": "agreement",
+      "reason": "Protocol schema positions retain local references and validate their semantic target kind.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-schema-kafka-operation-clientId-wrong-kind",
+      "file": "synthetic/binding-schema-kafka-operation-clientId-wrong-kind.json",
+      "group": "synthetic",
+      "sha256": "c61248b440328e31d81b704ce8012993315d6f3b8b1482a0aba97d272104936f",
+      "classification": "reference-parser-difference",
+      "reason": "Asyncwright requires a schema target at this protocol binding position; JS core accepts a server target.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "reference.type"
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-schema-kafka-operation-clientId-recursive",
+      "file": "synthetic/binding-schema-kafka-operation-clientId-recursive.json",
+      "group": "synthetic",
+      "sha256": "20ad369a2466822dd70e1d00d2793fac99fa73b08ed32f7980ceec2b3d958ce7",
+      "classification": "agreement",
+      "reason": "Both parsers accept a concrete recursive schema inside the protocol binding; Asyncwright retains the reference.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-schema-http-message-headers-reference",
+      "file": "synthetic/binding-schema-http-message-headers-reference.json",
+      "group": "synthetic",
+      "sha256": "f883f234d3682a5fe877d9d41d4e008a6a328933c3a5fef07b9d09fabb486a98",
+      "classification": "agreement",
+      "reason": "Protocol schema positions retain local references and validate their semantic target kind.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-schema-http-message-headers-wrong-kind",
+      "file": "synthetic/binding-schema-http-message-headers-wrong-kind.json",
+      "group": "synthetic",
+      "sha256": "2af775531910708135d0765426df1ae403ff4cf3c337ee48a59b24f5ac81072c",
+      "classification": "reference-parser-difference",
+      "reason": "Asyncwright requires a schema target at this protocol binding position; JS core accepts a server target.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "reference.type"
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-schema-http-message-headers-recursive",
+      "file": "synthetic/binding-schema-http-message-headers-recursive.json",
+      "group": "synthetic",
+      "sha256": "da185599b1941ffd12a1c95a0cb77038f78ecab59e6f1783da3b2b27ea71b3db",
+      "classification": "agreement",
+      "reason": "Both parsers accept a concrete recursive schema inside the protocol binding; Asyncwright retains the reference.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-schema-http-operation-query-reference",
+      "file": "synthetic/binding-schema-http-operation-query-reference.json",
+      "group": "synthetic",
+      "sha256": "bcd6095d5f43a1fa009c5e8c28eb4c8144a2f8719c36e7571e78582755688628",
+      "classification": "agreement",
+      "reason": "Protocol schema positions retain local references and validate their semantic target kind.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-schema-http-operation-query-wrong-kind",
+      "file": "synthetic/binding-schema-http-operation-query-wrong-kind.json",
+      "group": "synthetic",
+      "sha256": "5efe6ba10ac78fdec662f16e2bb62866e1b0de6cf7c7925bdd64b42d3b955d03",
+      "classification": "reference-parser-difference",
+      "reason": "Asyncwright requires a schema target at this protocol binding position; JS core accepts a server target.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "reference.type"
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-schema-http-operation-query-recursive",
+      "file": "synthetic/binding-schema-http-operation-query-recursive.json",
+      "group": "synthetic",
+      "sha256": "ffb4c54fd9e36c777e9b1885042097773f5380c58d9bbcb32a6c1f1e4166d160",
+      "classification": "agreement",
+      "reason": "Both parsers accept a concrete recursive schema inside the protocol binding; Asyncwright retains the reference.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-schema-ws-channel-query-reference",
+      "file": "synthetic/binding-schema-ws-channel-query-reference.json",
+      "group": "synthetic",
+      "sha256": "20673637df6f028f80f0d0d699d3b92a8d076f5b5db4ff7b1732fb1a2421be1a",
+      "classification": "agreement",
+      "reason": "Protocol schema positions retain local references and validate their semantic target kind.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-schema-ws-channel-query-wrong-kind",
+      "file": "synthetic/binding-schema-ws-channel-query-wrong-kind.json",
+      "group": "synthetic",
+      "sha256": "4f61d0b4877084860bab6f35cb9fe761a52cbf8ddd4f3dd7b6de07416040fea6",
+      "classification": "reference-parser-difference",
+      "reason": "Asyncwright requires a schema target at this protocol binding position; JS core accepts a server target.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "reference.type"
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-schema-ws-channel-query-recursive",
+      "file": "synthetic/binding-schema-ws-channel-query-recursive.json",
+      "group": "synthetic",
+      "sha256": "d49f07560c5ec8e1c435469e5db4379e368d4151c590c15d3e0523ce2375ee3e",
+      "classification": "agreement",
+      "reason": "Both parsers accept a concrete recursive schema inside the protocol binding; Asyncwright retains the reference.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-schema-ws-channel-headers-reference",
+      "file": "synthetic/binding-schema-ws-channel-headers-reference.json",
+      "group": "synthetic",
+      "sha256": "65190650ac23a7baf89f0e1f4c01166e3b6a3504d3122b9c6935ad3a6cb2412b",
+      "classification": "agreement",
+      "reason": "Protocol schema positions retain local references and validate their semantic target kind.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-schema-ws-channel-headers-wrong-kind",
+      "file": "synthetic/binding-schema-ws-channel-headers-wrong-kind.json",
+      "group": "synthetic",
+      "sha256": "8a58e5d83ce6a0d69eeb75b4dcc2c655befbf001e559d80b83f96af4a49e29f8",
+      "classification": "reference-parser-difference",
+      "reason": "Asyncwright requires a schema target at this protocol binding position; JS core accepts a server target.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "reference.type"
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-schema-ws-channel-headers-recursive",
+      "file": "synthetic/binding-schema-ws-channel-headers-recursive.json",
+      "group": "synthetic",
+      "sha256": "2c1ac2e0f44532034fa1eba2d2e9ebadfeecbdb26de97d837f7cc455fef0a669",
+      "classification": "agreement",
+      "reason": "Both parsers accept a concrete recursive schema inside the protocol binding; Asyncwright retains the reference.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-schema-jms-message-headers-reference",
+      "file": "synthetic/binding-schema-jms-message-headers-reference.json",
+      "group": "synthetic",
+      "sha256": "2bfbaecbf2918fc10a35186b1c474b9fb57db9deca410d83abc5b370cd7e1e2f",
+      "classification": "agreement",
+      "reason": "Protocol schema positions retain local references and validate their semantic target kind.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-schema-jms-message-headers-wrong-kind",
+      "file": "synthetic/binding-schema-jms-message-headers-wrong-kind.json",
+      "group": "synthetic",
+      "sha256": "c5fd26cf367ace144e624af20a34aadd7ad513fab3b9004c49e9f2ca347697eb",
+      "classification": "reference-parser-difference",
+      "reason": "Asyncwright requires a schema target at this protocol binding position; JS core accepts a server target.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "reference.type"
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-schema-jms-message-headers-recursive",
+      "file": "synthetic/binding-schema-jms-message-headers-recursive.json",
+      "group": "synthetic",
+      "sha256": "401d62fc6607c14add358e5625834ae917d0014eb74d342c5cb53332af361247",
+      "classification": "agreement",
+      "reason": "Both parsers accept a concrete recursive schema inside the protocol binding; Asyncwright retains the reference.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-schema-anypointmq-message-headers-reference",
+      "file": "synthetic/binding-schema-anypointmq-message-headers-reference.json",
+      "group": "synthetic",
+      "sha256": "053bb994ce7866fa9ff423bdbbae98eefcaceb68bbc5d6c17951afa58ea2c393",
+      "classification": "agreement",
+      "reason": "Protocol schema positions retain local references and validate their semantic target kind.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-schema-anypointmq-message-headers-wrong-kind",
+      "file": "synthetic/binding-schema-anypointmq-message-headers-wrong-kind.json",
+      "group": "synthetic",
+      "sha256": "791d8213e714b9f791368bf0375aa65f949a43d0211c549950302a74b94ea80b",
+      "classification": "reference-parser-difference",
+      "reason": "Asyncwright requires a schema target at this protocol binding position; JS core accepts a server target.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "reference.type"
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-schema-anypointmq-message-headers-recursive",
+      "file": "synthetic/binding-schema-anypointmq-message-headers-recursive.json",
+      "group": "synthetic",
+      "sha256": "77b8daf0188db8baf0cfc07dbfec28619588637c89d602236250b35d760c71b7",
+      "classification": "agreement",
+      "reason": "Both parsers accept a concrete recursive schema inside the protocol binding; Asyncwright retains the reference.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-schema-mqtt-server-sessionExpiryInterval-reference",
+      "file": "synthetic/binding-schema-mqtt-server-sessionExpiryInterval-reference.json",
+      "group": "synthetic",
+      "sha256": "3c4a3216ace2284dad340698f585ccad56caa6fa0fd75dba1859fc9b0e5bc9fb",
+      "classification": "agreement",
+      "reason": "Protocol schema positions retain local references and validate their semantic target kind.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-schema-mqtt-server-sessionExpiryInterval-wrong-kind",
+      "file": "synthetic/binding-schema-mqtt-server-sessionExpiryInterval-wrong-kind.json",
+      "group": "synthetic",
+      "sha256": "a6c2f013c1a402bb0d53549ae6c9d8d6855b302278ab45cecb23efd3ffc2d535",
+      "classification": "reference-parser-difference",
+      "reason": "Asyncwright requires a schema target at this protocol binding position; JS core accepts a server target.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "reference.type"
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-schema-mqtt-server-sessionExpiryInterval-recursive",
+      "file": "synthetic/binding-schema-mqtt-server-sessionExpiryInterval-recursive.json",
+      "group": "synthetic",
+      "sha256": "b77fc7ba99dd4f5d3bad6bfc0aaac493ebac91d138bc56d88428787e994f3ba8",
+      "classification": "agreement",
+      "reason": "Both parsers accept a concrete recursive schema inside the protocol binding; Asyncwright retains the reference.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-schema-mqtt-server-maximumPacketSize-reference",
+      "file": "synthetic/binding-schema-mqtt-server-maximumPacketSize-reference.json",
+      "group": "synthetic",
+      "sha256": "ee8872b789bdad5ea7aa7cfce40a38a42a24f2bf8924723eb0218cda325b8d8b",
+      "classification": "agreement",
+      "reason": "Protocol schema positions retain local references and validate their semantic target kind.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-schema-mqtt-server-maximumPacketSize-wrong-kind",
+      "file": "synthetic/binding-schema-mqtt-server-maximumPacketSize-wrong-kind.json",
+      "group": "synthetic",
+      "sha256": "566e2e41b37c75cdf5959cdb9428054ff2e311fef36a7b924895599bf092d960",
+      "classification": "reference-parser-difference",
+      "reason": "Asyncwright requires a schema target at this protocol binding position; JS core accepts a server target.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "reference.type"
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-schema-mqtt-server-maximumPacketSize-recursive",
+      "file": "synthetic/binding-schema-mqtt-server-maximumPacketSize-recursive.json",
+      "group": "synthetic",
+      "sha256": "bcec212253cdbcf4a357195eddf0abf78d2c90537ced45e11339bbcc7e337a2a",
+      "classification": "agreement",
+      "reason": "Both parsers accept a concrete recursive schema inside the protocol binding; Asyncwright retains the reference.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-schema-mqtt-operation-messageExpiryInterval-reference",
+      "file": "synthetic/binding-schema-mqtt-operation-messageExpiryInterval-reference.json",
+      "group": "synthetic",
+      "sha256": "76b60a768d926cc4273002b21672104afbb244210c74ca3ea4ee920b3c346303",
+      "classification": "agreement",
+      "reason": "Protocol schema positions retain local references and validate their semantic target kind.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-schema-mqtt-operation-messageExpiryInterval-wrong-kind",
+      "file": "synthetic/binding-schema-mqtt-operation-messageExpiryInterval-wrong-kind.json",
+      "group": "synthetic",
+      "sha256": "712e05457123cc3cc359ba3a0b5b6cb50a2fc370709ed34afff73fd96f8c98fa",
+      "classification": "reference-parser-difference",
+      "reason": "Asyncwright requires a schema target at this protocol binding position; JS core accepts a server target.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "reference.type"
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-schema-mqtt-operation-messageExpiryInterval-recursive",
+      "file": "synthetic/binding-schema-mqtt-operation-messageExpiryInterval-recursive.json",
+      "group": "synthetic",
+      "sha256": "5c93bbcd1f60afc124cd033110a2011157692630e39fee2a2d5b9cefb36386e5",
+      "classification": "agreement",
+      "reason": "Both parsers accept a concrete recursive schema inside the protocol binding; Asyncwright retains the reference.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-schema-mqtt-message-correlationData-reference",
+      "file": "synthetic/binding-schema-mqtt-message-correlationData-reference.json",
+      "group": "synthetic",
+      "sha256": "7293bb24bc54b01eb93f8b74a1da263c51f5fafd9d135094bc42fe8bd0509bf7",
+      "classification": "agreement",
+      "reason": "Protocol schema positions retain local references and validate their semantic target kind.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-schema-mqtt-message-correlationData-wrong-kind",
+      "file": "synthetic/binding-schema-mqtt-message-correlationData-wrong-kind.json",
+      "group": "synthetic",
+      "sha256": "572cc5e13d9adabd0f3ee5ab8bbb346566e5f76ad4222bb949ac45e3e6e2b441",
+      "classification": "reference-parser-difference",
+      "reason": "Asyncwright requires a schema target at this protocol binding position; JS core accepts a server target.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "reference.type"
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-schema-mqtt-message-correlationData-recursive",
+      "file": "synthetic/binding-schema-mqtt-message-correlationData-recursive.json",
+      "group": "synthetic",
+      "sha256": "e4d3554ca39767ebb87a9360773402de34335fccaa5689bedb90f0a03a3c113a",
+      "classification": "agreement",
+      "reason": "Both parsers accept a concrete recursive schema inside the protocol binding; Asyncwright retains the reference.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-schema-mqtt-message-responseTopic-reference",
+      "file": "synthetic/binding-schema-mqtt-message-responseTopic-reference.json",
+      "group": "synthetic",
+      "sha256": "6fc9b7298e10e6cd562401f33a628da71aa59e85c981be83ffd9a46da27e5fc9",
+      "classification": "agreement",
+      "reason": "Protocol schema positions retain local references and validate their semantic target kind.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-schema-mqtt-message-responseTopic-wrong-kind",
+      "file": "synthetic/binding-schema-mqtt-message-responseTopic-wrong-kind.json",
+      "group": "synthetic",
+      "sha256": "889f8bb7f6e6cf312478e5c3d0a82e26ce0c18a9f95c38c975ed86a4911e12a5",
+      "classification": "reference-parser-difference",
+      "reason": "Asyncwright requires a schema target at this protocol binding position; JS core accepts a server target.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "reference.type"
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-schema-mqtt-message-responseTopic-recursive",
+      "file": "synthetic/binding-schema-mqtt-message-responseTopic-recursive.json",
+      "group": "synthetic",
+      "sha256": "740d7219f0b76a69d74d0a5093c86c88b7c5b712904ebddf9abf127eb78931c7",
+      "classification": "agreement",
+      "reason": "Both parsers accept a concrete recursive schema inside the protocol binding; Asyncwright retains the reference.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "component-name-space",
+      "file": "synthetic/component-name-space.json",
+      "group": "synthetic",
+      "sha256": "0ff2400db53f4b6b6af60845b5381d9d829233374dcebc86fe9816cd8d3fb4bc",
+      "classification": "reference-parser-difference",
+      "reason": "Asyncwright enforces the AsyncAPI Components Object name pattern; JS core accepts the invalid key.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "component.name"
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "component-name-slash",
+      "file": "synthetic/component-name-slash.json",
+      "group": "synthetic",
+      "sha256": "46d0ec682428daab79a9f130bbe137a9ddc2aa190ce26f3d4138f3c2f4769c48",
+      "classification": "reference-parser-difference",
+      "reason": "Asyncwright enforces the AsyncAPI Components Object name pattern; JS core accepts the invalid key.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "component.name"
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "component-name-valid",
+      "file": "synthetic/component-name-valid.json",
+      "group": "synthetic",
+      "sha256": "c90b4689952dc4a4b2a47b3dacfee06a84a3531ed04001f1da405c23b8fcf91e",
+      "classification": "agreement",
+      "reason": "Protocol schema positions retain local references and validate their semantic target kind.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "binding-schema-mqtt-scalars",
+      "file": "synthetic/binding-schema-mqtt-scalars.json",
+      "group": "synthetic",
+      "sha256": "112322cc0ff37358341a5378e3c010fbd5c94350107f91e8fd94e32097ea8df6",
+      "classification": "agreement",
+      "reason": "Protocol schema positions retain local references and validate their semantic target kind.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
     }
   ],
   "assets": [

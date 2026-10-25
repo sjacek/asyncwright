@@ -1,0 +1,14 @@
+{
+  "asyncapi": "3.0.0",
+  "info": {
+    "title": "Component key",
+    "version": "1.0.0"
+  },
+  "components": {
+    "schemas": {
+      "Bad name": {
+        "type": "string"
+      }
+    }
+  }
+}

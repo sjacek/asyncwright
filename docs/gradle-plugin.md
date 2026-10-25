@@ -70,6 +70,19 @@ Groovy `Pattern` flags are retained. The content-type rule requires an exact roo
 component references. It does not create a server when none is declared. These are
 opt-in project rules, in addition to the parser's structural and semantic validation.
 
+In the **unreleased development version**, a protocol requirement can accept alternatives:
+`requireProtocol 'kafka', 'kafka-secure'` in Groovy or
+`requireProtocol("kafka", "kafka-secure")` in Kotlin. Each declared root server must match
+one entry exactly. This does not require a server to exist or establish a broker connection.
+Calling `requireProtocol()` disables the requirement. A later DSL call replaces the
+previous requirement; the existing single-value call, including `requireProtocol ''` to
+disable it, remains supported.
+
+The managed `rules.protocols` list takes precedence when explicitly set. Otherwise it
+follows the existing `rules.protocol` property. A single-value DSL call resets the list
+to that convention. The effective list crosses the isolated worker boundary and is a
+task input, so changing the allowed protocols invalidates validation and generation caches.
+
 Kotlin DSL uses the same typed properties:
 
 ```kotlin

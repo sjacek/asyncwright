@@ -16,6 +16,8 @@ import java.util.*;
  * Instance values and extension data are excluded so a literal {@code $ref} cannot become an edge.
  */
 final class DocumentIndex {
+    private static final java.util.regex.Pattern COMPONENT_NAME =
+            java.util.regex.Pattern.compile("[a-zA-Z0-9.\\-_]+");
     /** Distinct binding-map kinds prevent structurally similar maps from crossing owner boundaries. */
     enum Kind {
         SERVER_BINDINGS, CHANNEL_BINDINGS, OPERATION_BINDINGS, MESSAGE_BINDINGS,
@@ -54,6 +56,24 @@ final class DocumentIndex {
             if (node.size() > 1) diagnostics.add(Diagnostic.at(BuiltinRuleId.REFERENCE_SIBLINGS, Severity.WARNING,
                     "Fields beside $ref are ignored", source.location(pointer), List.of()));
             return;
+        }
+        if (BindingSchemaPositions.isBindingMap(kind)) {
+            visitBindingMap(node, pointer, kind);
+            return;
+        }
+        if (kind == Kind.COMPONENTS) {
+            // Inspect map keys, not the definitions' contents. Traits still need valid names
+            // even though their merge semantics are unsupported; x-* component data is opaque.
+            for (var collection : node.properties()) {
+                if (mapKind(kind, collection.getKey()) == null
+                        && !Set.of(OPERATION_TRAITS, MESSAGE_TRAITS).contains(collection.getKey())) continue;
+                for (var field : collection.getValue().properties())
+                    if (!COMPONENT_NAME.matcher(field.getKey()).matches())
+                        diagnostics.add(Diagnostic.at(BuiltinRuleId.COMPONENT_NAME, Severity.ERROR,
+                                "Component names must match [a-zA-Z0-9.\\-_]+",
+                                source.location(pointer + "/" + collection.getKey() + "/"
+                                        + SourceDocument.escape(field.getKey())), List.of()));
+            }
         }
         if (kind == Kind.SCHEMA) {
             if (node.has(SCHEMA_FORMAT) || node.has(SCHEMA)) {
@@ -149,8 +169,31 @@ final class DocumentIndex {
     }
 
     private void mapChildren(JsonNode node, String pointer, String key, Kind kind) {
-        for (var field : node.path(key).properties())
+        for (var field : node.path(key).properties()) {
             child(pointer, key + "/" + SourceDocument.escape(field.getKey()), field.getValue(), kind);
+        }
+    }
+
+    /**
+     * Adds only schema-valued fields to the graph. Whole-map references were already handled
+     * by visit(), so aliases keep their owner's kind. Protocol containers are containment nodes,
+     * not schema targets. Booleans are schemas, whereas MQTT numbers/strings are scalar alternatives.
+     * Never recurse generically through topic configuration: its literal $ref values are data.
+     */
+    private void visitBindingMap(JsonNode node, String pointer, Kind owner) {
+        for (var protocol : node.properties()) {
+            if (protocol.getKey().startsWith(EXTENSION_PREFIX)) continue;
+            String binding = pointer + "/" + SourceDocument.escape(protocol.getKey());
+            kinds.put(binding, Kind.OTHER);
+            children.put(binding, new ArrayList<>());
+            children.get(pointer).add(binding);
+            for (var field : protocol.getValue().properties()) {
+                JsonNode value = field.getValue();
+                if (BindingSchemaPositions.contains(protocol.getKey(), owner, field.getKey())
+                        && (value.isObject() || value.isBoolean()))
+                    child(binding, SourceDocument.escape(field.getKey()), value, Kind.SCHEMA);
+            }
+        }
     }
 
     private void listChildren(JsonNode node, String pointer, String key, Kind kind) {

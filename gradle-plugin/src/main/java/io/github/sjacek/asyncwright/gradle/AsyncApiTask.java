@@ -112,7 +112,7 @@ public abstract class AsyncApiTask extends DefaultTask {
             work.getChannelAddress().set(rules.getChannelAddress());
             work.getChannelAddressFlags().set(rules.getChannelAddressFlags());
             work.getContentType().set(rules.getDefaultContentType());
-            work.getProtocol().set(rules.getProtocol());
+            work.getProtocols().set(rules.getProtocols());
             work.getRuleClasses().set(rules.getCustomRules().get().stream().map(e -> e.getClassName().get()).toList());
             work.getRuleParameters().set(rules.getCustomRules().get().stream().map(e -> e.getParameters().get()).toList());
             if (jsonReport != null) work.getJsonReport().set(jsonReport);

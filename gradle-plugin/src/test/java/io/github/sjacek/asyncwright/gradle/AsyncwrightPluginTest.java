@@ -320,6 +320,70 @@ class AsyncwrightPluginTest {
         assertEquals(SUCCESS, outcome(run(root, "check"), ":asyncApiValidateEvents"));
     }
 
+    @Test void groovyProtocolListCrossesTheWorkerBoundaryAndInvalidatesCachedValidationAndGeneration() throws Exception {
+        String policy = SPEC.replace("requireProtocol 'amqp'", "requireProtocol 'kafka', 'kafka-secure'");
+        Path root = fixture("protocol-list", PLUGIN + policy);
+        projectExtension(root);
+        append(root, "build.gradle", REGISTRATION);
+        write(root, "contracts/events.yaml", DOCUMENT.replace("protocol: amqp", "protocol: kafka")
+                .replace("servers:\n  broker:", "servers:\n  secure: {host: localhost, protocol: kafka-secure}\n  broker:"));
+        String output = "build/generated/asyncapi/events/catalog/channels.txt";
+        BuildResult first = run(root, "check", "asyncApiGenerateEventsCatalog");
+        assertEquals(SUCCESS, outcome(first, ":asyncApiValidateEvents"));
+        assertEquals(SUCCESS, outcome(first, ":asyncApiGenerateEventsCatalog"));
+        BuildResult repeated = run(root, "check", "asyncApiGenerateEventsCatalog");
+        assertEquals(UP_TO_DATE, outcome(repeated, ":asyncApiValidateEvents"));
+        assertTrue(repeated.getOutput().contains("Reusing configuration cache"));
+        write(root, "build.gradle", read(root, "build.gradle").replace("'kafka', 'kafka-secure'", "'kafka'"));
+        BuildResult rejected = fail(root, "asyncApiGenerateEventsCatalog");
+        assertEquals(FAILED, outcome(rejected, ":asyncApiGenerateEventsCatalog"));
+        assertFalse(Files.exists(root.resolve(output)), "A changed protocol policy must remove obsolete generation");
+        fail(root, "check");
+        assertTrue(read(root, "build/reports/asyncapi/events.json").contains("/servers/secure/protocol"));
+        write(root, "build.gradle", read(root, "build.gradle").replace("requireProtocol 'kafka'", "requireProtocol 'kafka', 'kafka-secure'"));
+        BuildResult restored = run(root, "check", "asyncApiGenerateEventsCatalog");
+        assertEquals(FROM_CACHE, outcome(restored, ":asyncApiValidateEvents"));
+        assertEquals(FROM_CACHE, outcome(restored, ":asyncApiGenerateEventsCatalog"));
+        assertEquals("events.created", read(root, output));
+    }
+
+    @Test void kotlinDslAcceptsMultipleProtocols() throws Exception {
+        Path root = fixture("kotlin-protocol-list", "");
+        Files.delete(root.resolve("build.gradle"));
+        write(root, "contracts/events.yaml", DOCUMENT.replace("protocol: amqp", "protocol: kafka-secure"));
+        write(root, "build.gradle.kts", """
+                plugins { id("io.github.sjacek.asyncwright") }
+                asyncwright {
+                    specs {
+                        register("events") {
+                            file.set(layout.projectDirectory.file("contracts/events.yaml"))
+                            rules { requireProtocol("kafka", "kafka-secure") }
+                        }
+                    }
+                }
+                """);
+        assertEquals(SUCCESS, outcome(run(root, "check"), ":asyncApiValidateEvents"));
+        // The managed property is also public DSL, not just an implementation of the convenience method.
+        write(root, "build.gradle.kts", read(root, "build.gradle.kts")
+                .replace("requireProtocol(\"kafka\", \"kafka-secure\")", "protocols.set(listOf(\"kafka\", \"kafka-secure\"))"));
+        assertEquals(UP_TO_DATE, outcome(run(root, "check"), ":asyncApiValidateEvents"),
+                "Equivalent DSL forms must keep the same effective task inputs");
+    }
+
+    /** A deliberately empty policy crosses the worker boundary as [], rather than falling back to a scalar. */
+    @Test void clearingTheProtocolListDisablesValidationAndKeepsTheConfigurationCacheUsable() throws Exception {
+        Path root = fixture("empty-protocol-list", PLUGIN + SPEC
+                + "asyncwright.specs.events.rules { requireProtocol 'kafka', 'kafka-secure' }\n");
+        assertEquals(FAILED, outcome(fail(root, "check"), ":asyncApiValidateEvents"));
+        assertTrue(read(root, "build/reports/asyncapi/events.json").contains("project.protocol"));
+        append(root, "build.gradle", "asyncwright.specs.events.rules.requireProtocol()\n");
+        assertEquals(SUCCESS, outcome(run(root, "check"), ":asyncApiValidateEvents"));
+        assertEquals("[ ]\n", read(root, "build/reports/asyncapi/events.json"));
+        BuildResult repeated = run(root, "check");
+        assertEquals(UP_TO_DATE, outcome(repeated, ":asyncApiValidateEvents"));
+        assertTrue(repeated.getOutput().contains("Reusing configuration cache"));
+    }
+
     @Test void builtinRuleConfigurationAndInputContentsInvalidateCache() throws Exception {
         Path root = fixture("rule-inputs", PLUGIN + SPEC);
         run(root, "check");

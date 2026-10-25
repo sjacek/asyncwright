@@ -76,10 +76,11 @@ public abstract class AsyncApiWork implements WorkAction<AsyncApiWork.Parameters
          */
         Property<String> getContentType();
         /**
-         * Required declared-server protocol, empty when disabled.
+         * Effective allowed declared-server protocols, empty when disabled. The task has already
+         * resolved legacy/list precedence; no live Gradle rule object crosses the classloader boundary.
          * @return managed worker value
          */
-        Property<String> getProtocol();
+        ListProperty<String> getProtocols();
         /**
          * Ordered binary rule class names.
          * @return managed worker value
@@ -144,7 +145,8 @@ public abstract class AsyncApiWork implements WorkAction<AsyncApiWork.Parameters
             rules.add(new ExtensionSpec(DeclarativeRules.class.getName(), Map.of(
                     CHANNEL_ADDRESS.key(), work.getChannelAddress().get(),
                     CHANNEL_ADDRESS_FLAGS.key(), work.getChannelAddressFlags().get().toString(),
-                    CONTENT_TYPE.key(), work.getContentType().get(), PROTOCOL.key(), work.getProtocol().get())));
+                    CONTENT_TYPE.key(), work.getContentType().get(),
+                    PROTOCOLS.key(), new ObjectMapper().writeValueAsString(work.getProtocols().get()))));
             for (int index = 0; index < work.getRuleClasses().get().size(); index++)
                 rules.add(new ExtensionSpec(work.getRuleClasses().get().get(index), work.getRuleParameters().get().get(index)));
             ExtensionExecutor executor = new ExtensionExecutor(getClass().getClassLoader());

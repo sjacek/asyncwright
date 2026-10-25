@@ -1,8 +1,8 @@
 # Public parser comparison
 
 The public corpus is checked in under `parser/src/test/resources/conformance/`.
-It contains **108 cases**: 12 unchanged examples from `asyncapi/spec` tag `v3.0.0`
-(commit `d78dcea70c9b094a3df72f9a4e811828cec778cc`) and 96 synthetic fixtures.
+It contains **154 cases**: 12 unchanged examples from `asyncapi/spec` tag `v3.0.0`
+(commit `d78dcea70c9b094a3df72f9a4e811828cec778cc`) and 142 synthetic fixtures.
 The official files retain their original Apache-2.0 LICENSE and NOTICE; synthetic files
 use the project MIT license. No application contracts are included.
 
@@ -18,6 +18,13 @@ and unresolved references. Some valid encoded pointers also produce false positi
 resolvers. Keep these inputs unchanged: applying schema or reference quick-fixes can remove
 the condition a regression is meant to exercise and invalidate its checksum.
 
+The binding-schema reference fixtures can also report "Validates to more than one variant".
+The pinned upstream schema uses overlapping Reference/Schema branches under `oneOf`.
+The IDE validates against that original schema, while the development parser applies nine
+explicit corrections in memory through `SchemaCompatibility`. The `*-reference` cases
+are positive regressions; `*-wrong-kind` cases must reach the resolver and report
+`reference.type`. Keep both sets and the upstream schema bytes unchanged.
+
 For affected data files in IntelliJ IDEA, set the file's analysis level to **None** via
 the editor's inspection widget or **Code | Analyze Code | Configure Current File Analysis**.
 This is a local preference in the Git-ignored `.idea` directory; do not disable analysis
@@ -31,7 +38,7 @@ Configure the local model repository as described in the root README. From the p
 .\gradlew.bat check assemble --configuration-cache-problems=fail
 ```
 
-This includes `:parser:publicCorpusTest`, with 108 case checks and one manifest integrity check.
+This includes `:parser:publicCorpusTest`, with 154 case checks and one manifest integrity check.
 It needs no Node.js or external application contracts. With Gradle dependencies already
 cached, add `--offline`. The JVM report is `parser/build/reports/conformance/asyncwright.json`.
 
@@ -67,14 +74,14 @@ model graph equality. JavaScript dereferences and composes a document; Asyncwrig
 `$ref` values and exposes a separate resolver. Two rejecting parsers can report different
 diagnostics because Asyncwright stops after structural errors.
 
-The current result is **79 agreements and 29 reviewed differences** across **108 cases**:
+The development result is **109 agreements and 45 reviewed differences** across **154 cases**:
 
 | Classification | Cases | Meaning |
 | --- | ---: | --- |
-| Agreement | 79 | Both accept or both reject. |
+| Agreement | 109 | Both accept or both reject. |
 | Unsupported | 11 | Traits (including a shared definition), YAML aliases, external files, versions 2.6/3.1, component Avro format, foreign schema dialect and schema resource ID. |
 | Model limit | 2 | Unknown `nullable` keyword and custom binding extensions cannot be preserved by the typed Java model. |
-| Reference parser difference | 11 | JavaScript follows reference-like instance values, skips one channel parameter check, rejects four valid boolean-schema cases and accepts three cross-kind binding-map references and an invalid AMQP server field. |
+| Reference parser difference | 27 | The original 11 differences plus 14 wrong-kind schema references in protocol bindings and two invalid component names accepted by JavaScript. |
 | Policy difference | 5 | Asyncwright rejects pure schema and binding-map alias cycles that JavaScript accepts. |
 | Implementation gap | 0 | The three identified semantic validation gaps below are fixed. |
 
@@ -122,7 +129,7 @@ The `example-instance-not-validated` case documents that neither parser validate
 payload instances here. This corpus is a selected regression baseline, not a complete
 AsyncAPI conformance suite or a replacement for payload instance validation.
 
-## Binding-map regression coverage (0.1.1, prepared)
+## Binding-map regression coverage (released 0.1.1 baseline)
 
 The 28 new fixtures cover four binding-map kinds, each with direct references, two-hop
 aliases, missing targets, wrong target kinds, alias cycles, malformed pointers and invalid
@@ -144,9 +151,19 @@ the unchanged 108-case cross-parser baseline.
 
 Full-parser positive tests use component names permitted by the specification. Escaped
 slashes, tildes, spaces and plus signs are checked at the resolver level without asserting
-document validity. The selected parser does not yet enforce component-name syntax; this
-separate [validation gap](../../docs/validation.md#known-coverage-and-model-limits) is outside
-the 108-case corpus and is not hidden by the comparison's shared-limitation counter.
+document validity. The development parser now enforces component-name syntax; escaped
+tokens in schema property names remain legal. The [validation contract](../../docs/validation.md)
+distinguishes these development changes from the released 0.1.1 behavior.
+
+## Unreleased protocol-schema regressions
+
+The development corpus adds 46 fixtures: local schema references, concrete recursion and
+wrong-kind targets at all 14 protocol/owner/field combinations, MQTT scalar alternatives,
+and component names. The original 108 fixtures and their outcomes remain unchanged.
+The 154-case comparison has 109 agreements and 45 reviewed differences. The 16 new
+differences are invalid schema target kinds and invalid component names accepted by JS
+core validation. No new implementation-gap or known-shared-limitation category is introduced.
+This is the first parser/DSL stage, not acceptance of the entire Kafka/Avro profile.
 
 The AMQP server negative case is a reference-parser difference, not an additional Java
 model limitation: [AMQP binding 0.3.0](https://github.com/asyncapi/bindings/blob/master/amqp/README.md#server-binding-object)

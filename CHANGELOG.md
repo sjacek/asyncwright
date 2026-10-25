@@ -4,6 +4,26 @@ User-visible changes to Asyncwright. Changes under **Unreleased** are not yet pu
 
 ## Unreleased
 
+### Added
+
+- Allow multiple server protocols in project rules, for example
+  `requireProtocol 'kafka', 'kafka-secure'`. Existing single-protocol declarations continue
+  to work; an empty list disables the requirement.
+
+### Fixed
+
+- Validate schema references inside Kafka, HTTP, WebSockets, JMS, Anypoint MQ and MQTT
+  bindings. Wrong target kinds and missing targets now produce located reference errors;
+  concrete recursive schemas remain usable without expanding the typed model.
+- Accept valid local references at nine binding schema positions where overlapping
+  alternatives in the bundled schema incorrectly rejected them. MQTT scalar alternatives
+  retain their original constraints.
+- Reject invalid names in reusable component maps with `component.name` at the key.
+  Payload property names and arbitrary extension data retain their existing behavior.
+
+These are the first parser/DSL changes toward the Kafka profile. Avro, Registry dependency
+checks, the Kafka example and broker tests are still pending; this is not full Kafka acceptance.
+
 ## [0.1.1] - 2026-10-25
 
 ### Fixed

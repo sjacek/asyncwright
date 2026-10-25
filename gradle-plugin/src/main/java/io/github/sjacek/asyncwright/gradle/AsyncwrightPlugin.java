@@ -102,6 +102,7 @@ public final class AsyncwrightPlugin implements Plugin<Project> {
         task.getRules().getChannelAddressFlags().set(spec.getRules().getChannelAddressFlags());
         task.getRules().getDefaultContentType().set(spec.getRules().getDefaultContentType());
         task.getRules().getProtocol().set(spec.getRules().getProtocol());
+        task.getRules().getProtocols().set(spec.getRules().getProtocols());
         task.getRules().getCustomRules().set(spec.getRules().getCustomRules());
         task.getExtensionClasspath().from(extensions);
     }
