@@ -20,6 +20,17 @@ User-visible changes to Asyncwright. Changes under **Unreleased** are not yet pu
   retain their original constraints.
 - Reject invalid names in reusable component maps with `component.name` at the key.
   Payload property names and arbitrary extension data retain their existing behavior.
+- Preserve 64-bit Kafka retention values and additional topic configuration through
+  model `1.0.0-RC4-asyncwright.5` for binding versions 0.4.0 and 0.5.0.
+  Document validation still rejects extra topic configuration in binding 0.4.0.
+
+### Dependencies and upgrading
+
+- The development build selects model `1.0.0-RC4-asyncwright.5`, which is not yet
+  published and requires an explicit model repository.
+- Retention getters, setters and builders use `Long` instead of `Integer`.
+  All-arguments topic-configuration constructors also include the additional-property map.
+  Recompile extensions using those model APIs.
 
 These are the first parser/DSL changes toward the Kafka profile. Avro, Registry dependency
 checks, the Kafka example and broker tests are still pending; this is not full Kafka acceptance.

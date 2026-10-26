@@ -95,24 +95,25 @@ Modules:
 
 ## Build
 
-Compile and package the plugin with its published model from Maven Central:
+The Kafka development branch selects unpublished model `1.0.0-RC4-asyncwright.5`.
+Build the model's `build/kafka-model-distribution` branch at commit
+`421e78bfab6c70d261bc5126aca252f11eb6263f` and stage it with
+`tools/install-local.ps1 -Repository C:/path/to/model-repository`.
+Model tests require JDK 21 and Maven Toolchains. Then compile and package this checkout:
 
 ```powershell
-.\gradlew.bat assemble '-PasyncwrightModelRepository=' --configuration-cache-problems=fail
+.\gradlew.bat assemble '-PasyncwrightModelRepository=C:/path/to/model-repository' --configuration-cache-problems=fail
 ```
 
-The empty override disables a development model path in the Git-ignored
-`gradle/local.properties`. The [included-build development consumer](examples/gradle-consumer)
-also works with public model dependencies:
+The [included-build development consumer](examples/gradle-consumer) uses the same
+model repository for its plugin dependencies:
 
 ```powershell
-.\gradlew.bat -p examples/gradle-consumer check '-PasyncwrightModelRepository=' --configuration-cache-problems=fail
+.\gradlew.bat -p examples/gradle-consumer check '-PasyncwrightModelRepository=C:/path/to/model-repository' --configuration-cache-problems=fail
 ```
 
-The full `check` includes HTTP publication tests that deliberately serve a model file
-repository as a fixture. For those tests, build the fork's `build/asyncwright-distribution`
-branch and stage it with `tools/install-local.ps1 -Repository C:/path/to/model-repository`
-(JDK 21 and Maven Toolchains are required for the model tests). Then run:
+The full `check` includes HTTP publication tests that serve this model file
+repository as a fixture. Run:
 
 ```powershell
 .\gradlew.bat check assemble --configuration-cache-problems=fail `
@@ -122,9 +123,9 @@ branch and stage it with `tools/install-local.ps1 -Repository C:/path/to/model-r
 That file repository is a test fixture, not a requirement for using the published plugin.
 Maven Local is not used.
 
-IDE imports resolve the published model from Maven Central by default. For model
-development or HTTP test fixtures, optionally copy `gradle/local.properties.example` to
-`gradle/local.properties` and set `asyncwrightModelRepository` to the fixture repository.
+IDE imports of this development branch also need model `.5`. Optionally copy
+`gradle/local.properties.example` to `gradle/local.properties` and set
+`asyncwrightModelRepository` to the model repository.
 Use forward slashes in Windows paths. This file is ignored by Git; `-P` overrides its value.
 Reload the Gradle project after changing the repository configuration.
 
@@ -138,6 +139,7 @@ Dependency versions are pinned in `gradle/libs.versions.toml`:
 
 | Dependency | Version |
 | --- | --- |
+| jasyncapi fork (development; explicit repository required) | 1.0.0-RC4-asyncwright.5 |
 | Jackson BOM | 2.22.4 |
 | NetworkNT JSON Schema Validator (Jackson 2 line) | 2.0.8 |
 | Joni regular expressions | 2.2.6 |
@@ -232,10 +234,10 @@ The public extension contracts are in `io.github.sjacek.asyncwright.api`: `Async
 parse → project rules → generators sequence without Gradle. Each invocation receives its
 own model; references stay in the document and are followed through the resolver.
 
-Run the checked-in Java extension example using the public model:
+Run the checked-in Java extension example using the development model repository:
 
 ```powershell
-.\gradlew.bat :extension-examples:runExample '-PasyncwrightModelRepository=' --configuration-cache-problems=fail
+.\gradlew.bat :extension-examples:runExample '-PasyncwrightModelRepository=C:/path/to/model-repository' --configuration-cache-problems=fail
 ```
 
 This validates channel address prefixes and writes

@@ -12,15 +12,16 @@ distribution `1.0.0-RC4-asyncwright.4` is already available from Maven Central.
 ## Validation DSL
 
 The runnable `examples/gradle-consumer` build resolves the plugin directly from this
-checkout through `pluginManagement.includeBuild`, while its model `.4` resolves from
-Maven Central. Run from the repository root:
+checkout through `pluginManagement.includeBuild`. The Kafka development branch selects
+unpublished model `.5`; stage it using the [source-build instructions](../README.md#build)
+and run from the repository root:
 
 ```powershell
-.\gradlew.bat -p examples/gradle-consumer check '-PasyncwrightModelRepository=' --configuration-cache-problems=fail
+.\gradlew.bat -p examples/gradle-consumer check '-PasyncwrightModelRepository=C:/path/to/model-repository' --configuration-cache-problems=fail
 ```
 
-The empty override disables a local development model path. A file repository is optional
-when working on the model itself; it is not required for this released version.
+This repository is required for the current development checkout. Published plugin
+0.1.1 continues to resolve model `.4` from Maven Central without a local repository.
 Plugin runtime dependencies are resolved in the consumer's plugin-management repositories;
 repositories of the included plugin build are not inherited.
 
