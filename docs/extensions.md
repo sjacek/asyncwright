@@ -81,7 +81,7 @@ are configuration/execution failures, not invalid-contract diagnostics.
 
 ## Binding-map references
 
-This support is available in the published `0.1.1` / model `.4` pair.
+This support was introduced in `0.1.1` / model `.4` and is retained in released `0.2.0` / model `.5`.
 Earlier `0.1.0` / model `.3` do not support these maps. Existing `Map<String, Object>` getters
 retain their signatures. An owner's whole-map reference is represented as
 `Map.of("$ref", originalUri)`; concrete maps hold protocol names and typed protocol bindings.

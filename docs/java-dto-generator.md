@@ -1,13 +1,13 @@
 # Java DTO generator
 
-The prepared stable version `0.2.0` includes
+Released version `0.2.0` includes
 `io.github.sjacek.asyncwright.generator.java.JavaDtoGenerator` in the plugin JAR.
 It is an implementation of the existing `AsyncApiGenerator` SPI, not a new plugin
 or a separately published parser/generator dependency. Generated Java uses only JDK
 types and has no Gradle, Asyncwright or JSON-library dependency.
 
-Version 0.2.0 and its model .5 are not yet published. Build this checkout with an
-explicit model repository until the release is announced; see the [release status](releases.md#prepared-020-release).
+Version 0.2.0 is available from Plugin Portal and its model .5 from Maven Central.
+No local model repository or plugin checkout is required; see the [release status](releases.md#published-020-release).
 
 This backend generates transport beans and named string enums from message payloads.
 It does not generate application services, broker clients or runtime schema validators.
@@ -16,8 +16,8 @@ through the public resolver; source trees and reference URIs remain unchanged.
 
 ## Configure generation
 
-The current source branch uses unpublished model `.5`; first follow the
-[development build instructions](../README.md#build). In a Java consumer:
+Use the public repositories from the [quick start](../README.md#quick-start).
+In a Java consumer:
 
 ```groovy
 import io.github.sjacek.asyncwright.generator.java.JavaDtoGenerator
@@ -25,7 +25,7 @@ import io.github.sjacek.asyncwright.gradle.AsyncApiGenerate
 
 plugins {
     id 'java'
-    id 'io.github.sjacek.asyncwright'
+    id 'io.github.sjacek.asyncwright' version '0.2.0'
 }
 
 asyncwright {
@@ -117,13 +117,12 @@ Concrete recursive object graphs remain references between Java types.
 From the source repository root:
 
 ```shell
-./gradlew -p examples/java-dto-consumer demo \
-  -PasyncwrightModelRepository=/path/to/model-repository \
-  --configuration-cache-problems=fail
+./gradlew -p examples/java-dto-consumer demo --configuration-cache-problems=fail
 ```
 
-The [example](../examples/java-dto-consumer) uses includeBuild for the development
-plugin, generates Event/State, compiles a Java client and exercises its public API.
+The [example](../examples/java-dto-consumer) uses the released plugin from Plugin Portal,
+generates Event/State, compiles a Java client and exercises its public API. It also runs
+outside this checkout with an installed Gradle 9.0+ and a compatible JDK 17+.
 TestKit covers both DSLs, real worker isolation, compilation, up-to-date,
 configuration/build cache, relocation, package-parameter invalidation, error cleanup
 and recovery. A cold HTTP consumer loads the backend from the staged plugin JAR and

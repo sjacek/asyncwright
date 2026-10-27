@@ -16,19 +16,19 @@ targets 17; the Wrapper uses Gradle 9.8.1.
 
 Notable changes are recorded in the [changelog](CHANGELOG.md).
 
-**Asyncwright 0.1.1** is published in the Gradle Plugin Portal with model
-**1.0.0-RC4-asyncwright.4** in Maven Central. The quick start and public consumer use
+**Asyncwright 0.2.0** is published in the Gradle Plugin Portal with model
+**1.0.0-RC4-asyncwright.5** in Maven Central. The quick start and public consumer use
 these released versions; no local model repository or sibling checkout is required.
 See the [release guide](docs/releases.md) for the verified source commits and consumer checks.
 
-This branch prepares stable **Asyncwright 0.2.0 / model .5**, including a bundled
-[Java DTO generator](docs/java-dto-generator.md). These versions are not yet published;
-the public quick start below continues to use released 0.1.1 / model .4.
+Version **0.2.0** includes a bundled [Java DTO generator](docs/java-dto-generator.md).
+The [public DTO example](examples/java-dto-consumer) generates Java models and compiles
+a client using the released plugin, without Node.js or a sibling checkout.
 
 ## Quick start
 
 Requires Gradle 9.0 or newer and a JDK supported by that Gradle version (Java 17 or newer).
-Version [0.1.1 is available from the Gradle Plugin Portal](https://plugins.gradle.org/plugin/io.github.sjacek.asyncwright/0.1.1).
+Version [0.2.0 is available from the Gradle Plugin Portal](https://plugins.gradle.org/plugin/io.github.sjacek.asyncwright/0.2.0).
 The following setup resolves the plugin and its model from public repositories.
 
 For a consuming project, add the public plugin repositories in `settings.gradle`:
@@ -47,7 +47,7 @@ Apply and configure the plugin in `build.gradle`:
 
 ```groovy
 plugins {
-    id 'io.github.sjacek.asyncwright' version '0.1.1'
+    id 'io.github.sjacek.asyncwright' version '0.2.0'
 }
 
 asyncwright {
@@ -83,8 +83,8 @@ specification with `asyncApiValidateEvents`.
 
 For custom Java rules and generators, see the [Gradle DSL guide](docs/gradle-plugin.md),
 [extension API](docs/extensions.md), and [complete consumer with an extension subproject](examples/published-consumer).
-Generation is explicit and uses a supplied generator; applying the plugin alone does not
-generate Java DTOs. The [validation guide](docs/validation.md) lists supported constructs
+Generation is explicit: select the bundled JavaDtoGenerator or a custom generator.
+Applying the plugin alone does not generate DTOs. The [validation guide](docs/validation.md) lists supported constructs
 and limitations.
 
 Modules:
@@ -93,33 +93,30 @@ Modules:
   F0 has its own source set and dependency graph.
 - `java-generator`: native Java DTO/enum backend, bundled in the plugin JAR;
 - `gradle-plugin`: `io.github.sjacek.asyncwright`, with the parser/API included in its JAR;
-  DSL, cacheable tasks, Worker API and consumer TestKit tests. Version `0.1.1` is published;
+  DSL, cacheable tasks, Worker API and consumer TestKit tests. Version `0.2.0` is published;
   see the [release guide](docs/releases.md).
 - `extension-examples`: ordinary Java rule/generator examples with their own tests;
   this development module is not part of the plugin's dependency graph.
 
 ## Build
 
-This source branch prepares stable `0.2.0`, including the
-[Java DTO backend](docs/java-dto-generator.md). It is not a published release.
-The public quick start continues to use published 0.1.1.
-
-This release preparation selects unpublished model `1.0.0-RC4-asyncwright.5`.
-Build the model's `build/kafka-model-distribution` branch, verify its immutable
-source provenance (`6de0c02e884a9336f727a6cc797ac8eb304c0e87`), and stage it with
-`tools/install-local.ps1 -Repository C:/path/to/model-repository`.
-Model tests require JDK 21 and Maven Toolchains. Then compile and package this checkout:
+This checkout builds Asyncwright `0.2.0` with model `1.0.0-RC4-asyncwright.5`
+from Maven Central. Compile and package it without a model checkout:
 
 ```powershell
-.\gradlew.bat assemble '-PasyncwrightModelRepository=C:/path/to/model-repository' --configuration-cache-problems=fail
+.\gradlew.bat assemble '-PasyncwrightModelRepository=' --configuration-cache-problems=fail
+.\gradlew.bat -p examples/gradle-consumer check '-PasyncwrightModelRepository=' --configuration-cache-problems=fail
 ```
 
-The [included-build development consumer](examples/gradle-consumer) uses the same
-model repository for its plugin dependencies:
+The second command uses the [included-build development consumer](examples/gradle-consumer).
+The empty property clears a machine-specific override in ignored gradle/local.properties;
+it is unnecessary when no override is configured. The public examples use the released
+plugin instead of the included build.
 
-```powershell
-.\gradlew.bat -p examples/gradle-consumer check '-PasyncwrightModelRepository=C:/path/to/model-repository' --configuration-cache-problems=fail
-```
+For HTTP publication tests, prepare a fresh model file repository with
+`tools/install-local.ps1 -Repository C:/path/to/model-repository` in the separate
+`jasyncapi-distribution` checkout at release commit
+`e07d9e1ded75711a5180ea435b0ce02c27a89de8`. Model tests require JDK 21 and Maven Toolchains.
 
 The full `check` includes HTTP publication tests that serve this model file
 repository as a fixture. Run:
@@ -132,7 +129,7 @@ repository as a fixture. Run:
 That file repository is a test fixture, not a requirement for using the published plugin.
 Maven Local is not used.
 
-IDE imports of this development branch also need model `.5`. Optionally copy
+IDE imports resolve model `.5` from Maven Central by default. For model development, copy
 `gradle/local.properties.example` to `gradle/local.properties` and set
 `asyncwrightModelRepository` to the model repository.
 Use forward slashes in Windows paths. This file is ignored by Git; `-P` overrides its value.
@@ -148,7 +145,7 @@ Dependency versions are pinned in `gradle/libs.versions.toml`:
 
 | Dependency | Version |
 | --- | --- |
-| jasyncapi fork (prepared; explicit repository until publication) | 1.0.0-RC4-asyncwright.5 |
+| jasyncapi fork (Maven Central) | 1.0.0-RC4-asyncwright.5 |
 | Jackson BOM | 2.22.4 |
 | NetworkNT JSON Schema Validator (Jackson 2 line) | 2.0.8 |
 | Joni regular expressions | 2.2.6 |
@@ -165,10 +162,10 @@ In IntelliJ IDEA, exclude this file from the `JsonSchemaRefReference` and
 `RegExpRedundantEscape` inspections using a file scope if they report unresolved example
 references or redundant escapes. Keep these IDE preferences local rather than editing the schema.
 
-The published `0.1.1` release uses the separately maintained model fork
-`io.github.sjacek.jasyncapi:asyncapi-core:1.0.0-RC4-asyncwright.4`, with model sources at
-[`a6ac111a`](https://github.com/sjacek/jasyncapi/commit/a6ac111a10f6e18fd26c7b4820bf262125054b66).
-The distribution was released from `dac5a9703a9a0f82a7d25a2b78789e1d109da41d`.
+The published `0.2.0` release uses the separately maintained model fork
+`io.github.sjacek.jasyncapi:asyncapi-core:1.0.0-RC4-asyncwright.5`, with model sources at
+[`6de0c02e`](https://github.com/sjacek/jasyncapi/commit/6de0c02e884a9336f727a6cc797ac8eb304c0e87).
+The distribution was released from `e07d9e1ded75711a5180ea435b0ce02c27a89de8`.
 Both parent POM and model resolve from Maven Central. Original packages, Apache-2.0
 licensing and upstream attribution are preserved.
 
@@ -177,12 +174,12 @@ to the fork group. It must contain the parent POM, model POM and model JAR. This
 for model development and HTTP publication tests; consuming projects need neither it nor
 a sibling checkout. `mavenLocal()` is not consulted.
 
-The [published-consumer example](examples/published-consumer) resolves plugin `0.1.1` from
-the Portal and model `.4` from Maven Central by default, with no local paths or included
+The [published-consumer example](examples/published-consumer) resolves plugin `0.2.0` from
+the Portal and model `.5` from Maven Central by default, with no local paths or included
 build. TestKit also verifies this project over staged HTTP repositories. The separate
 composite-build example is for developing the plugin itself.
 
-The `0.1.1` parser accepts references to whole server, channel, operation and message
+The parser accepts references to whole server, channel, operation and message
 binding maps. Models keep `$ref`; follow the map first, then select its protocol through
 the separate resolver. See the [binding-map example](docs/extensions.md#binding-map-references).
 
@@ -223,7 +220,7 @@ Ignored reference siblings produce warnings and remain available in the source t
 data and extension values are not treated as document references. YAML aliases, external
 references, traits and non-default schema formats are currently unsupported. Broader parser
 conformance remains under development; the Gradle DSL and worker integration are available
-in the published `0.1.1` plugin.
+in the published `0.2.0` plugin.
 Schema-valid constructs that the typed model cannot preserve are rejected with
 `model.preservation` diagnostics; custom binding extensions are one such current limitation.
 

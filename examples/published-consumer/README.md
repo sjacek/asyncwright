@@ -1,7 +1,7 @@
 # Public Asyncwright consumer
 
-This example uses released **Asyncwright 0.1.1** from the Gradle Plugin Portal and
-model **1.0.0-RC4-asyncwright.4** from Maven Central. It does not include the plugin build
+This example uses released **Asyncwright 0.2.0** from the Gradle Plugin Portal and
+model **1.0.0-RC4-asyncwright.5** from Maven Central. It does not include the plugin build
 or require a sibling model checkout, a local model repository or Maven Local.
 
 With an installed Gradle 9.0+ and a compatible JDK 17+, run from this directory:
@@ -26,21 +26,15 @@ prefix. Generation resolves typed channels and writes `events.created` followed 
 the configuration and up-to-date results. An invalid channel prefix produces
 `sample.channel-prefix`; explicitly running generation removes its old output on failure.
 
-Both the plugin and extension dependency default to `0.1.1`.
+Both the plugin and extension dependency default to `0.2.0`.
 `-PasyncwrightVersion=...` selects another published version. The optional HTTP repository
 properties in settings exist for the automated prepublication test; normal use needs no
 repository overrides. See the [release guide](../../docs/releases.md) for the acceptance
 procedure and the [Gradle DSL](../../docs/gradle-plugin.md) for configuration.
 
-## Prepared 0.2.0 verification
+## Java DTO generation
 
-Asyncwright 0.2.0 and model .5 are prepared but not yet published. This example's
-public defaults stay on 0.1.1 / .4 until their release completes. The automated
-prepublication test copies this project, selects 0.2.0 explicitly, and resolves its
-real marker, implementation and model over loopback HTTP with cold caches. That
-copy also generates and compiles a DTO with the bundled backend, checks failure
-cleanup and verifies cache behavior. It does not upload artifacts.
-
-For a runnable source-build DTO example, use
-[java-dto-consumer](../java-dto-consumer). After publication, the final public-only
-acceptance must select 0.2.0 without these HTTP repository overrides.
+The separate [Java DTO consumer](../java-dto-consumer) uses the same released 0.2.0
+plugin and model .5, generates Java models and compiles a client without an included
+plugin build. The automated publication test adds DTO generation to a copy of this
+custom-extension example and checks compilation, failure cleanup and cache behavior.

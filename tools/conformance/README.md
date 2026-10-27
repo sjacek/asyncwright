@@ -151,13 +151,13 @@ the unchanged 108-case cross-parser baseline.
 
 Full-parser positive tests use component names permitted by the specification. Escaped
 slashes, tildes, spaces and plus signs are checked at the resolver level without asserting
-document validity. The development parser now enforces component-name syntax; escaped
+document validity. Released 0.2.0 enforces component-name syntax; escaped
 tokens in schema property names remain legal. The [validation contract](../../docs/validation.md)
-distinguishes these development changes from the released 0.1.1 behavior.
+describes the changes released in 0.2.0 and the earlier 0.1.1 behavior.
 
-## Unreleased protocol-schema regressions
+## Protocol-schema regressions released in 0.2.0
 
-The development corpus adds 46 fixtures: local schema references, concrete recursion and
+The 0.2.0 corpus adds 46 fixtures: local schema references, concrete recursion and
 wrong-kind targets at all 14 protocol/owner/field combinations, MQTT scalar alternatives,
 and component names. The original 108 fixtures and their outcomes remain unchanged.
 The 154-case comparison has 109 agreements and 45 reviewed differences. The 16 new

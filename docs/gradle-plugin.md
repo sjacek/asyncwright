@@ -2,30 +2,29 @@
 
 The plugin ID is `io.github.sjacek.asyncwright`. It validates the same
 [AsyncAPI 3.0.0 subset](validation.md) as the parser. It does not require Node.js.
-Version [0.1.1 is available from the Plugin Portal](https://plugins.gradle.org/plugin/io.github.sjacek.asyncwright/0.1.1),
+Version [0.2.0 is available from the Plugin Portal](https://plugins.gradle.org/plugin/io.github.sjacek.asyncwright/0.2.0),
 including the plugin marker, parser/API, source and Javadoc artifacts.
 See the [release guide](releases.md) for publication and consumer verification.
 Start with the [complete minimal consumer setup](../README.md#quick-start), including
 repositories, the plugin version, a contract and the validation command. The model
-distribution `1.0.0-RC4-asyncwright.4` is already available from Maven Central.
+distribution `1.0.0-RC4-asyncwright.5` is already available from Maven Central.
 
-This source branch prepares stable **0.2.0 / model .5**, including the bundled
-[Java DTO generator](java-dto-generator.md). Publication is still pending;
-the public setup above describes the currently released version.
+Released **0.2.0 / model .5** includes the bundled
+[Java DTO generator](java-dto-generator.md). The public examples resolve the plugin
+from Plugin Portal and the model from Maven Central.
 
 ## Validation DSL
 
 The runnable `examples/gradle-consumer` build resolves the plugin directly from this
-checkout through `pluginManagement.includeBuild`. The prepared 0.2.0 version selects
-unpublished model `.5`; stage it using the [source-build instructions](../README.md#build)
-and run from the repository root:
+checkout through `pluginManagement.includeBuild`. Model `.5` is available from
+Maven Central. Run from the repository root:
 
 ```powershell
-.\gradlew.bat -p examples/gradle-consumer check '-PasyncwrightModelRepository=C:/path/to/model-repository' --configuration-cache-problems=fail
+.\gradlew.bat -p examples/gradle-consumer check '-PasyncwrightModelRepository=' --configuration-cache-problems=fail
 ```
 
-This repository is required for the current development checkout. Published plugin
-0.1.1 continues to resolve model `.4` from Maven Central without a local repository.
+The empty property clears any local model override in the source build.
+Published consumers require neither this checkout nor a local model repository.
 Plugin runtime dependencies are resolved in the consumer's plugin-management repositories;
 repositories of the included plugin build are not inherited.
 
@@ -75,7 +74,7 @@ Groovy `Pattern` flags are retained. The content-type rule requires an exact roo
 component references. It does not create a server when none is declared. These are
 opt-in project rules, in addition to the parser's structural and semantic validation.
 
-In the **prepared 0.2.0 version**, a protocol requirement can accept alternatives:
+Since **0.2.0**, a protocol requirement can accept alternatives:
 `requireProtocol 'kafka', 'kafka-secure'` in Groovy or
 `requireProtocol("kafka", "kafka-secure")` in Kotlin. Each declared root server must match
 one entry exactly. This does not require a server to exist or establish a broker connection.
@@ -128,7 +127,7 @@ asyncwright.specs.platformEvents {
 ```
 
 The extension subproject uses a `compileOnly` dependency on the plugin artifact
-(`io.github.sjacek.asyncwright:asyncwright-gradle-plugin:0.1.1` for the current release).
+(`io.github.sjacek.asyncwright:asyncwright-gradle-plugin:0.2.0` for the current release).
 The plugin JAR includes the parser and public API; its API dependencies provide
 the typed model and Jackson 2. Plugin Portal and Maven Central supply the published
 plugin and model dependencies. TestKit also exercises file-based compilation

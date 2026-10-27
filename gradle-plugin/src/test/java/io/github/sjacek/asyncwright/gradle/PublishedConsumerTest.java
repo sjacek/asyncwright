@@ -107,7 +107,7 @@ class PublishedConsumerTest {
         }
     }
 
-    /** Extends only the test copy: the public example remains compatible with released 0.1.1. */
+    /** Adds bundled DTO generation to the test copy of the custom-extension consumer. */
     private static void addBundledDtoConsumer(Path root) throws Exception {
         Files.writeString(root.resolve("contracts/events.yaml"), """
                 components:

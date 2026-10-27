@@ -9,11 +9,11 @@ It is not a dependency of the Gradle plugin and is not published.
   `file` selects its relative output path (default `channels.json`); output uses UTF-8 and LF.
 - `ExampleMain` parses an input, registers both extensions by binary class name and executes them.
 
-From the repository root, using the unpublished model `.5` staged according to the
-[source-build instructions](../../README.md#build):
+From the repository root, resolving published model `.5` from Maven Central
+(see the [source-build instructions](../../README.md#build)):
 
 ```powershell
-.\gradlew.bat :extension-examples:runExample '-PasyncwrightModelRepository=C:/path/to/model-repository' --configuration-cache-problems=fail
+.\gradlew.bat :extension-examples:runExample '-PasyncwrightModelRepository=' --configuration-cache-problems=fail
 ```
 
 Input: `examples/extensions/events.yaml`. Output:

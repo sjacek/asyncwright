@@ -1,3 +1,4 @@
-# Copy to local.properties to use this repository during IDE imports and CLI builds.
+# Optional development/HTTP test fixture; published model .5 resolves from Maven Central.
+# Copy to local.properties only when selecting a local model repository for IDE imports or CLI builds.
 # Use forward slashes for Windows paths. Relative paths start at the project root.
 asyncwrightModelRepository=C:/path/to/model-repository

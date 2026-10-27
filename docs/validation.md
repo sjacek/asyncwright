@@ -1,11 +1,11 @@
-# Validation scope and diagnostics (0.1)
+# Validation scope and diagnostics (0.2.0)
 
 Asyncwright validates a defined subset of AsyncAPI 3.0.0. A passing comparison with another
 parser is a regression result, not proof of complete specification conformance.
 
-## Prepared 0.2.0 binding-schema and component-name changes
+## Released 0.2.0 binding-schema and component-name changes
 
-The development branch adds schema context for Kafka `key` / `groupId` / `clientId`,
+Version 0.2.0 adds schema context for Kafka `key` / `groupId` / `clientId`,
 HTTP headers and query schemas, WebSockets query/header schemas, JMS and Anypoint MQ
 headers, and the five MQTT 0.2.0 schema-valued fields. MQTT scalar alternatives remain
 scalars. Schema references are checked for target kind, missing targets and cycles;
@@ -21,7 +21,7 @@ Reusable component keys must match `^[a-zA-Z0-9.\-_]+$`. Invalid keys produce
 components and trait component maps; traits themselves remain unsupported. Arbitrary
 payload property names and extension data are unaffected.
 
-These changes are **not part of published 0.1.1**. Full Kafka acceptance, Registry
+These changes are **available in published 0.2.0**; they were absent from 0.1.1. Full Kafka acceptance, Registry
 dependencies, Avro, local `.avsc` references and the Kafka example are still pending.
 
 ## P3 capability boundary
@@ -33,7 +33,7 @@ dependencies, Avro, local `.avsc` references and the Kafka example are still pen
 | YAML aliases, including merge aliases | Rejected with `unsupported.yaml-alias` at the alias token and pointer. |
 | AsyncAPI versions other than 3.0.0 | Rejected with `unsupported.version`. |
 | Local JSON Pointer references and aliases | Supported, including URI percent encoding and `~0`/`~1` escapes. |
-| Whole binding-map references (since 0.1.1) | Server/channel/operation/message maps and aliases in `components.*Bindings` are supported with published model `.4`; cross-kind targets and alias-only cycles reject. Public `0.1.0` / model `.3` still reject these maps. |
+| Whole binding-map references (since 0.1.1) | Server/channel/operation/message maps and aliases in `components.*Bindings` are supported with published model `.5` (introduced in `.4`); cross-kind targets and alias-only cycles reject. Public `0.1.0` / model `.3` still reject these maps. |
 | Recursive schemas with concrete schema content | Supported without expanding references in the model. Pure reference cycles reject. |
 | External references and named anchors | Outside the resolver scope; rejected, without fetching remote resources. |
 | Traits | Rejected with `unsupported.construct`; no trait merge occurs. |
@@ -55,8 +55,8 @@ These are product limits, not statements that the rejected constructs are invali
 They apply to schema/document positions, not arbitrary instance values or extension data.
 The parser, typed resolver and extension snapshots share model mapping that preserves
 instance objects and arbitrary-precision JSON numbers. This mapping uses local Jackson
-mixins and a boolean-aware schema deserializer. Binding-map support in published `0.1.1`
-uses the separately maintained model `.4` from Maven Central. See the
+mixins and a boolean-aware schema deserializer. Binding-map support in published `0.2.0`
+uses the separately maintained model `.5` from Maven Central. See the
 [mapping and resolver example](extensions.md#binding-map-references).
 
 ## Boolean schemas
@@ -86,11 +86,10 @@ are indexed as schemas; a reference to an arbitrary boolean instance value is st
 
 ## Known coverage and model limits
 
-- Published 0.1.1 does not enforce the Components Object name pattern.
-  Use component keys matching `^[a-zA-Z0-9.\-_]+$`, as required by the
+- Component keys must match `^[a-zA-Z0-9.\-_]+$`, as required by the
   [Components Object specification](https://www.asyncapi.com/docs/reference/specification/v3.0.0#componentsObject).
   JSON Pointer support for arbitrary escaped tokens does not relax this document rule.
-  The development parser closes this gap with `component.name` and dedicated regressions.
+  Released 0.2.0 enforces this with `component.name`; older 0.1.1 did not check it.
 - Custom binding entries such as `bindings.x-custom` are dropped by the selected typed
   model and therefore rejected by the preservation guard. Source data is never silently
   discarded from a successful document.

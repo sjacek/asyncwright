@@ -4,10 +4,10 @@ User-visible changes to Asyncwright. Changes under **Unreleased** are not yet pu
 
 ## Unreleased
 
-## 0.2.0 — prepared, not published
+## [0.2.0] - 2026-10-27
 
-This stable version is being verified for publication. Plugin Portal and Maven Central
-availability will be announced after the release is completed.
+Available from the Gradle Plugin Portal with model `.5` from Maven Central.
+Consumers need no local model repository or source checkout.
 
 ### Added
 
@@ -37,8 +37,7 @@ availability will be announced after the release is completed.
 
 ### Dependencies and upgrading
 
-- Uses model `1.0.0-RC4-asyncwright.5`. Until model and plugin publication completes,
-  source builds and verification consumers require explicit preview repositories.
+- Uses model `1.0.0-RC4-asyncwright.5` from Maven Central.
 - Retention getters, setters and builders use `Long` instead of `Integer`.
   All-arguments topic-configuration constructors also include the additional-property map.
   Recompile extensions using those model APIs.
@@ -113,5 +112,6 @@ First public release.
 - Generation requires a custom generator. This release does not include a Java DTO generator
   or automatically attach generated files to compilation.
 
+[0.2.0]: https://plugins.gradle.org/plugin/io.github.sjacek.asyncwright/0.2.0
 [0.1.1]: https://plugins.gradle.org/plugin/io.github.sjacek.asyncwright/0.1.1
 [0.1.0]: https://plugins.gradle.org/plugin/io.github.sjacek.asyncwright/0.1.0
