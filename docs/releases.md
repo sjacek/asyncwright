@@ -1,5 +1,49 @@
 # Releases and verification
 
+## Prepared 0.2.0 release
+
+Stable **Asyncwright 0.2.0** selects model **1.0.0-RC4-asyncwright.5**.
+Both are prepared for verification, not yet published. The Java DTO backend ships
+inside the plugin implementation, sources and Javadoc; there is no separate
+java-generator or parser publication. See the [changelog](../CHANGELOG.md) for
+DTO generation, binding-schema fixes and the model API changes requiring recompilation.
+
+The model keeps immutable source provenance
+`6de0c02e884a9336f727a6cc797ac8eb304c0e87`. Distribution packaging changes receive
+their own commit; pin that full distribution SHA after the maintainer commits and
+pushes it. The previous 0598d83 / 421e78bf compatibility matrix and contracts preview
+accepted the snapshot implementation, not the final stable release packaging.
+
+Prepare an unsigned model bundle with its tools/prepare-release.ps1 -Unsigned
+script, verify all five artifacts and twenty checksums, then install the tested
+model into a fresh file repository. From this plugin checkout:
+
+```powershell
+.\gradlew.bat check assemble :gradle-plugin:publishAllPublicationsToStagingRepository verifyReleaseTag `
+  '-PasyncwrightModelRepository=C:/path/to/model-repository' `
+  '-PreleaseTag=v0.2.0' --configuration-cache-problems=fail
+```
+
+The output stays in gradle-plugin/build/staging-repository. check includes a copied
+HTTP consumer with cold caches, bundled DTO generation and compilation, failure
+cleanup and cache checks. This verifies the prepared 0.2.0 artifacts without Portal
+submission. An unsigned model bundle is not suitable for public release.
+
+The public quick start and published-consumer defaults remain at released 0.1.1 / .4.
+Release completion requires reviewed integration and CI with the final distribution
+SHA, model signatures and Central availability, Portal submission and a public-only
+consumer test. Commits, tags, merges and uploads are separate maintainer steps.
+
+Local preparation on 2026-10-27 passed with Gradle 9.8.1 / JDK 21:
+clean check assemble and stable-tag verification, 596 cases (595 passed and the
+Windows symlink case skipped), no failures or errors. The staged implementation,
+marker, metadata, sources and Javadoc use 0.2.0 consistently; all six files and
+24 checksums were checked. Model dependency .5 and bundled DTO/API/parser classes
+are present, with no separate parser or generator dependency. The HTTP consumer
+tests passed, and the standalone DTO demo printed 3000000000 / ready.
+This local evidence does not replace CI on the final committed revisions or
+the public-only acceptance after publication.
+
 ## Published versions
 
 **Asyncwright 0.1.1** and model **1.0.0-RC4-asyncwright.4** were published on
@@ -47,12 +91,13 @@ outputs. All five model signatures and 20 checksums were verified from Central.
 
 ## Build and test the checkout
 
-`assemble` and the development examples can use public model `.4`; the empty repository
-override disables a machine-specific path in ignored `gradle/local.properties`:
+The prepared 0.2.0 checkout and its included-build examples need model `.5` in an
+explicit file repository until publication. Pass the property below or configure
+ignored gradle/local.properties:
 
 ```powershell
-.\gradlew.bat assemble :extension-examples:runExample '-PasyncwrightModelRepository=' --configuration-cache-problems=fail
-.\gradlew.bat -p examples/gradle-consumer check '-PasyncwrightModelRepository=' --configuration-cache-problems=fail
+.\gradlew.bat assemble :extension-examples:runExample '-PasyncwrightModelRepository=C:/path/to/model-repository' --configuration-cache-problems=fail
+.\gradlew.bat -p examples/gradle-consumer check '-PasyncwrightModelRepository=C:/path/to/model-repository' --configuration-cache-problems=fail
 ```
 
 The complete `check` also contains HTTP publication tests. These deliberately need an
@@ -69,8 +114,8 @@ synthetic fixtures and does not depend on evolving application contracts.
 
 ## Prepare a future version without uploading
 
-The current versions are already published. Choose new model/plugin versions before a
-future release; never resubmit, overwrite or retag `.4` or `0.1.1`.
+Published .4 / 0.1.1 remain immutable. The next versions, .5 / 0.2.0, are prepared
+above; never overwrite artifacts already published under older coordinates.
 
 1. Keep model fixes separate from distribution metadata. The distribution lives on
    `build/asyncwright-distribution` in `sjacek/jasyncapi`; the released plugin is on `main`

@@ -9,7 +9,7 @@ description = 'Asyncwright brings contract-first AsyncAPI validation and model-b
         'and produces JSON and text diagnostic reports. A Groovy/Kotlin DSL configures specifications and project rules; ' +
         'validation integrates with the check task so contract errors fail the build. ' +
         'The Java extension API lets teams supply custom validation rules and generators that work with a typed model. ' +
-        'Generation runs through explicitly invoked tasks using user-supplied generators. ' +
+        'Generation runs through explicitly invoked tasks using the bundled Java DTO backend or custom generators. ' +
         'Validation and generation tasks support the Gradle build cache and configuration cache, and run in ' +
         'classloader-isolated Gradle workers without requiring Node.js. Custom extensions must declare their inputs ' +
         'and produce deterministic outputs for correct caching. The supported subset excludes external references, ' +

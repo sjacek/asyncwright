@@ -21,6 +21,10 @@ Notable changes are recorded in the [changelog](CHANGELOG.md).
 these released versions; no local model repository or sibling checkout is required.
 See the [release guide](docs/releases.md) for the verified source commits and consumer checks.
 
+This branch prepares stable **Asyncwright 0.2.0 / model .5**, including a bundled
+[Java DTO generator](docs/java-dto-generator.md). These versions are not yet published;
+the public quick start below continues to use released 0.1.1 / model .4.
+
 ## Quick start
 
 Requires Gradle 9.0 or newer and a JDK supported by that Gradle version (Java 17 or newer).
@@ -86,8 +90,8 @@ and limitations.
 Modules:
 
 - `parser`: document loading, structural validation, local reference resolution and diagnostics;
-- `java-generator`: native Java DTO/enum backend, bundled in the plugin JAR;
   F0 has its own source set and dependency graph.
+- `java-generator`: native Java DTO/enum backend, bundled in the plugin JAR;
 - `gradle-plugin`: `io.github.sjacek.asyncwright`, with the parser/API included in its JAR;
   DSL, cacheable tasks, Worker API and consumer TestKit tests. Version `0.1.1` is published;
   see the [release guide](docs/releases.md).
@@ -96,13 +100,13 @@ Modules:
 
 ## Build
 
-This source branch prepares `0.2.0-SNAPSHOT`, including the
+This source branch prepares stable `0.2.0`, including the
 [Java DTO backend](docs/java-dto-generator.md). It is not a published release.
 The public quick start continues to use published 0.1.1.
 
-The Kafka development branch selects unpublished model `1.0.0-RC4-asyncwright.5`.
-Build the model's `build/kafka-model-distribution` branch at commit
-`421e78bfab6c70d261bc5126aca252f11eb6263f` and stage it with
+This release preparation selects unpublished model `1.0.0-RC4-asyncwright.5`.
+Build the model's `build/kafka-model-distribution` branch, verify its immutable
+source provenance (`6de0c02e884a9336f727a6cc797ac8eb304c0e87`), and stage it with
 `tools/install-local.ps1 -Repository C:/path/to/model-repository`.
 Model tests require JDK 21 and Maven Toolchains. Then compile and package this checkout:
 
@@ -144,7 +148,7 @@ Dependency versions are pinned in `gradle/libs.versions.toml`:
 
 | Dependency | Version |
 | --- | --- |
-| jasyncapi fork (development; explicit repository required) | 1.0.0-RC4-asyncwright.5 |
+| jasyncapi fork (prepared; explicit repository until publication) | 1.0.0-RC4-asyncwright.5 |
 | Jackson BOM | 2.22.4 |
 | NetworkNT JSON Schema Validator (Jackson 2 line) | 2.0.8 |
 | Joni regular expressions | 2.2.6 |

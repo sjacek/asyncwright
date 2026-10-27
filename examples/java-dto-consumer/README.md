@@ -1,7 +1,8 @@
 # Java DTO consumer
 
-Uses the development plugin through includeBuild, its bundled JavaDtoGenerator and
+Uses the prepared 0.2.0 plugin through includeBuild, its bundled JavaDtoGenerator and
 an explicitly staged model `.5`. No Node.js, npm or Modelina process is invoked.
+The plugin and model are not yet published. The client and generated DTOs target Java 17.
 
 Run from the Asyncwright source root:
 

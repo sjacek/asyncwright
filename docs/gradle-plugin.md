@@ -9,10 +9,14 @@ Start with the [complete minimal consumer setup](../README.md#quick-start), incl
 repositories, the plugin version, a contract and the validation command. The model
 distribution `1.0.0-RC4-asyncwright.4` is already available from Maven Central.
 
+This source branch prepares stable **0.2.0 / model .5**, including the bundled
+[Java DTO generator](java-dto-generator.md). Publication is still pending;
+the public setup above describes the currently released version.
+
 ## Validation DSL
 
 The runnable `examples/gradle-consumer` build resolves the plugin directly from this
-checkout through `pluginManagement.includeBuild`. The Kafka development branch selects
+checkout through `pluginManagement.includeBuild`. The prepared 0.2.0 version selects
 unpublished model `.5`; stage it using the [source-build instructions](../README.md#build)
 and run from the repository root:
 
@@ -71,7 +75,7 @@ Groovy `Pattern` flags are retained. The content-type rule requires an exact roo
 component references. It does not create a server when none is declared. These are
 opt-in project rules, in addition to the parser's structural and semantic validation.
 
-In the **unreleased development version**, a protocol requirement can accept alternatives:
+In the **prepared 0.2.0 version**, a protocol requirement can accept alternatives:
 `requireProtocol 'kafka', 'kafka-secure'` in Groovy or
 `requireProtocol("kafka", "kafka-secure")` in Kotlin. Each declared root server must match
 one entry exactly. This does not require a server to exist or establish a broker connection.

@@ -3,7 +3,7 @@
 Asyncwright validates a defined subset of AsyncAPI 3.0.0. A passing comparison with another
 parser is a regression result, not proof of complete specification conformance.
 
-## Unreleased binding-schema and component-name changes
+## Prepared 0.2.0 binding-schema and component-name changes
 
 The development branch adds schema context for Kafka `key` / `groupId` / `clientId`,
 HTTP headers and query schemas, WebSockets query/header schemas, JMS and Anypoint MQ

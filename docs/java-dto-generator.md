@@ -1,10 +1,13 @@
 # Java DTO generator
 
-The development build `0.2.0-SNAPSHOT` includes
+The prepared stable version `0.2.0` includes
 `io.github.sjacek.asyncwright.generator.java.JavaDtoGenerator` in the plugin JAR.
 It is an implementation of the existing `AsyncApiGenerator` SPI, not a new plugin
 or a separately published parser/generator dependency. Generated Java uses only JDK
 types and has no Gradle, Asyncwright or JSON-library dependency.
+
+Version 0.2.0 and its model .5 are not yet published. Build this checkout with an
+explicit model repository until the release is announced; see the [release status](releases.md#prepared-020-release).
 
 This backend generates transport beans and named string enums from message payloads.
 It does not generate application services, broker clients or runtime schema validators.

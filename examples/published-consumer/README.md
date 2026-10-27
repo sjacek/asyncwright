@@ -31,3 +31,16 @@ Both the plugin and extension dependency default to `0.1.1`.
 properties in settings exist for the automated prepublication test; normal use needs no
 repository overrides. See the [release guide](../../docs/releases.md) for the acceptance
 procedure and the [Gradle DSL](../../docs/gradle-plugin.md) for configuration.
+
+## Prepared 0.2.0 verification
+
+Asyncwright 0.2.0 and model .5 are prepared but not yet published. This example's
+public defaults stay on 0.1.1 / .4 until their release completes. The automated
+prepublication test copies this project, selects 0.2.0 explicitly, and resolves its
+real marker, implementation and model over loopback HTTP with cold caches. That
+copy also generates and compiles a DTO with the bundled backend, checks failure
+cleanup and verifies cache behavior. It does not upload artifacts.
+
+For a runnable source-build DTO example, use
+[java-dto-consumer](../java-dto-consumer). After publication, the final public-only
+acceptance must select 0.2.0 without these HTTP repository overrides.

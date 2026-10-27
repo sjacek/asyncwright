@@ -4,6 +4,11 @@ User-visible changes to Asyncwright. Changes under **Unreleased** are not yet pu
 
 ## Unreleased
 
+## 0.2.0 — prepared, not published
+
+This stable version is being verified for publication. Plugin Portal and Maven Central
+availability will be announced after the release is completed.
+
 ### Added
 
 - Generate Java DTOs and string enums on the JVM through the bundled
@@ -32,8 +37,8 @@ User-visible changes to Asyncwright. Changes under **Unreleased** are not yet pu
 
 ### Dependencies and upgrading
 
-- The development build selects model `1.0.0-RC4-asyncwright.5`, which is not yet
-  published and requires an explicit model repository.
+- Uses model `1.0.0-RC4-asyncwright.5`. Until model and plugin publication completes,
+  source builds and verification consumers require explicit preview repositories.
 - Retention getters, setters and builders use `Long` instead of `Integer`.
   All-arguments topic-configuration constructors also include the additional-property map.
   Recompile extensions using those model APIs.
