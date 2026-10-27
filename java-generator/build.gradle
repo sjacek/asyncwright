@@ -1,0 +1,12 @@
+// Pure Java backend for the public generator SPI; bundled with the plugin, not separately published.
+dependencies {
+    // The host supplies the SPI/model at runtime; this module does not create a second distribution.
+    compileOnly(project(':parser'))
+    // Standalone regressions need the real parser/resolver as well as the compile-only SPI.
+    testImplementation(project(':parser'))
+    // Valid BOM notation; IDEA cannot infer the platform dependency type here.
+    //noinspection DependencyNotationArgument
+    testImplementation(platform(libs.junit.bom))
+    testImplementation(libs.junit.jupiter)
+    testRuntimeOnly(libs.junit.platform.launcher)
+}

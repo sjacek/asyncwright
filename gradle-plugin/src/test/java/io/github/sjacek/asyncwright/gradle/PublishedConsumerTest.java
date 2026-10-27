@@ -1,6 +1,7 @@
 package io.github.sjacek.asyncwright.gradle;
 
 import com.sun.net.httpserver.HttpServer;
+import io.github.sjacek.asyncwright.generator.java.JavaDtoGenerator;
 import org.gradle.testkit.runner.BuildResult;
 import org.gradle.testkit.runner.GradleRunner;
 import org.junit.jupiter.api.Test;
@@ -23,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class PublishedConsumerTest {
     @TempDir Path temporary;
 
-    @Test void resolvesMarkerPluginAndModelOverHttpAndRunsProjectExtensions() throws Exception {
+    @Test void resolvesMarkerPluginAndModelOverHttpAndRunsBundledAndProjectGenerators() throws Exception {
         Path plugins = Path.of(System.getProperty("asyncwright.stagingRepository"));
         Path model = Path.of(System.getProperty("asyncwright.modelRepository")).toAbsolutePath();
         String modelVersion = System.getProperty("asyncwright.modelVersion");
@@ -37,6 +38,7 @@ class PublishedConsumerTest {
         try {
             Path root = temporary.resolve("consumer");
             copyExample(root);
+            addBundledDtoConsumer(root);
             String origin = "http://127.0.0.1:" + server.getAddress().getPort();
             // This cold home has never received withPluginClasspath(), Maven Local or an included build.
             File home = new File(System.getProperty("asyncwright.testKitDir"), "published-consumer-" + UUID.randomUUID());
@@ -54,12 +56,16 @@ class PublishedConsumerTest {
             assertNotNull(validation, result::getOutput);
             assertEquals(SUCCESS, validation.getOutcome());
             assertEquals("events.created\n", Files.readString(root.resolve("build/generated/asyncapi/events/catalog/channels.txt")));
+            assertEquals(SUCCESS, java.util.Objects.requireNonNull(result.task(":compileJava"), result.getOutput()).getOutcome());
+            assertTrue(Files.isRegularFile(root.resolve("build/classes/java/main/sample/Client.class")));
+            assertTrue(Files.isRegularFile(root.resolve("build/generated/asyncapi/events/dto/sample/dto/Event.java")));
             assertFalse(result.getOutput().contains("Unknown keyword example"), result::getOutput);
             assertTrue(requests.stream().anyMatch(p -> p.contains("io.github.sjacek.asyncwright.gradle.plugin") && p.endsWith(".pom")), requests::toString);
             assertTrue(requests.stream().anyMatch(p -> p.contains("asyncwright-gradle-plugin") && p.endsWith(".jar")), requests::toString);
             assertTrue(requests.stream().anyMatch(p -> p.contains("/asyncapi/") && p.endsWith(".pom")), requests::toString);
             assertTrue(requests.stream().anyMatch(p -> p.contains("/asyncapi-core/") && p.endsWith(".jar")), requests::toString);
             assertFalse(requests.stream().anyMatch(p -> p.contains("/parser/")), requests::toString);
+            assertFalse(requests.stream().anyMatch(p -> p.contains("/java-generator/")), requests::toString);
 
             Path contract = root.resolve("contracts/events.yaml");
             Files.writeString(contract, Files.readString(contract).replace("events.created", "invalid.created"));
@@ -67,6 +73,8 @@ class PublishedConsumerTest {
             assertTrue(invalid.getOutput().contains("sample.channel-prefix"), invalid::getOutput);
             assertTrue(invalid.getOutput().contains("Reusing configuration cache"), invalid::getOutput);
             assertFalse(Files.exists(root.resolve("build/generated/asyncapi/events/catalog")));
+            assertFalse(Files.exists(root.resolve("build/generated/asyncapi/events/dto")));
+            assertNull(invalid.task(":compileJava"), "Failed validation must block compilation of stale models");
         } finally {
             server.stop(0);
         }
@@ -86,13 +94,59 @@ class PublishedConsumerTest {
                             ? "io/github/sjacek/asyncwright/api/AsyncApiRule.java"
                             : "io/github/sjacek/asyncwright/api/AsyncApiRule.html";
                     assertNotNull(jar.getEntry(apiEntry), apiEntry);
+                    String generatorEntry = JavaDtoGenerator.class.getName().replace('.', '/')
+                            + (classifier.equals("-sources.jar") ? ".java" : ".html");
+                    assertNotNull(jar.getEntry(generatorEntry), generatorEntry);
                 }
             }
         }
         try (JarFile jar = new JarFile(System.getProperty("asyncwright.pluginJar"))) {
             assertNotNull(jar.getEntry("META-INF/LICENSE"));
             assertNotNull(jar.getEntry("META-INF/licenses/spec-json-schemas/NOTICE"));
+            assertNotNull(jar.getEntry(JavaDtoGenerator.class.getName().replace('.', '/') + ".class"));
         }
+    }
+
+    /** Extends only the test copy: the public example remains compatible with released 0.1.1. */
+    private static void addBundledDtoConsumer(Path root) throws Exception {
+        Files.writeString(root.resolve("contracts/events.yaml"), """
+                components:
+                  messages:
+                    event:
+                      payload: {$ref: '#/components/schemas/Event'}
+                  schemas:
+                    Event:
+                      type: object
+                      additionalProperties: false
+                      properties:
+                        value: {type: string}
+                """, java.nio.file.StandardOpenOption.APPEND);
+        Files.writeString(root.resolve("build.gradle"), """
+
+                apply plugin: 'java'
+                asyncwright.specs.named('events') {
+                    generators.register('dto') {
+                        className = '%s'
+                        parameters.put('%s', 'sample.dto')
+                    }
+                }
+                def dto = tasks.named('asyncApiGenerateEventsDto')
+                sourceSets.main.java.srcDir(dto.flatMap { it.outputDirectory })
+                tasks.named('compileJava') { dependsOn dto }
+                """.formatted(JavaDtoGenerator.class.getName(), JavaDtoGenerator.PACKAGE_NAME),
+                java.nio.file.StandardOpenOption.APPEND);
+        Path client = root.resolve("src/main/java/sample/Client.java");
+        Files.createDirectories(client.getParent());
+        Files.writeString(client, """
+                package sample;
+                public final class Client {
+                    public static String value() {
+                        sample.dto.Event event = new sample.dto.Event();
+                        event.setValue("published");
+                        return event.getValue();
+                    }
+                }
+                """);
     }
 
     private static void serve(HttpServer server, String prefix, Path root, Set<String> requests) {

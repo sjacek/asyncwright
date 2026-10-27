@@ -1,0 +1,36 @@
+import io.github.sjacek.asyncwright.generator.java.JavaDtoGenerator
+import io.github.sjacek.asyncwright.gradle.AsyncApiGenerate
+import io.github.sjacek.asyncwright.gradle.GeneratorOptions
+
+plugins {
+    id 'java'
+    id 'io.github.sjacek.asyncwright'
+}
+// Keep the runnable client compatible with the same Java 17 baseline as generated DTOs.
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+tasks.withType(JavaCompile).configureEach { options.release = 17 }
+
+asyncwright {
+    specs {
+        events {
+            file = layout.projectDirectory.file('events.yaml')
+            generators {
+                dto { GeneratorOptions generator ->
+                    generator.getClassName().set(JavaDtoGenerator.class.getName())
+                    generator.getParameters().put(JavaDtoGenerator.PACKAGE_NAME, 'example.generated')
+                }
+            }
+        }
+    }
+}
+def dto = tasks.named('asyncApiGenerateEventsDto', AsyncApiGenerate)
+sourceSets.main.java.srcDir(dto.flatMap { it.outputDirectory })
+tasks.named('compileJava') { dependsOn dto }
+tasks.register('demo', JavaExec) {
+    dependsOn tasks.named('classes')
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'example.Client'
+}

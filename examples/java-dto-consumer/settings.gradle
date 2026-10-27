@@ -1,0 +1,18 @@
+pluginManagement {
+    includeBuild('../..')
+    def local = new Properties()
+    local.load(new StringReader(providers.fileContents(
+            layout.settingsDirectory.file('../../gradle/local.properties')).asText.getOrElse('')))
+    def model = providers.gradleProperty('asyncwrightModelRepository')
+            .getOrElse(local.getProperty('asyncwrightModelRepository', ''))
+    repositories {
+        if (!model.isBlank()) {
+            maven {
+                url = new File(model).toURI()
+                content { includeGroup 'io.github.sjacek.jasyncapi' }
+            }
+        }
+        mavenCentral()
+    }
+}
+rootProject.name = 'asyncwright-java-dto-consumer'

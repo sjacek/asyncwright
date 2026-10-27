@@ -32,3 +32,9 @@ replay_pid*
 /gradle/local.properties
 **/node_modules/
 !gradle/wrapper/gradle-wrapper.jar
+
+# IntelliJ can create a local wrapper when linking this standalone example.
+# Development commands use the repository-root wrapper.
+/examples/java-dto-consumer/gradle/wrapper/
+/examples/java-dto-consumer/gradlew
+/examples/java-dto-consumer/gradlew.bat

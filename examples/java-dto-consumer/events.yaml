@@ -1,0 +1,17 @@
+asyncapi: 3.0.0
+info: {title: Java DTO example, version: 1.0.0}
+components:
+  messages:
+    event:
+      payload: {$ref: '#/components/schemas/Event'}
+  schemas:
+    Event:
+      type: object
+      additionalProperties: false
+      required: [count]
+      properties:
+        count: {type: integer, format: int64}
+        state: {$ref: '#/components/schemas/State'}
+    State:
+      type: [string, 'null']
+      enum: [ready, failed, null]

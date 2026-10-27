@@ -31,8 +31,10 @@ gradlePlugin {
     }
 }
 dependencies {
-    // Parser/API classes ship in the plugin JAR, without a separate parser publication.
+    // Parser/API and the built-in Java backend ship in the plugin JAR. compileOnly keeps
+    // their internal project coordinates out of the consumer POM; packaging below includes them.
     compileOnly project(':parser')
+    compileOnly project(':java-generator')
     // Valid platform notation; IDEA cannot infer the dependency type here.
     //noinspection DependencyNotationArgument
     api(platform(libs.jackson.bom))
@@ -46,16 +48,22 @@ dependencies {
     testImplementation(libs.junit.jupiter)
     testImplementation gradleTestKit()
     testImplementation project(':parser')
+    testImplementation project(':java-generator')
     // Host-only fixture proves that Jackson 3 does not leak into the isolated worker.
     testImplementation 'tools.jackson.core:jackson-databind:3.2.4'
     testRuntimeOnly(libs.junit.platform.launcher)
 }
 
+// Keep binary, source and API documentation artifacts aligned: consumers resolve one plugin artifact.
 tasks.named('jar') { from project(':parser').sourceSets.main.output }
+tasks.named('jar') { from project(':java-generator').sourceSets.main.output }
 tasks.named('sourcesJar') { from project(':parser').sourceSets.main.allSource }
+tasks.named('sourcesJar') { from project(':java-generator').sourceSets.main.allSource }
 tasks.named('javadoc') {
     source project(':parser').sourceSets.main.allJava
+    source project(':java-generator').sourceSets.main.allJava
     classpath += project(':parser').sourceSets.main.compileClasspath
+    classpath += project(':java-generator').sourceSets.main.compileClasspath
     options.encoding = 'UTF-8'
     // Published API documentation is part of the artifact contract, including parameter and return tags.
     options.addBooleanOption('Xdoclint:all', true)
@@ -85,6 +93,7 @@ publishing {
 tasks.named('publishPlugins') { dependsOn rootProject.tasks.named('verifyReleaseModel') }
 tasks.named('pluginUnderTestMetadata') {
     pluginClasspath.from(project(':parser').sourceSets.main.output)
+    pluginClasspath.from(project(':java-generator').sourceSets.main.output)
 }
 tasks.named('test') {
     maxHeapSize = '512m'
