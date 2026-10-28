@@ -1,14 +1,23 @@
 # Changelog
 
-User-visible changes to Asyncwright. Changes under **Unreleased** are not yet published.
+User-visible changes to Asyncwright. Versions marked **Unreleased** are not yet published.
 
-## Unreleased
+## 0.2.1 - Unreleased
+
+Prepared patch release; not yet available from the Gradle Plugin Portal.
 
 ### Fixed
 
 - Fix intermittent `Stream closed` build failures when validating or generating multiple
   contracts in isolated Gradle workers. Closing another worker's classloader no longer
   interrupts loading of the bundled AsyncAPI schema.
+
+### Dependencies and upgrading
+
+- Continues to use model `1.0.0-RC4-asyncwright.5` from Maven Central. No new model
+  release, DSL changes or extension API migration are required.
+- Generated DTOs, schema contents and validation rules are unchanged. Requirements
+  remain Java 17+ and Gradle 9.0+ on a compatible JDK.
 
 ## [0.2.0] - 2026-10-27
 

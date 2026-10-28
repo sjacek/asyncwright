@@ -189,12 +189,14 @@ extension instances and script closures do not cross the worker boundary. Except
 retain their original causes and fail the task. This is classloader isolation for
 trusted Java code, not a process or filesystem sandbox.
 
-The unpublished `0.2.1-SNAPSHOT` fix gives each bundled-schema read its own connection
+The prepared, unpublished `0.2.1` fix gives each bundled-schema read its own connection
 with JAR caching disabled for that connection. Closing another isolated classloader
 then cannot close the schema stream. The reader closes its own stream on success and
 failure; it does not change JVM-wide cache defaults or require network schema access.
 This addresses intermittent `Stream closed` errors in parser initialization, before
 contract validation or generator callbacks. The schema bytes and model `.5` are unchanged.
+The DSL and extension API are unchanged; existing consumers can upgrade their plugin
+version after publication. See the [release preparation status](releases.md#prepared-021-patch-release).
 
 Validation and DSL generator tasks are cacheable. Inputs include the document with
 relative path sensitivity, its complete project-relative name, bundled schema version,

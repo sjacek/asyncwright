@@ -100,10 +100,12 @@ Modules:
 
 ## Build
 
-This development checkout builds unpublished Asyncwright `0.2.1-SNAPSHOT` with model
-`1.0.0-RC4-asyncwright.5` from Maven Central. It includes the isolated schema-resource
-loading fix; public examples continue to use released `0.2.0` until the next release.
-Compile and package the development build without a model checkout:
+This checkout prepares stable Asyncwright `0.2.1`, **not yet published**, with model
+`1.0.0-RC4-asyncwright.5` from Maven Central. It fixes intermittent `Stream closed`
+failures when isolated workers load the bundled schema. No DSL, extension API or
+generated-output migration is required. Public examples continue to use released
+`0.2.0` until publication; see the [0.2.1 preparation status](docs/releases.md#prepared-021-patch-release).
+Compile and package this checkout without a model checkout:
 
 ```powershell
 .\gradlew.bat assemble '-PasyncwrightModelRepository=' --configuration-cache-problems=fail

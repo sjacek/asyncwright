@@ -1,5 +1,48 @@
 # Releases and verification
 
+## Prepared 0.2.1 patch release
+
+This checkout prepares stable **Asyncwright 0.2.1**; it is **not yet published**.
+The patch fixes intermittent `Stream closed` failures when another isolated Gradle
+worker closes its classloader while the parser loads the bundled AsyncAPI schema.
+Each read owns its connection and stream, with JAR caching disabled for that
+connection. JVM-wide cache defaults are unchanged.
+
+Model **1.0.0-RC4-asyncwright.5** remains the published dependency. Its distribution
+pin stays **`e07d9e1ded75711a5180ea435b0ce02c27a89de8`**; no model rebuild, new
+model release or provenance change is needed. DSL, extension APIs, validation rules
+and generated DTOs are unchanged. Java 17+ and compatible Gradle 9.0+ remain required.
+
+The implementation commit `c398342522cf9d869b460cf1c191bb5902a890e0` passed
+[all eight Gradle/JDK combinations](https://github.com/sjacek/asyncwright/actions/runs/40641177811)
+and a [nine-contract source preview](https://gitlab.com/tichodroma/asyncapi-contracts/-/pipelines/2997725379)
+as `0.2.1-SNAPSHOT`. That preview passed 599 Java and 17 Node tests and retained the
+55-file baseline. These results precede the stable version change; require CI on
+the final release-preparation commit before integration and publication.
+
+Local stable-version verification on 2026-10-28 used Gradle 9.8.1 / JDK 21:
+full `check assemble` and the extension example passed with 599 test cases,
+zero failures/errors and one Windows symlink capability skip. All three classloader
+regressions passed. The HTTP consumer tests resolved the stable 0.2.1 marker,
+implementation and model and compiled generated DTOs. Binary, sources, Javadoc,
+both POMs and Gradle metadata passed packaging checks, including all 24 checksums.
+The public-model preflight and included-build consumer also passed with the local
+model override cleared. These are local preparation results, not a Portal publication.
+
+Run the full checkout verification below, then check the stable tag/version and
+public model availability without uploading:
+
+```powershell
+.\gradlew.bat verifyReleaseModel '-PreleaseTag=v0.2.1' '-PasyncwrightModelRepository=' --configuration-cache-problems=fail
+```
+
+This task does not create or inspect a Git tag. Creating/pushing `v0.2.1`, integration
+onto main and Portal upload remain separate maintainer steps after review and CI.
+The public examples and quick start continue to select published **0.2.0** until
+0.2.1 becomes available. Do not merge the consumer preview's snapshot version or
+default source pin into develop. After publication, update consumers to public
+0.2.1/.5, run verification and accept the transport publications before closing F4.
+
 ## Published 0.2.0 release
 
 **Asyncwright 0.2.0** and model **1.0.0-RC4-asyncwright.5** were published on
