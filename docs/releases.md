@@ -1,47 +1,48 @@
 # Releases and verification
 
-## Prepared 0.2.1 patch release
+## Published 0.2.1 patch release
 
-This checkout prepares stable **Asyncwright 0.2.1**; it is **not yet published**.
-The patch fixes intermittent `Stream closed` failures when another isolated Gradle
-worker closes its classloader while the parser loads the bundled AsyncAPI schema.
-Each read owns its connection and stream, with JAR caching disabled for that
-connection. JVM-wide cache defaults are unchanged.
+**Asyncwright 0.2.1** was published on **2026-10-28** and accepted from the
+public Gradle Plugin Portal. It fixes intermittent `Stream closed` failures when
+isolated workers validate or generate multiple contracts. Upgrade the plugin
+version to 0.2.1; no DSL, extension API or generated-output migration is required.
 
-Model **1.0.0-RC4-asyncwright.5** remains the published dependency. Its distribution
-pin stays **`e07d9e1ded75711a5180ea435b0ce02c27a89de8`**; no model rebuild, new
-model release or provenance change is needed. DSL, extension APIs, validation rules
-and generated DTOs are unchanged. Java 17+ and compatible Gradle 9.0+ remain required.
+| Artifact | Coordinates | Repository |
+| --- | --- | --- |
+| Model parent POM | `io.github.sjacek.jasyncapi:asyncapi:1.0.0-RC4-asyncwright.5` | Maven Central |
+| Model JAR, sources and Javadoc | `io.github.sjacek.jasyncapi:asyncapi-core:1.0.0-RC4-asyncwright.5` | Maven Central |
+| Plugin implementation, sources and Javadoc | `io.github.sjacek.asyncwright:asyncwright-gradle-plugin:0.2.1` | [Plugin Portal](https://plugins.gradle.org/plugin/io.github.sjacek.asyncwright/0.2.1) |
+| Plugin marker POM | `io.github.sjacek.asyncwright:io.github.sjacek.asyncwright.gradle.plugin:0.2.1` | Plugin Portal |
 
-The implementation commit `c398342522cf9d869b460cf1c191bb5902a890e0` passed
-[all eight Gradle/JDK combinations](https://github.com/sjacek/asyncwright/actions/runs/40641177811)
-and a [nine-contract source preview](https://gitlab.com/tichodroma/asyncapi-contracts/-/pipelines/2997725379)
-as `0.2.1-SNAPSHOT`. That preview passed 599 Java and 17 Node tests and retained the
-55-file baseline. These results precede the stable version change; require CI on
-the final release-preparation commit before integration and publication.
+Tag **`v0.2.1`** identifies plugin source commit
+**`b49658276b15c7ff3663925053236b9c45c44bc4`**. It passed all eight supported
+Gradle/JDK combinations on main in
+[CI #40647111188](https://github.com/sjacek/asyncwright/actions/runs/40647111188).
+The JDK 17 report contains **599 tests, zero failures/errors/skips**, including
+all three classloader lifecycle regressions.
 
-Local stable-version verification on 2026-10-28 used Gradle 9.8.1 / JDK 21:
-full `check assemble` and the extension example passed with 599 test cases,
-zero failures/errors and one Windows symlink capability skip. All three classloader
-regressions passed. The HTTP consumer tests resolved the stable 0.2.1 marker,
-implementation and model and compiled generated DTOs. Binary, sources, Javadoc,
-both POMs and Gradle metadata passed packaging checks, including all 24 checksums.
-The public-model preflight and included-build consumer also passed with the local
-model override cleared. These are local preparation results, not a Portal publication.
+Model **1.0.0-RC4-asyncwright.5** is unchanged from 0.2.0 and remains published
+in Maven Central. Its distribution pin stays
+**`e07d9e1ded75711a5180ea435b0ce02c27a89de8`**, with model sources at
+`6de0c02e884a9336f727a6cc797ac8eb304c0e87`. No model rebuild, new model release
+or provenance change was required. Schema contents, validation rules and generated
+DTOs are unchanged. Java 17+ and compatible Gradle 9.0+ remain required.
 
-Run the full checkout verification below, then check the stable tag/version and
-public model availability without uploading:
+All six public publication files resolved successfully. The implementation JAR,
+sources, Javadoc, implementation POM and Gradle metadata match the pre-upload
+SHA-256 manifest. The Portal's marker POM omits optional descriptive metadata;
+its coordinates and sole dependency on the 0.2.1 implementation match exactly.
 
-```powershell
-.\gradlew.bat verifyReleaseModel '-PreleaseTag=v0.2.1' '-PasyncwrightModelRepository=' --configuration-cache-problems=fail
-```
+The final consumer used Gradle 9.8.1 / Temurin 21.0.12.1, initially empty dependency
+caches, Plugin Portal and Maven Central. Custom extensions, bundled DTO generation
+and Java compilation passed, as did configuration-cache reuse, expected rule failure
+with stale-output cleanup and build-cache restoration. No local model repository,
+included plugin build or injected plugin classpath was used.
 
-This task does not create or inspect a Git tag. Creating/pushing `v0.2.1`, integration
-onto main and Portal upload remain separate maintainer steps after review and CI.
-The public examples and quick start continue to select published **0.2.0** until
-0.2.1 becomes available. Do not merge the consumer preview's snapshot version or
-default source pin into develop. After publication, update consumers to public
-0.2.1/.5, run verification and accept the transport publications before closing F4.
+The quick start and public examples now default to **0.2.1/.5**. Documentation-only
+changes after publication do not move the tag, release commit or model pin.
+Contract consumers should select public 0.2.1/.5 and verify their generated outputs;
+do not carry snapshot versions or source-preview pins into normal consumer builds.
 
 ## Published 0.2.0 release
 
@@ -91,7 +92,7 @@ Use the matching old version explicitly when reproducing those historical releas
 
 ## Verify the released consumers
 
-The [custom-extension consumer](../examples/published-consumer) defaults to `0.2.0`
+The [custom-extension consumer](../examples/published-consumer) defaults to `0.2.1`
 and model `.5`. From the repository root:
 
 ```powershell
@@ -108,7 +109,7 @@ reuse and up-to-date outputs. An invalid channel prefix produces
 `sample.channel-prefix`; run generation explicitly with `--continue` to verify
 cleanup of all requested generators after validation fails.
 `-PasyncwrightVersion=...` in the custom-extension example can select another
-published plugin version for comparison; no override is required for 0.2.0.
+published plugin version for comparison; no override is required for 0.2.1.
 
 ## Build and test the checkout
 
@@ -138,7 +139,7 @@ uses checked-in public and synthetic fixtures.
 
 ## Prepare a future version without uploading
 
-Published 0.2.0 / .5 and earlier coordinates are immutable. Never overwrite them
+Published 0.2.1 / .5 and earlier coordinates are immutable. Never overwrite them
 with another candidate or move their release tags.
 
 1. Keep model fixes separate from distribution metadata. Use new development
@@ -154,7 +155,7 @@ with another candidate or move their release tags.
    distribution SHA. The manual **Prepare release (no upload)** workflow provides
    a publication preview without publication credentials. Update the global
    `ASYNCWRIGHT_MODEL_REF` when integrating the matching model on main; the released
-   0.2.0 pin is `e07d9e1ded75711a5180ea435b0ce02c27a89de8`.
+   0.2.1 pin is `e07d9e1ded75711a5180ea435b0ce02c27a89de8`.
 
 ## Publish a future version after authorization
 
@@ -162,10 +163,11 @@ Replace `X.Y.Z` below with a new stable version, not an already published releas
 
 1. Integrate reviewed sources and English documentation onto default main; verify
    CI with the matching model pin and the public website/VCS links.
-2. Prepare and verify a model bundle signed with the real release key, keeping
-   secrets outside the repository. Upload it through Central Portal or explicitly
-   enable upload in the model's central-release profile. Wait for parent/core POMs
-   and the model JAR to resolve from Maven Central before submitting the plugin.
+2. If the model changes, prepare and verify a bundle signed with the real release
+   key, keeping secrets outside the repository. Upload it through Central Portal
+   or explicitly enable upload in the model's central-release profile. For a
+   plugin-only patch, reuse the existing published model. In either case, require
+   parent/core POMs and the model JAR in Maven Central before submitting the plugin.
 3. Create/push the matching plugin tag on the reviewed commit. Run
    `:gradle-plugin:publishPlugins --validate-only -PreleaseTag=vX.Y.Z`
    with `-PasyncwrightModelRepository=` for public-model preflight; remove only

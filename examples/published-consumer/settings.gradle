@@ -21,7 +21,7 @@ pluginManagement {
         gradlePluginPortal()
         mavenCentral()
     }
-    plugins { id 'io.github.sjacek.asyncwright' version providers.gradleProperty('asyncwrightVersion').getOrElse('0.2.0') }
+    plugins { id 'io.github.sjacek.asyncwright' version providers.gradleProperty('asyncwrightVersion').getOrElse('0.2.1') }
 }
 
 dependencyResolutionManagement {

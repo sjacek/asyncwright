@@ -2,14 +2,14 @@
 
 The plugin ID is `io.github.sjacek.asyncwright`. It validates the same
 [AsyncAPI 3.0.0 subset](validation.md) as the parser. It does not require Node.js.
-Version [0.2.0 is available from the Plugin Portal](https://plugins.gradle.org/plugin/io.github.sjacek.asyncwright/0.2.0),
+Version [0.2.1 is available from the Plugin Portal](https://plugins.gradle.org/plugin/io.github.sjacek.asyncwright/0.2.1),
 including the plugin marker, parser/API, source and Javadoc artifacts.
 See the [release guide](releases.md) for publication and consumer verification.
 Start with the [complete minimal consumer setup](../README.md#quick-start), including
 repositories, the plugin version, a contract and the validation command. The model
 distribution `1.0.0-RC4-asyncwright.5` is already available from Maven Central.
 
-Released **0.2.0 / model .5** includes the bundled
+Released **0.2.1 / model .5** includes the bundled
 [Java DTO generator](java-dto-generator.md). The public examples resolve the plugin
 from Plugin Portal and the model from Maven Central.
 
@@ -127,7 +127,7 @@ asyncwright.specs.platformEvents {
 ```
 
 The extension subproject uses a `compileOnly` dependency on the plugin artifact
-(`io.github.sjacek.asyncwright:asyncwright-gradle-plugin:0.2.0` for the current release).
+(`io.github.sjacek.asyncwright:asyncwright-gradle-plugin:0.2.1` for the current release).
 The plugin JAR includes the parser and public API; its API dependencies provide
 the typed model and Jackson 2. Plugin Portal and Maven Central supply the published
 plugin and model dependencies. TestKit also exercises file-based compilation
@@ -189,14 +189,14 @@ extension instances and script closures do not cross the worker boundary. Except
 retain their original causes and fail the task. This is classloader isolation for
 trusted Java code, not a process or filesystem sandbox.
 
-The prepared, unpublished `0.2.1` fix gives each bundled-schema read its own connection
+Released `0.2.1` gives each bundled-schema read its own connection
 with JAR caching disabled for that connection. Closing another isolated classloader
 then cannot close the schema stream. The reader closes its own stream on success and
 failure; it does not change JVM-wide cache defaults or require network schema access.
 This addresses intermittent `Stream closed` errors in parser initialization, before
 contract validation or generator callbacks. The schema bytes and model `.5` are unchanged.
 The DSL and extension API are unchanged; existing consumers can upgrade their plugin
-version after publication. See the [release preparation status](releases.md#prepared-021-patch-release).
+version to 0.2.1. See the [release status](releases.md#published-021-patch-release).
 
 Validation and DSL generator tasks are cacheable. Inputs include the document with
 relative path sensitivity, its complete project-relative name, bundled schema version,

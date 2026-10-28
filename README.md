@@ -16,19 +16,19 @@ targets 17; the Wrapper uses Gradle 9.8.1.
 
 Notable changes are recorded in the [changelog](CHANGELOG.md).
 
-**Asyncwright 0.2.0** is published in the Gradle Plugin Portal with model
+**Asyncwright 0.2.1** is published in the Gradle Plugin Portal with model
 **1.0.0-RC4-asyncwright.5** in Maven Central. The quick start and public consumer use
 these released versions; no local model repository or sibling checkout is required.
 See the [release guide](docs/releases.md) for the verified source commits and consumer checks.
 
-Version **0.2.0** includes a bundled [Java DTO generator](docs/java-dto-generator.md).
+Since **0.2.0**, the plugin includes a bundled [Java DTO generator](docs/java-dto-generator.md).
 The [public DTO example](examples/java-dto-consumer) generates Java models and compiles
 a client using the released plugin, without Node.js or a sibling checkout.
 
 ## Quick start
 
 Requires Gradle 9.0 or newer and a JDK supported by that Gradle version (Java 17 or newer).
-Version [0.2.0 is available from the Gradle Plugin Portal](https://plugins.gradle.org/plugin/io.github.sjacek.asyncwright/0.2.0).
+Version [0.2.1 is available from the Gradle Plugin Portal](https://plugins.gradle.org/plugin/io.github.sjacek.asyncwright/0.2.1).
 The following setup resolves the plugin and its model from public repositories.
 
 For a consuming project, add the public plugin repositories in `settings.gradle`:
@@ -47,7 +47,7 @@ Apply and configure the plugin in `build.gradle`:
 
 ```groovy
 plugins {
-    id 'io.github.sjacek.asyncwright' version '0.2.0'
+    id 'io.github.sjacek.asyncwright' version '0.2.1'
 }
 
 asyncwright {
@@ -93,18 +93,18 @@ Modules:
   F0 has its own source set and dependency graph.
 - `java-generator`: native Java DTO/enum backend, bundled in the plugin JAR;
 - `gradle-plugin`: `io.github.sjacek.asyncwright`, with the parser/API included in its JAR;
-  DSL, cacheable tasks, Worker API and consumer TestKit tests. Version `0.2.0` is published;
+  DSL, cacheable tasks, Worker API and consumer TestKit tests. Version `0.2.1` is published;
   see the [release guide](docs/releases.md).
 - `extension-examples`: ordinary Java rule/generator examples with their own tests;
   this development module is not part of the plugin's dependency graph.
 
 ## Build
 
-This checkout prepares stable Asyncwright `0.2.1`, **not yet published**, with model
-`1.0.0-RC4-asyncwright.5` from Maven Central. It fixes intermittent `Stream closed`
-failures when isolated workers load the bundled schema. No DSL, extension API or
-generated-output migration is required. Public examples continue to use released
-`0.2.0` until publication; see the [0.2.1 preparation status](docs/releases.md#prepared-021-patch-release).
+This checkout builds released Asyncwright `0.2.1` with model
+`1.0.0-RC4-asyncwright.5` from Maven Central. Version 0.2.1 fixes intermittent
+`Stream closed` failures when isolated workers load the bundled schema. No DSL,
+extension API or generated-output migration is required. Public examples use
+released `0.2.1/.5`; see the [release status](docs/releases.md#published-021-patch-release).
 Compile and package this checkout without a model checkout:
 
 ```powershell
@@ -166,7 +166,7 @@ In IntelliJ IDEA, exclude this file from the `JsonSchemaRefReference` and
 `RegExpRedundantEscape` inspections using a file scope if they report unresolved example
 references or redundant escapes. Keep these IDE preferences local rather than editing the schema.
 
-The published `0.2.0` release uses the separately maintained model fork
+The published `0.2.1` release uses the separately maintained model fork
 `io.github.sjacek.jasyncapi:asyncapi-core:1.0.0-RC4-asyncwright.5`, with model sources at
 [`6de0c02e`](https://github.com/sjacek/jasyncapi/commit/6de0c02e884a9336f727a6cc797ac8eb304c0e87).
 The distribution was released from `e07d9e1ded75711a5180ea435b0ce02c27a89de8`.
@@ -178,7 +178,7 @@ to the fork group. It must contain the parent POM, model POM and model JAR. This
 for model development and HTTP publication tests; consuming projects need neither it nor
 a sibling checkout. `mavenLocal()` is not consulted.
 
-The [published-consumer example](examples/published-consumer) resolves plugin `0.2.0` from
+The [published-consumer example](examples/published-consumer) resolves plugin `0.2.1` from
 the Portal and model `.5` from Maven Central by default, with no local paths or included
 build. TestKit also verifies this project over staged HTTP repositories. The separate
 composite-build example is for developing the plugin itself.
@@ -224,7 +224,7 @@ Ignored reference siblings produce warnings and remain available in the source t
 data and extension values are not treated as document references. YAML aliases, external
 references, traits and non-default schema formats are currently unsupported. Broader parser
 conformance remains under development; the Gradle DSL and worker integration are available
-in the published `0.2.0` plugin.
+in the published `0.2.1` plugin.
 Schema-valid constructs that the typed model cannot preserve are rejected with
 `model.preservation` diagnostics; custom binding extensions are one such current limitation.
 

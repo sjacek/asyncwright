@@ -2,9 +2,9 @@
 
 User-visible changes to Asyncwright. Versions marked **Unreleased** are not yet published.
 
-## 0.2.1 - Unreleased
+## [0.2.1] - 2026-10-28
 
-Prepared patch release; not yet available from the Gradle Plugin Portal.
+Available from the Gradle Plugin Portal with the unchanged model `.5` from Maven Central.
 
 ### Fixed
 
@@ -127,6 +127,7 @@ First public release.
 - Generation requires a custom generator. This release does not include a Java DTO generator
   or automatically attach generated files to compilation.
 
+[0.2.1]: https://plugins.gradle.org/plugin/io.github.sjacek.asyncwright/0.2.1
 [0.2.0]: https://plugins.gradle.org/plugin/io.github.sjacek.asyncwright/0.2.0
 [0.1.1]: https://plugins.gradle.org/plugin/io.github.sjacek.asyncwright/0.1.1
 [0.1.0]: https://plugins.gradle.org/plugin/io.github.sjacek.asyncwright/0.1.0

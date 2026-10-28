@@ -4,7 +4,7 @@ json-schema-validator = "2.0.8"
 joni = "2.2.6"
 junit = "5.11.3"
 jetbrains-annotations = "26.0.2"
-# Separate fork distribution, available from an explicitly configured repository.
+# Published fork distribution in Maven Central; local repositories are optional test fixtures.
 jasyncapi-fork = "1.0.0-RC4-asyncwright.5"
 
 [libraries]

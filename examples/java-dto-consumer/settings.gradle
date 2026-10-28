@@ -3,6 +3,6 @@ pluginManagement {
         gradlePluginPortal()
         mavenCentral()
     }
-    plugins { id 'io.github.sjacek.asyncwright' version '0.2.0' }
+    plugins { id 'io.github.sjacek.asyncwright' version '0.2.1' }
 }
 rootProject.name = 'asyncwright-java-dto-consumer'

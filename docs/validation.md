@@ -1,7 +1,11 @@
-# Validation scope and diagnostics (0.2.0)
+# Validation scope and diagnostics (0.2.1)
 
 Asyncwright validates a defined subset of AsyncAPI 3.0.0. A passing comparison with another
 parser is a regression result, not proof of complete specification conformance.
+
+Version 0.2.1 fixes bundled-schema loading across isolated worker classloader
+lifecycles. Schema contents, validation rules, reference semantics and model `.5`
+are unchanged from 0.2.0; see the [release notes](releases.md#published-021-patch-release).
 
 ## Released 0.2.0 binding-schema and component-name changes
 
@@ -21,7 +25,8 @@ Reusable component keys must match `^[a-zA-Z0-9.\-_]+$`. Invalid keys produce
 components and trait component maps; traits themselves remain unsupported. Arbitrary
 payload property names and extension data are unaffected.
 
-These changes are **available in published 0.2.0**; they were absent from 0.1.1. Full Kafka acceptance, Registry
+These changes were introduced in **0.2.0** and remain in published **0.2.1**;
+they were absent from 0.1.1. Full Kafka acceptance, Registry
 dependencies, Avro, local `.avsc` references and the Kafka example are still pending.
 
 ## P3 capability boundary
@@ -55,7 +60,7 @@ These are product limits, not statements that the rejected constructs are invali
 They apply to schema/document positions, not arbitrary instance values or extension data.
 The parser, typed resolver and extension snapshots share model mapping that preserves
 instance objects and arbitrary-precision JSON numbers. This mapping uses local Jackson
-mixins and a boolean-aware schema deserializer. Binding-map support in published `0.2.0`
+mixins and a boolean-aware schema deserializer. Binding-map support in published `0.2.1`
 uses the separately maintained model `.5` from Maven Central. See the
 [mapping and resolver example](extensions.md#binding-map-references).
 
@@ -149,7 +154,9 @@ subsequent stages. A loading/execution exception in a project extension propagat
 F1 was accepted on **2026-10-22** for the parser and plain-Java rule/generator API in
 commit `e5b73f957ece1127f1490930b3563ef7ca897328`, within the explicit 0.1 scope above.
 The acceptance includes the documented capability exclusions and model limits; it does
-not claim complete AsyncAPI 3.0 conformance or a released Gradle plugin.
+not claim complete AsyncAPI 3.0 conformance. That historical parser-only acceptance
+predates the released Gradle plugin; current 0.2.1/.5 availability and consumer checks
+are recorded in the [release guide](releases.md#published-021-patch-release).
 
 A clean `check assemble`, example execution and the five corrected external contracts
 completed successfully on Gradle **9.8.1 / Temurin 21.0.12.1**. Of **189 test cases**,
@@ -171,5 +178,5 @@ the original contracts containing `nullable` or perform application migration.
 
 Worker isolation, Gradle tasks/DSL, TestKit and task-cache behavior were outside the F1
 acceptance scope. They are now implemented and documented in the [Gradle plugin guide](gradle-plugin.md).
-Public distribution of the model artifact is required before release. The historical
-negative F0/P1 result for upstream RC4 remains unchanged.
+The public model dependency required for the current release is available as `.5`
+in Maven Central. The historical negative F0/P1 result for upstream RC4 remains unchanged.

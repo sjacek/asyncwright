@@ -1,6 +1,6 @@
 # Java DTO consumer
 
-Uses released **Asyncwright 0.2.0** from the Gradle Plugin Portal and model
+Uses released **Asyncwright 0.2.1** from the Gradle Plugin Portal and model
 **1.0.0-RC4-asyncwright.5** from Maven Central. No included plugin build, local model
 repository, Node.js, npm or Modelina process is required. The client and generated
 DTOs target Java 17.

@@ -165,6 +165,9 @@ differences are invalid schema target kinds and invalid component names accepted
 core validation. No new implementation-gap or known-shared-limitation category is introduced.
 This is the first parser/DSL stage, not acceptance of the entire Kafka/Avro profile.
 
+Released 0.2.1 retains these outcomes and model .5 unchanged; its patch only fixes
+bundled-schema loading across worker classloader lifecycles.
+
 The AMQP server negative case is a reference-parser difference, not an additional Java
 model limitation: [AMQP binding 0.3.0](https://github.com/asyncapi/bindings/blob/master/amqp/README.md#server-binding-object)
 requires the server binding to be empty. Asyncwright rejects the unexpected property during
