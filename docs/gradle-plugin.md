@@ -189,6 +189,13 @@ extension instances and script closures do not cross the worker boundary. Except
 retain their original causes and fail the task. This is classloader isolation for
 trusted Java code, not a process or filesystem sandbox.
 
+The unpublished `0.2.1-SNAPSHOT` fix gives each bundled-schema read its own connection
+with JAR caching disabled for that connection. Closing another isolated classloader
+then cannot close the schema stream. The reader closes its own stream on success and
+failure; it does not change JVM-wide cache defaults or require network schema access.
+This addresses intermittent `Stream closed` errors in parser initialization, before
+contract validation or generator callbacks. The schema bytes and model `.5` are unchanged.
+
 Validation and DSL generator tasks are cacheable. Inputs include the document with
 relative path sensitivity, its complete project-relative name, bundled schema version,
 built-in rules (including regex flags), ordered custom rule class names and text
@@ -203,6 +210,10 @@ build cache restoration, relocation, extension JAR/parameter/input invalidation,
 included-build extensions, Jackson 3 on the host, the packaged plugin and output cleanup.
 Regressions also cover regex flags across the worker/cache boundary, empty generation
 and output guards for both the build directory itself and directories containing the input.
+Parser regressions load a real packaged JAR, close a sibling classloader during schema
+reading and repeatedly initialize cold parsers on two threads. A cached-stream control
+proves the fixture can reproduce the original failure; valid and invalid inputs still
+exercise structural validation after the fix.
 Run `:gradle-plugin:test :gradle-plugin:validatePlugins`. Set `-PtestGradleVersion=9.0.0`
 to select a consumer Gradle distribution; the default uses the running build's distribution
 and JDK. The compatibility workflow defines eight Gradle/JDK pairs: 9.0.0, 9.1.0 and

@@ -3,6 +3,7 @@ jackson = "2.22.4"
 json-schema-validator = "2.0.8"
 joni = "2.2.6"
 junit = "5.11.3"
+jetbrains-annotations = "26.0.2"
 # Separate fork distribution, available from an explicitly configured repository.
 jasyncapi-fork = "1.0.0-RC4-asyncwright.5"
 
@@ -15,4 +16,5 @@ joni = { module = "org.jruby.joni:joni", version.ref = "joni" }
 junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter" }
 junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
+jetbrains-annotations = { module = "org.jetbrains:annotations", version.ref = "jetbrains-annotations" }
 jasyncapi-fork = { module = "io.github.sjacek.jasyncapi:asyncapi-core", version.ref = "jasyncapi-fork" }

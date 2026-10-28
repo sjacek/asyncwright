@@ -4,6 +4,12 @@ User-visible changes to Asyncwright. Changes under **Unreleased** are not yet pu
 
 ## Unreleased
 
+### Fixed
+
+- Fix intermittent `Stream closed` build failures when validating or generating multiple
+  contracts in isolated Gradle workers. Closing another worker's classloader no longer
+  interrupts loading of the bundled AsyncAPI schema.
+
 ## [0.2.0] - 2026-10-27
 
 Available from the Gradle Plugin Portal with model `.5` from Maven Central.

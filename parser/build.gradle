@@ -18,6 +18,8 @@ dependencies {
     //noinspection DependencyNotationArgument
     testImplementation(platform(libs.junit.bom))
     testImplementation(libs.junit.jupiter)
+    // Explicit IDE nullability contracts in JDK overrides; not part of the parser's published API/runtime.
+    testCompileOnly(libs.jetbrains.annotations)
     testRuntimeOnly(libs.junit.platform.launcher)
 
     f0Implementation 'com.asyncapi:asyncapi-core:1.0.0-RC4'
@@ -45,6 +47,12 @@ tasks.named('check') { dependsOn tasks.named('f0Classes') }
 
 tasks.named('test') {
     useJUnitPlatform { excludeTags 'external-corpus', 'public-corpus' }
+    // Directory-based TestKit classpaths cannot expose shared JAR resource lifetimes.
+    // Load production classes and schema from this archive; fingerprint resource-only packaging changes too.
+    def parserJar = tasks.named('jar', Jar).flatMap { it.archiveFile }
+    dependsOn tasks.named('jar')
+    inputs.file(parserJar).withPropertyName('packagedParser').withPathSensitivity(PathSensitivity.NONE)
+    systemProperty 'asyncwright.parserJar', parserJar.get().asFile.absolutePath
 }
 
 tasks.register('publicCorpusTest', Test) {

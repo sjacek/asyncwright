@@ -100,8 +100,10 @@ Modules:
 
 ## Build
 
-This checkout builds Asyncwright `0.2.0` with model `1.0.0-RC4-asyncwright.5`
-from Maven Central. Compile and package it without a model checkout:
+This development checkout builds unpublished Asyncwright `0.2.1-SNAPSHOT` with model
+`1.0.0-RC4-asyncwright.5` from Maven Central. It includes the isolated schema-resource
+loading fix; public examples continue to use released `0.2.0` until the next release.
+Compile and package the development build without a model checkout:
 
 ```powershell
 .\gradlew.bat assemble '-PasyncwrightModelRepository=' --configuration-cache-problems=fail
