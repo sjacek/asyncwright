@@ -161,6 +161,8 @@ final class DocumentIndex {
             case CHANNEL_BINDINGS -> Kind.CHANNEL_BINDINGS;
             case OPERATION_BINDINGS -> Kind.OPERATION_BINDINGS;
             case MESSAGE_BINDINGS -> Kind.MESSAGE_BINDINGS;
+            // Reply aliases need the same kind as inline operation replies, including their channels/messages.
+            case REPLIES -> Kind.REPLY;
             default -> null;
         };
         if (parent == Kind.CHANNEL && field.equals(MESSAGES)) return Kind.MESSAGE;

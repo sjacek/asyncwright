@@ -1,0 +1,42 @@
+{
+  "asyncapi": "3.0.0",
+  "info": {
+    "title": "Kafka registry",
+    "version": "1.0.0"
+  },
+  "servers": {
+    "broker": {
+      "host": "localhost:9092",
+      "protocol": "kafka",
+      "bindings": {
+        "kafka": {
+          "schemaRegistryVendor": "confluent",
+          "bindingVersion": "0.5.0"
+        }
+      }
+    }
+  },
+  "channels": {
+    "events": {
+      "address": "events",
+      "messages": {
+        "registered": {
+          "payload": {
+            "type": "string"
+          },
+          "bindings": {
+            "kafka": {
+              "schemaIdLocation": "header",
+              "bindingVersion": "0.5.0"
+            }
+          }
+        },
+        "plain": {
+          "payload": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,8 +1,8 @@
 # Public parser comparison
 
 The public corpus is checked in under `parser/src/test/resources/conformance/`.
-It contains **154 cases**: 12 unchanged examples from `asyncapi/spec` tag `v3.0.0`
-(commit `d78dcea70c9b094a3df72f9a4e811828cec778cc`) and 142 synthetic fixtures.
+It contains **166 cases**: 12 unchanged examples from `asyncapi/spec` tag `v3.0.0`
+(commit `d78dcea70c9b094a3df72f9a4e811828cec778cc`) and 154 synthetic fixtures.
 The official files retain their original Apache-2.0 LICENSE and NOTICE; synthetic files
 use the project MIT license. No application contracts are included.
 
@@ -38,7 +38,7 @@ Configure the local model repository as described in the root README. From the p
 .\gradlew.bat check assemble --configuration-cache-problems=fail
 ```
 
-This includes `:parser:publicCorpusTest`, with 154 case checks and one manifest integrity check.
+This includes `:parser:publicCorpusTest`, with 166 case checks and one manifest integrity check.
 It needs no Node.js or external application contracts. With Gradle dependencies already
 cached, add `--offline`. The JVM report is `parser/build/reports/conformance/asyncwright.json`.
 
@@ -74,14 +74,14 @@ model graph equality. JavaScript dereferences and composes a document; Asyncwrig
 `$ref` values and exposes a separate resolver. Two rejecting parsers can report different
 diagnostics because Asyncwright stops after structural errors.
 
-The development result is **109 agreements and 45 reviewed differences** across **154 cases**:
+The development result is **114 agreements and 52 reviewed differences** across **166 cases**:
 
 | Classification | Cases | Meaning |
 | --- | ---: | --- |
-| Agreement | 109 | Both accept or both reject. |
+| Agreement | 114 | Both accept or both reject. |
 | Unsupported | 11 | Traits (including a shared definition), YAML aliases, external files, versions 2.6/3.1, component Avro format, foreign schema dialect and schema resource ID. |
 | Model limit | 2 | Unknown `nullable` keyword and custom binding extensions cannot be preserved by the typed Java model. |
-| Reference parser difference | 27 | The original 11 differences plus 14 wrong-kind schema references in protocol bindings and two invalid component names accepted by JavaScript. |
+| Reference parser difference | 34 | The original 11 differences, 14 wrong-kind binding schema references, two invalid component names and seven Registry dependency cases accepted by JavaScript. |
 | Policy difference | 5 | Asyncwright rejects pure schema and binding-map alias cycles that JavaScript accepts. |
 | Implementation gap | 0 | The three identified semantic validation gaps below are fixed. |
 
@@ -172,3 +172,15 @@ The AMQP server negative case is a reference-parser difference, not an additiona
 model limitation: [AMQP binding 0.3.0](https://github.com/asyncapi/bindings/blob/master/amqp/README.md#server-binding-object)
 requires the server binding to be empty. Asyncwright rejects the unexpected property during
 typed mapping; the pinned JS core validation accepts this fixture.
+
+## Development Registry dependency regressions (0.3.0-SNAPSHOT)
+
+Twelve additional fixtures exercise complete Registry metadata, all three message
+metadata fields without a URL, vendor without a URL, multiple servers, an unselected
+message, a no-Kafka-server warning, reply and dynamic-reply contexts, binding-map aliases
+and reusable replies. The original 154 fixture bytes and outcomes remain unchanged.
+JavaScript 3.6.6 accepts all twelve. Asyncwright rejects seven for missing Registry
+dependencies and accepts five; the no-Kafka-server case emits a warning while succeeding.
+These seven semantic differences are reviewed under `reference-parser-difference`,
+not hidden as implementation gaps or evidence of complete Kafka support.
+The versioned comparison records **166 cases, 114 agreements and 52 differences**.

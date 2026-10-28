@@ -2812,6 +2812,212 @@
         "successful": true,
         "errorCodes": []
       }
+    },
+    {
+      "id": "kafka-registry-complete",
+      "file": "synthetic/kafka-registry-complete.json",
+      "group": "synthetic",
+      "sha256": "bfcacec6671c163b062179d63069ed0bc9a5cf7c9ccbfe2c7099a1c3b18ed9a0",
+      "classification": "agreement",
+      "reason": "Registry metadata is complete for every Kafka server in the usage context; no HTTP is needed.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "kafka-registry-schemaIdLocation-missing-url",
+      "file": "synthetic/kafka-registry-schemaIdLocation-missing-url.json",
+      "group": "synthetic",
+      "sha256": "be4e185cb13d00acd7b00f1637ff108be2046265d2e78a8eaf13d4efb147df36",
+      "classification": "reference-parser-difference",
+      "reason": "The Kafka binding requires a Registry URL on every Kafka server of this usage; JavaScript omits this dependency check.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "kafka.schema-registry"
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "kafka-registry-schemaIdPayloadEncoding-missing-url",
+      "file": "synthetic/kafka-registry-schemaIdPayloadEncoding-missing-url.json",
+      "group": "synthetic",
+      "sha256": "80dd0772237bd34efc299efb897ba72d4faa90f6a3f727ebae7ed96f27619306",
+      "classification": "reference-parser-difference",
+      "reason": "The Kafka binding requires a Registry URL on every Kafka server of this usage; JavaScript omits this dependency check.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "kafka.schema-registry"
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "kafka-registry-schemaLookupStrategy-missing-url",
+      "file": "synthetic/kafka-registry-schemaLookupStrategy-missing-url.json",
+      "group": "synthetic",
+      "sha256": "17c0cd60ce8f8bde0913b648de624b29fd612682e88979e76c3e477aba2a1908",
+      "classification": "reference-parser-difference",
+      "reason": "The Kafka binding requires a Registry URL on every Kafka server of this usage; JavaScript omits this dependency check.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "kafka.schema-registry"
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "kafka-registry-vendor-missing-url",
+      "file": "synthetic/kafka-registry-vendor-missing-url.json",
+      "group": "synthetic",
+      "sha256": "32381be6da76d6445059be7cb766ffaf56affd0520d86aa238a15033f1c5cbda",
+      "classification": "reference-parser-difference",
+      "reason": "Vendor requires a URL on the same server binding even without an operation; JavaScript omits this dependency check.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "kafka.schema-registry"
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "kafka-registry-multiple-servers",
+      "file": "synthetic/kafka-registry-multiple-servers.json",
+      "group": "synthetic",
+      "sha256": "372f460161269bbbd66e52a7a9b8391ed0b215f207b55d112ec481b1108d11f1",
+      "classification": "reference-parser-difference",
+      "reason": "A URL on one server does not satisfy registry metadata for another Kafka server in the same usage context.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "kafka.schema-registry"
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "kafka-registry-unselected-message",
+      "file": "synthetic/kafka-registry-unselected-message.json",
+      "group": "synthetic",
+      "sha256": "22c24ad9a607f81890f99909fdeef56468b7ceec9f476aacbc3095e2b8255e96",
+      "classification": "agreement",
+      "reason": "A registered message excluded by operation.messages is not used and creates no dependency.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "kafka-registry-no-kafka-server-warning",
+      "file": "synthetic/kafka-registry-no-kafka-server-warning.json",
+      "group": "synthetic",
+      "sha256": "2f8e9dab3497aab1b8a5125a64d999b8f4b371bbf51b6cd53142cca96fea1107",
+      "classification": "agreement",
+      "reason": "No Kafka server produces a warning, permitting a model; comparison checks acceptance, not warning equality.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "kafka-registry-reply-channel",
+      "file": "synthetic/kafka-registry-reply-channel.json",
+      "group": "synthetic",
+      "sha256": "69020af0845ab2423a58cc0c60e004b9369c1c6b27f4caa0276e942ba260da0e",
+      "classification": "reference-parser-difference",
+      "reason": "Reply metadata uses the reply channel servers independently of the request channel; JavaScript omits this dependency check.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "kafka.schema-registry"
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "kafka-registry-dynamic-reply",
+      "file": "synthetic/kafka-registry-dynamic-reply.json",
+      "group": "synthetic",
+      "sha256": "d922984108136ec526a7640ae881639f4b2bd158c6a372681a35905eafb63bf6",
+      "classification": "reference-parser-difference",
+      "reason": "The documented dynamic reply policy uses request channel servers when the reply has no channel.",
+      "asyncwright": {
+        "successful": false,
+        "errorRules": [
+          "kafka.schema-registry"
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "kafka-registry-binding-map-alias",
+      "file": "synthetic/kafka-registry-binding-map-alias.json",
+      "group": "synthetic",
+      "sha256": "b5c0c96c85a773ee393fc7042baff635435ed043033a83d8b58f5fc9109ec909",
+      "classification": "agreement",
+      "reason": "Resolve the message binding map alias before reading Kafka metadata, retaining source refs.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "kafka-registry-reusable-reply",
+      "file": "synthetic/kafka-registry-reusable-reply.json",
+      "group": "synthetic",
+      "sha256": "54060fa2431f2b084da78784d308df525d70bfb9db85453b85b9658b04e7d6d0",
+      "classification": "agreement",
+      "reason": "A reply component alias resolves as a reply, with its channel and messages preserved.",
+      "asyncwright": {
+        "successful": true,
+        "errorRules": []
+      },
+      "javascript": {
+        "successful": true,
+        "errorCodes": []
+      }
     }
   ],
   "assets": [

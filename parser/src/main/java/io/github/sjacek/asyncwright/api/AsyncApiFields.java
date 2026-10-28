@@ -90,6 +90,8 @@ public final class AsyncApiFields {
      * Operation reply definition.
      */
     public static final String REPLY = "reply";
+    /** Reusable operation reply definitions. */
+    public static final String REPLIES = "replies";
     /**
      * Protocol-specific object bindings.
      */

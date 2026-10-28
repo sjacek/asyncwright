@@ -516,6 +516,157 @@ class AsyncwrightPluginTest {
         assertTrue(read(root, "build/reports/asyncapi/events.json").contains("reference.missing"));
     }
 
+    /** Registry semantics cross the real isolated worker boundary and invalidate cached generation. */
+    @Test void kafkaRegistryErrorsWriteReportsAndRemovePreviousGeneratorOutput() throws Exception {
+        Path root = fixture("kafka-registry", PLUGIN + """
+                asyncwright.specs { events { file = layout.projectDirectory.file('contracts/events.yaml') } }
+                """);
+        projectExtension(root);
+        append(root, "build.gradle", """
+                dependencies { asyncwrightExtensions project(':extensions') }
+                asyncwright.specs.events.generators {
+                    catalog { className = 'fixture.Catalog'; parameters.put('name', 'channels.txt') }
+                }
+                """);
+        write(root, "contracts/events.yaml", kafkaRegistryDocument());
+        assertEquals(SUCCESS, outcome(run(root, "check", "asyncApiGenerateEventsCatalog"), ":asyncApiGenerateEventsCatalog"));
+        assertEquals("events", read(root, "build/generated/asyncapi/events/catalog/channels.txt"));
+        BuildResult reused = run(root, "check", "asyncApiGenerateEventsCatalog");
+        assertTrue(reused.getOutput().contains("Reusing configuration cache"), reused::getOutput);
+        assertEquals(UP_TO_DATE, outcome(reused, ":asyncApiGenerateEventsCatalog"));
+        write(root, "contracts/events.yaml", kafkaRegistryDocument().replace("schemaRegistryUrl: https://registry.invalid", ""));
+        assertEquals(FAILED, outcome(fail(root, "check"), ":asyncApiValidateEvents"));
+        var report = new com.fasterxml.jackson.databind.ObjectMapper().readTree(read(root, "build/reports/asyncapi/events.json"));
+        assertEquals(1, report.size());
+        assertEquals("kafka.schema-registry", report.path(0).path("ruleId").asText());
+        assertEquals("error", report.path(0).path("severity").asText());
+        assertEquals("/channels/events/messages/event/bindings/kafka/schemaIdLocation", report.path(0).path("pointer").asText());
+        assertEquals(FAILED, outcome(fail(root, "asyncApiGenerateEventsCatalog"), ":asyncApiGenerateEventsCatalog"));
+        assertFalse(Files.exists(root.resolve("build/generated/asyncapi/events/catalog/channels.txt")));
+    }
+
+    /** Warnings permit generation and survive restoring both reports and generator output from cache. */
+    @Test void kafkaRegistryWithoutKafkaServersWarnsAndAllowsGeneration() throws Exception {
+        Path root = fixture("kafka-registry-warning", PLUGIN + """
+                asyncwright.specs { events { file = layout.projectDirectory.file('contracts/events.yaml') } }
+                """);
+        projectExtension(root);
+        append(root, "build.gradle", """
+                dependencies { asyncwrightExtensions project(':extensions') }
+                asyncwright.specs.events.generators {
+                    catalog { className = 'fixture.Catalog'; parameters.put('name', 'channels.txt') }
+                }
+                """);
+        write(root, "contracts/events.yaml", kafkaRegistryDocument().replace("protocol: kafka", "protocol: amqp"));
+        BuildResult result = run(root, "check", "asyncApiGenerateEventsCatalog");
+        assertEquals(SUCCESS, outcome(result, ":asyncApiValidateEvents"));
+        assertEquals(SUCCESS, outcome(result, ":asyncApiGenerateEventsCatalog"));
+        assertTrue(result.getOutput().contains("kafka.schema-registry"), result::getOutput);
+        var report = new com.fasterxml.jackson.databind.ObjectMapper().readTree(read(root, "build/reports/asyncapi/events.json"));
+        assertEquals("warning", report.path(0).path("severity").asText());
+        assertEquals("events", read(root, "build/generated/asyncapi/events/catalog/channels.txt"));
+        String expectedReport = read(root, "build/reports/asyncapi/events.json");
+        run(root, "clean");
+        BuildResult restored = run(root, "check", "asyncApiGenerateEventsCatalog");
+        assertEquals(FROM_CACHE, outcome(restored, ":asyncApiValidateEvents"));
+        assertEquals(FROM_CACHE, outcome(restored, ":asyncApiGenerateEventsCatalog"));
+        assertEquals(expectedReport, read(root, "build/reports/asyncapi/events.json"));
+        assertEquals("events", read(root, "build/generated/asyncapi/events/catalog/channels.txt"));
+    }
+
+    /** Shared binding aliases report once with every operation and stop extension loading on failure. */
+    @Test void kafkaRegistryAliasesAggregateRelatedLocationsAndBlockProjectRules() throws Exception {
+        Path root = fixture("kafka-registry-shared", PLUGIN + """
+                asyncwright.specs {
+                    events {
+                        file = layout.projectDirectory.file('contracts/events.yaml')
+                        rules { rule 'missing.MustNeverBeLoaded' }
+                    }
+                }
+                """);
+        write(root, "contracts/events.yaml", """
+                asyncapi: 3.0.0
+                info: {title: Registry, version: 1.0.0}
+                servers:
+                  broker:
+                    host: localhost:9092
+                    protocol: kafka
+                channels:
+                  events:
+                    address: events
+                    messages:
+                      first: {$ref: '#/components/messages/Shared'}
+                      second: {$ref: '#/components/messages/Shared'}
+                operations:
+                  first:
+                    action: send
+                    channel: {$ref: '#/channels/events'}
+                    messages: [{$ref: '#/channels/events/messages/first'}]
+                  second:
+                    action: receive
+                    channel: {$ref: '#/channels/events'}
+                    messages: [{$ref: '#/channels/events/messages/second'}]
+                components:
+                  messages:
+                    Shared:
+                      payload: {type: string}
+                      bindings: {$ref: '#/components/messageBindings/Alias'}
+                  messageBindings:
+                    Shared:
+                      kafka:
+                        schemaIdLocation: header
+                        bindingVersion: 0.5.0
+                    Alias: {$ref: '#/components/messageBindings/Shared'}
+                """);
+        BuildResult result = fail(root, "check");
+        assertEquals(FAILED, outcome(result, ":asyncApiValidateEvents"));
+        var report = new com.fasterxml.jackson.databind.ObjectMapper().readTree(read(root, "build/reports/asyncapi/events.json"));
+        assertEquals(1, report.size());
+        var diagnostic = report.path(0);
+        assertEquals("kafka.schema-registry", diagnostic.path("ruleId").asText());
+        assertEquals("contracts/events.yaml", diagnostic.path("file").asText());
+        assertEquals("/components/messageBindings/Shared/kafka/schemaIdLocation", diagnostic.path("pointer").asText());
+        assertEquals(30, diagnostic.path("line").asInt());
+        assertEquals(9, diagnostic.path("column").asInt());
+        var related = diagnostic.path("related");
+        assertEquals(3, related.size());
+        assertEquals("/operations/first", related.path(0).path("pointer").asText());
+        assertEquals("/operations/second", related.path(1).path("pointer").asText());
+        assertEquals("/servers/broker", related.path(2).path("pointer").asText());
+        assertTrue(result.getOutput().contains("1 error(s)"), result::getOutput);
+        assertFalse(result.getOutput().contains("missing.MustNeverBeLoaded"), result::getOutput);
+    }
+
+    /** Complete metadata is the baseline; tests remove a URL or change the protocol deliberately. */
+    private static String kafkaRegistryDocument() {
+        return """
+                asyncapi: 3.0.0
+                info: {title: Registry, version: 1.0.0}
+                servers:
+                  broker:
+                    host: localhost:9092
+                    protocol: kafka
+                    bindings:
+                      kafka:
+                        schemaRegistryUrl: https://registry.invalid
+                        bindingVersion: 0.5.0
+                channels:
+                  events:
+                    address: events
+                    messages:
+                      event:
+                        payload: {type: string}
+                        bindings:
+                          kafka:
+                            schemaIdLocation: header
+                            bindingVersion: 0.5.0
+                operations:
+                  send:
+                    action: send
+                    channel: {$ref: '#/channels/events'}
+                """;
+    }
+
     private Path fixture(String name, String build) throws IOException {
         Path root = temporary.resolve(name);
         write(root, "settings.gradle", settings(""));

@@ -107,6 +107,9 @@ public final class AsyncApiParser {
         if (hasErrors(diagnostics)) return failed(diagnostics);
         diagnostics.addAll(references.validate());
         semanticRules(source, index, references, diagnostics);
+        // Registry checks read validated source/resolver contexts, not an expanded typed model.
+        // Reference errors can coexist with findings from independent operations or replies.
+        diagnostics.addAll(new KafkaSchemaRegistryRule(source, index, references).validate());
         if (hasErrors(diagnostics)) return failed(diagnostics);
         // Reference siblings are ignored by the specification; preserve the original source separately.
         JsonNode mapping = references.mappingTree("", source.root);

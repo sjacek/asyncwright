@@ -2,6 +2,26 @@
 
 User-visible changes to Asyncwright. Versions marked **Unreleased** are not yet published.
 
+## [0.3.0] - Unreleased
+
+### Added
+
+- Catch incomplete Kafka Schema Registry metadata during validation, before generation.
+  Every Kafka server used by an operation or reply must provide `schemaRegistryUrl` when
+  its message declares registry metadata. A vendor without a URL is an error; a usage
+  with no Kafka server produces a warning. Shared definitions report once per affected
+  server and include the operations in related locations. No Registry connection is made.
+### Fixed
+
+- Allow operations to reference reusable reply definitions in `components.replies`.
+  Reply channels and messages resolve correctly while references remain in the model.
+
+### Upgrading
+
+- Contracts with incomplete Kafka Registry metadata that passed 0.2.1 can now fail
+  validation. Supply a Registry URL on every Kafka server selected by the channel, or
+  correct the operation message/server selection. No model upgrade is required.
+
 ## [0.2.1] - 2026-10-28
 
 Available from the Gradle Plugin Portal with the unchanged model `.5` from Maven Central.

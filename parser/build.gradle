@@ -69,7 +69,7 @@ tasks.register('publicCorpusTest', Test) {
 tasks.named('check') { dependsOn tasks.named('publicCorpusTest') }
 
 tasks.register('contractCorpusTest', Test) {
-    description = 'Validate and resolve the five external AsyncAPI contracts with the production parser.'
+    description = 'Validate and resolve the nine external AsyncAPI contracts with the production parser.'
     group = 'verification'
     testClassesDirs = sourceSets.test.output.classesDirs
     classpath = sourceSets.test.runtimeClasspath

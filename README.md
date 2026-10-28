@@ -25,6 +25,10 @@ Since **0.2.0**, the plugin includes a bundled [Java DTO generator](docs/java-dt
 The [public DTO example](examples/java-dto-consumer) generates Java models and compiles
 a client using the released plugin, without Node.js or a sibling checkout.
 
+Development version **0.3.0-SNAPSHOT** adds
+[offline Registry dependency validation](docs/validation.md#development-kafka-registry-dependencies-030-snapshot).
+This work is unreleased; the quick start continues to use public 0.2.1/.5.
+
 ## Quick start
 
 Requires Gradle 9.0 or newer and a JDK supported by that Gradle version (Java 17 or newer).
@@ -241,7 +245,7 @@ them as `api.BooleanSchema`, a subtype of the model's `AsyncAPISchema` with a `v
 The public extension contracts are in `io.github.sjacek.asyncwright.api`: `AsyncApiRule`,
 `AsyncApiGenerator`, document/reference views, execution contexts, text parameters and diagnostics.
 `ExtensionExecutor` loads classes by name using a supplied classloader and runs the
-parse → project rules → generators sequence without Gradle. Each invocation receives its
+parse â†’ project rules â†’ generators sequence without Gradle. Each invocation receives its
 own model; references stay in the document and are followed through the resolver.
 
 Run the checked-in Java extension example using the development model repository:

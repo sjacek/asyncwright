@@ -1,0 +1,90 @@
+{
+  "asyncapi": "3.0.0",
+  "info": {
+    "title": "Kafka registry",
+    "version": "1.0.0"
+  },
+  "servers": {
+    "broker": {
+      "host": "localhost:9092",
+      "protocol": "kafka",
+      "bindings": {
+        "kafka": {
+          "schemaRegistryUrl": "https://registry.invalid",
+          "bindingVersion": "0.5.0"
+        }
+      }
+    },
+    "replyBroker": {
+      "host": "localhost",
+      "protocol": "kafka"
+    }
+  },
+  "channels": {
+    "events": {
+      "address": "events",
+      "messages": {
+        "registered": {
+          "payload": {
+            "type": "string"
+          },
+          "bindings": {
+            "kafka": {
+              "schemaIdLocation": "header",
+              "bindingVersion": "0.5.0"
+            }
+          }
+        },
+        "plain": {
+          "payload": {
+            "type": "string"
+          }
+        }
+      },
+      "servers": [
+        {
+          "$ref": "#/servers/broker"
+        }
+      ]
+    },
+    "replies": {
+      "address": "events",
+      "messages": {
+        "registered": {
+          "payload": {
+            "type": "string"
+          },
+          "bindings": {
+            "kafka": {
+              "schemaIdLocation": "header",
+              "bindingVersion": "0.5.0"
+            }
+          }
+        },
+        "plain": {
+          "payload": {
+            "type": "string"
+          }
+        }
+      },
+      "servers": [
+        {
+          "$ref": "#/servers/replyBroker"
+        }
+      ]
+    }
+  },
+  "operations": {
+    "send": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/events"
+      },
+      "reply": {
+        "channel": {
+          "$ref": "#/channels/replies"
+        }
+      }
+    }
+  }
+}

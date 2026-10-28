@@ -29,6 +29,46 @@ These changes were introduced in **0.2.0** and remain in published **0.2.1**;
 they were absent from 0.1.1. Full Kafka acceptance, Registry
 dependencies, Avro, local `.avsc` references and the Kafka example are still pending.
 
+## Development: Kafka Registry dependencies (0.3.0-SNAPSHOT)
+
+This built-in check is **unreleased** and uses the unchanged published model `.5`.
+The released 0.2.1 behavior above is unchanged in its published artifacts.
+The rule ID is `kafka.schema-registry`. It applies offline after reference validation:
+
+- A server Kafka binding with `schemaRegistryVendor` requires `schemaRegistryUrl` on
+  that same binding. This local dependency is checked even on unused server components
+  and unused `components.serverBindings` definitions.
+- An operation uses its explicit `messages`, or all channel messages when the list is
+  absent or empty. Unselected channel messages and unused component operations/messages
+  do not create contexts.
+- Each reply creates a separate context. It uses its own channel and message selection.
+  **Profile policy:** a reply without a channel (dynamic reply address) uses the request
+  channel's servers and, for an absent/empty reply message list, its messages.
+- Server selection comes from `channel.servers`; absent/empty lists select all root
+  servers. For each selected server whose protocol is `kafka` or `kafka-secure`, the
+  fields `schemaIdLocation`, `schemaIdPayloadEncoding` and `schemaLookupStrategy` in a
+  used message Kafka binding require `schemaRegistryUrl` on that server's Kafka binding.
+  A URL elsewhere in the document does not satisfy this dependency.
+- A context with no Kafka server produces a **warning**, allowing validation and
+  generation to proceed. An unresolved dependency keeps its reference error and does
+  not produce a misleading missing-Registry diagnostic for that dependency.
+
+Aliases of operations, replies, channels, messages, servers and whole binding maps use
+only the existing resolver. The model and source keep `$ref`; no graph is expanded.
+One error is emitted per concrete message-binding/server pair, at the first present
+metadata field in this order: `schemaIdLocation`, `schemaIdPayloadEncoding`,
+`schemaLookupStrategy`. Its `related` locations contain the server definition and all
+root operation usages affected by that pair. No-server warnings aggregate per message
+binding with the affected operation and channel locations. Vendor errors aggregate at
+one binding definition with its server definitions and reference usages.
+
+No HTTP, DNS, Registry schema retrieval, broker connection or credential lookup is
+performed. URLs remain metadata and are not copied into the diagnostic message.
+No Kafka client dependency is added. Avro, `.avsc` access, the Kafka SPI example and
+broker tests remain pending; this check is not full acceptance of the Kafka profile.
+The dependency follows the [Kafka binding specification](https://github.com/asyncapi/bindings/blob/master/kafka/README.md#message-binding-object);
+the context and dynamic-reply policy above make its offline interpretation explicit.
+
 ## P3 capability boundary
 
 | Construct | Current behavior |
@@ -102,10 +142,11 @@ are indexed as schemas; a reference to an arbitrary boolean instance value is st
   mapping. Use the supported draft-07 null union for nullable types. This is a model limit,
   not support for OpenAPI's nullable semantics.
 
-The development [recorded comparison](conformance/comparison.json) contains **154 cases: 109 agreements
-and 45 reviewed differences**, with **zero known shared limitations** in this selected corpus.
-The differences comprise 11 capability exclusions, 2 model limits, 27 reference parser
-differences and 5 pure-cycle policy differences. No unreviewed outcome changes remain.
+The development [recorded comparison](conformance/comparison.json) contains **166 cases: 114 agreements
+and 52 reviewed differences**, with **zero known shared limitations** in this selected corpus.
+The differences comprise 11 capability exclusions, 2 model limits, 34 reference parser
+differences (including seven Registry dependency cases) and 5 pure-cycle policy differences.
+No unreviewed outcome changes remain.
 
 The former `schema-boolean` limitation is now a valid JVM case and a JS difference. The
 pinned JS parser rejects it, direct boolean payloads, reference aliases to `false` and a

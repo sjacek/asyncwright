@@ -10,16 +10,16 @@
     "recommended": false
   },
   "network": "disabled",
-  "manifestSha256": "c505b7352e21fa0382de58b0fd4aada96801ac968392adb01e4881e075268e7d",
+  "manifestSha256": "cc3dcc9d1f764b6e446d1d94984f220c69440e009ea9c312e36cdd1d0309af9d",
   "lockSha256": "af3b18e8950cc7280793e8b2abacbd2891b6c888850b7eabac2de782eff8236a",
   "summary": {
-    "cases": 154,
-    "agreements": 109,
-    "differences": 45,
+    "cases": 166,
+    "agreements": 114,
+    "differences": 52,
     "classifications": {
-      "agreement": 109,
+      "agreement": 114,
       "unsupported": 11,
-      "reference-parser-difference": 27,
+      "reference-parser-difference": 34,
       "model-limit": 2,
       "policy-difference": 5
     },
@@ -7282,6 +7282,566 @@
         "id": "binding-schema-mqtt-scalars",
         "file": "synthetic/binding-schema-mqtt-scalars.json",
         "sha256": "112322cc0ff37358341a5378e3c010fbd5c94350107f91e8fd94e32097ea8df6",
+        "successful": true,
+        "documentPresent": true,
+        "errorRules": [],
+        "diagnostics": []
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "kafka-registry-complete",
+      "file": "synthetic/kafka-registry-complete.json",
+      "sha256": "bfcacec6671c163b062179d63069ed0bc9a5cf7c9ccbfe2c7099a1c3b18ed9a0",
+      "classification": "agreement",
+      "reason": "Registry metadata is complete for every Kafka server in the usage context; no HTTP is needed.",
+      "asyncwright": {
+        "id": "kafka-registry-complete",
+        "file": "synthetic/kafka-registry-complete.json",
+        "sha256": "bfcacec6671c163b062179d63069ed0bc9a5cf7c9ccbfe2c7099a1c3b18ed9a0",
+        "successful": true,
+        "documentPresent": true,
+        "errorRules": [],
+        "diagnostics": []
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "kafka-registry-schemaIdLocation-missing-url",
+      "file": "synthetic/kafka-registry-schemaIdLocation-missing-url.json",
+      "sha256": "be4e185cb13d00acd7b00f1637ff108be2046265d2e78a8eaf13d4efb147df36",
+      "classification": "reference-parser-difference",
+      "reason": "The Kafka binding requires a Registry URL on every Kafka server of this usage; JavaScript omits this dependency check.",
+      "asyncwright": {
+        "id": "kafka-registry-schemaIdLocation-missing-url",
+        "file": "synthetic/kafka-registry-schemaIdLocation-missing-url.json",
+        "sha256": "be4e185cb13d00acd7b00f1637ff108be2046265d2e78a8eaf13d4efb147df36",
+        "successful": false,
+        "documentPresent": false,
+        "errorRules": [
+          "kafka.schema-registry"
+        ],
+        "diagnostics": [
+          {
+            "ruleId": "kafka.schema-registry",
+            "severity": "error",
+            "message": "Kafka message registry metadata requires schemaRegistryUrl on every Kafka server in its usage context",
+            "file": "synthetic/kafka-registry-schemaIdLocation-missing-url.json",
+            "line": 24,
+            "column": 15,
+            "pointer": "/channels/events/messages/registered/bindings/kafka/schemaIdLocation",
+            "related": [
+              {
+                "file": "synthetic/kafka-registry-schemaIdLocation-missing-url.json",
+                "line": 37,
+                "column": 5,
+                "pointer": "/operations/send"
+              },
+              {
+                "file": "synthetic/kafka-registry-schemaIdLocation-missing-url.json",
+                "line": 8,
+                "column": 5,
+                "pointer": "/servers/broker"
+              }
+            ]
+          }
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "kafka-registry-schemaIdPayloadEncoding-missing-url",
+      "file": "synthetic/kafka-registry-schemaIdPayloadEncoding-missing-url.json",
+      "sha256": "80dd0772237bd34efc299efb897ba72d4faa90f6a3f727ebae7ed96f27619306",
+      "classification": "reference-parser-difference",
+      "reason": "The Kafka binding requires a Registry URL on every Kafka server of this usage; JavaScript omits this dependency check.",
+      "asyncwright": {
+        "id": "kafka-registry-schemaIdPayloadEncoding-missing-url",
+        "file": "synthetic/kafka-registry-schemaIdPayloadEncoding-missing-url.json",
+        "sha256": "80dd0772237bd34efc299efb897ba72d4faa90f6a3f727ebae7ed96f27619306",
+        "successful": false,
+        "documentPresent": false,
+        "errorRules": [
+          "kafka.schema-registry"
+        ],
+        "diagnostics": [
+          {
+            "ruleId": "kafka.schema-registry",
+            "severity": "error",
+            "message": "Kafka message registry metadata requires schemaRegistryUrl on every Kafka server in its usage context",
+            "file": "synthetic/kafka-registry-schemaIdPayloadEncoding-missing-url.json",
+            "line": 24,
+            "column": 15,
+            "pointer": "/channels/events/messages/registered/bindings/kafka/schemaIdPayloadEncoding",
+            "related": [
+              {
+                "file": "synthetic/kafka-registry-schemaIdPayloadEncoding-missing-url.json",
+                "line": 37,
+                "column": 5,
+                "pointer": "/operations/send"
+              },
+              {
+                "file": "synthetic/kafka-registry-schemaIdPayloadEncoding-missing-url.json",
+                "line": 8,
+                "column": 5,
+                "pointer": "/servers/broker"
+              }
+            ]
+          }
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "kafka-registry-schemaLookupStrategy-missing-url",
+      "file": "synthetic/kafka-registry-schemaLookupStrategy-missing-url.json",
+      "sha256": "17c0cd60ce8f8bde0913b648de624b29fd612682e88979e76c3e477aba2a1908",
+      "classification": "reference-parser-difference",
+      "reason": "The Kafka binding requires a Registry URL on every Kafka server of this usage; JavaScript omits this dependency check.",
+      "asyncwright": {
+        "id": "kafka-registry-schemaLookupStrategy-missing-url",
+        "file": "synthetic/kafka-registry-schemaLookupStrategy-missing-url.json",
+        "sha256": "17c0cd60ce8f8bde0913b648de624b29fd612682e88979e76c3e477aba2a1908",
+        "successful": false,
+        "documentPresent": false,
+        "errorRules": [
+          "kafka.schema-registry"
+        ],
+        "diagnostics": [
+          {
+            "ruleId": "kafka.schema-registry",
+            "severity": "error",
+            "message": "Kafka message registry metadata requires schemaRegistryUrl on every Kafka server in its usage context",
+            "file": "synthetic/kafka-registry-schemaLookupStrategy-missing-url.json",
+            "line": 24,
+            "column": 15,
+            "pointer": "/channels/events/messages/registered/bindings/kafka/schemaLookupStrategy",
+            "related": [
+              {
+                "file": "synthetic/kafka-registry-schemaLookupStrategy-missing-url.json",
+                "line": 37,
+                "column": 5,
+                "pointer": "/operations/send"
+              },
+              {
+                "file": "synthetic/kafka-registry-schemaLookupStrategy-missing-url.json",
+                "line": 8,
+                "column": 5,
+                "pointer": "/servers/broker"
+              }
+            ]
+          }
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "kafka-registry-vendor-missing-url",
+      "file": "synthetic/kafka-registry-vendor-missing-url.json",
+      "sha256": "32381be6da76d6445059be7cb766ffaf56affd0520d86aa238a15033f1c5cbda",
+      "classification": "reference-parser-difference",
+      "reason": "Vendor requires a URL on the same server binding even without an operation; JavaScript omits this dependency check.",
+      "asyncwright": {
+        "id": "kafka-registry-vendor-missing-url",
+        "file": "synthetic/kafka-registry-vendor-missing-url.json",
+        "sha256": "32381be6da76d6445059be7cb766ffaf56affd0520d86aa238a15033f1c5cbda",
+        "successful": false,
+        "documentPresent": false,
+        "errorRules": [
+          "kafka.schema-registry"
+        ],
+        "diagnostics": [
+          {
+            "ruleId": "kafka.schema-registry",
+            "severity": "error",
+            "message": "Kafka schemaRegistryVendor requires schemaRegistryUrl on the same server binding",
+            "file": "synthetic/kafka-registry-vendor-missing-url.json",
+            "line": 13,
+            "column": 11,
+            "pointer": "/servers/broker/bindings/kafka/schemaRegistryVendor",
+            "related": [
+              {
+                "file": "synthetic/kafka-registry-vendor-missing-url.json",
+                "line": 8,
+                "column": 5,
+                "pointer": "/servers/broker"
+              }
+            ]
+          }
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "kafka-registry-multiple-servers",
+      "file": "synthetic/kafka-registry-multiple-servers.json",
+      "sha256": "372f460161269bbbd66e52a7a9b8391ed0b215f207b55d112ec481b1108d11f1",
+      "classification": "reference-parser-difference",
+      "reason": "A URL on one server does not satisfy registry metadata for another Kafka server in the same usage context.",
+      "asyncwright": {
+        "id": "kafka-registry-multiple-servers",
+        "file": "synthetic/kafka-registry-multiple-servers.json",
+        "sha256": "372f460161269bbbd66e52a7a9b8391ed0b215f207b55d112ec481b1108d11f1",
+        "successful": false,
+        "documentPresent": false,
+        "errorRules": [
+          "kafka.schema-registry"
+        ],
+        "diagnostics": [
+          {
+            "ruleId": "kafka.schema-registry",
+            "severity": "error",
+            "message": "Kafka message registry metadata requires schemaRegistryUrl on every Kafka server in its usage context",
+            "file": "synthetic/kafka-registry-multiple-servers.json",
+            "line": 33,
+            "column": 15,
+            "pointer": "/channels/events/messages/registered/bindings/kafka/schemaIdLocation",
+            "related": [
+              {
+                "file": "synthetic/kafka-registry-multiple-servers.json",
+                "line": 47,
+                "column": 5,
+                "pointer": "/operations/send"
+              },
+              {
+                "file": "synthetic/kafka-registry-multiple-servers.json",
+                "line": 18,
+                "column": 5,
+                "pointer": "/servers/secure"
+              }
+            ]
+          }
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "kafka-registry-unselected-message",
+      "file": "synthetic/kafka-registry-unselected-message.json",
+      "sha256": "22c24ad9a607f81890f99909fdeef56468b7ceec9f476aacbc3095e2b8255e96",
+      "classification": "agreement",
+      "reason": "A registered message excluded by operation.messages is not used and creates no dependency.",
+      "asyncwright": {
+        "id": "kafka-registry-unselected-message",
+        "file": "synthetic/kafka-registry-unselected-message.json",
+        "sha256": "22c24ad9a607f81890f99909fdeef56468b7ceec9f476aacbc3095e2b8255e96",
+        "successful": true,
+        "documentPresent": true,
+        "errorRules": [],
+        "diagnostics": []
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "kafka-registry-no-kafka-server-warning",
+      "file": "synthetic/kafka-registry-no-kafka-server-warning.json",
+      "sha256": "2f8e9dab3497aab1b8a5125a64d999b8f4b371bbf51b6cd53142cca96fea1107",
+      "classification": "agreement",
+      "reason": "No Kafka server produces a warning, permitting a model; comparison checks acceptance, not warning equality.",
+      "asyncwright": {
+        "id": "kafka-registry-no-kafka-server-warning",
+        "file": "synthetic/kafka-registry-no-kafka-server-warning.json",
+        "sha256": "2f8e9dab3497aab1b8a5125a64d999b8f4b371bbf51b6cd53142cca96fea1107",
+        "successful": true,
+        "documentPresent": true,
+        "errorRules": [],
+        "diagnostics": [
+          {
+            "ruleId": "kafka.schema-registry",
+            "severity": "warning",
+            "message": "Kafka registry metadata cannot be checked: this usage has no Kafka server",
+            "file": "synthetic/kafka-registry-no-kafka-server-warning.json",
+            "line": 23,
+            "column": 15,
+            "pointer": "/channels/events/messages/registered/bindings/kafka/schemaIdLocation",
+            "related": [
+              {
+                "file": "synthetic/kafka-registry-no-kafka-server-warning.json",
+                "line": 14,
+                "column": 5,
+                "pointer": "/channels/events"
+              },
+              {
+                "file": "synthetic/kafka-registry-no-kafka-server-warning.json",
+                "line": 37,
+                "column": 5,
+                "pointer": "/operations/send"
+              }
+            ]
+          }
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "kafka-registry-reply-channel",
+      "file": "synthetic/kafka-registry-reply-channel.json",
+      "sha256": "69020af0845ab2423a58cc0c60e004b9369c1c6b27f4caa0276e942ba260da0e",
+      "classification": "reference-parser-difference",
+      "reason": "Reply metadata uses the reply channel servers independently of the request channel; JavaScript omits this dependency check.",
+      "asyncwright": {
+        "id": "kafka-registry-reply-channel",
+        "file": "synthetic/kafka-registry-reply-channel.json",
+        "sha256": "69020af0845ab2423a58cc0c60e004b9369c1c6b27f4caa0276e942ba260da0e",
+        "successful": false,
+        "documentPresent": false,
+        "errorRules": [
+          "kafka.schema-registry"
+        ],
+        "diagnostics": [
+          {
+            "ruleId": "kafka.schema-registry",
+            "severity": "error",
+            "message": "Kafka message registry metadata requires schemaRegistryUrl on every Kafka server in its usage context",
+            "file": "synthetic/kafka-registry-reply-channel.json",
+            "line": 59,
+            "column": 15,
+            "pointer": "/channels/replies/messages/registered/bindings/kafka/schemaIdLocation",
+            "related": [
+              {
+                "file": "synthetic/kafka-registry-reply-channel.json",
+                "line": 78,
+                "column": 5,
+                "pointer": "/operations/send"
+              },
+              {
+                "file": "synthetic/kafka-registry-reply-channel.json",
+                "line": 18,
+                "column": 5,
+                "pointer": "/servers/replyBroker"
+              }
+            ]
+          }
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "kafka-registry-dynamic-reply",
+      "file": "synthetic/kafka-registry-dynamic-reply.json",
+      "sha256": "d922984108136ec526a7640ae881639f4b2bd158c6a372681a35905eafb63bf6",
+      "classification": "reference-parser-difference",
+      "reason": "The documented dynamic reply policy uses request channel servers when the reply has no channel.",
+      "asyncwright": {
+        "id": "kafka-registry-dynamic-reply",
+        "file": "synthetic/kafka-registry-dynamic-reply.json",
+        "sha256": "d922984108136ec526a7640ae881639f4b2bd158c6a372681a35905eafb63bf6",
+        "successful": false,
+        "documentPresent": false,
+        "errorRules": [
+          "kafka.schema-registry"
+        ],
+        "diagnostics": [
+          {
+            "ruleId": "kafka.schema-registry",
+            "severity": "error",
+            "message": "Kafka message registry metadata requires schemaRegistryUrl on every Kafka server in its usage context",
+            "file": "synthetic/kafka-registry-dynamic-reply.json",
+            "line": 23,
+            "column": 15,
+            "pointer": "/channels/events/messages/registered/bindings/kafka/schemaIdLocation",
+            "related": [
+              {
+                "file": "synthetic/kafka-registry-dynamic-reply.json",
+                "line": 37,
+                "column": 5,
+                "pointer": "/operations/send"
+              },
+              {
+                "file": "synthetic/kafka-registry-dynamic-reply.json",
+                "line": 8,
+                "column": 5,
+                "pointer": "/servers/broker"
+              }
+            ]
+          }
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "kafka-registry-binding-map-alias",
+      "file": "synthetic/kafka-registry-binding-map-alias.json",
+      "sha256": "b5c0c96c85a773ee393fc7042baff635435ed043033a83d8b58f5fc9109ec909",
+      "classification": "agreement",
+      "reason": "Resolve the message binding map alias before reading Kafka metadata, retaining source refs.",
+      "asyncwright": {
+        "id": "kafka-registry-binding-map-alias",
+        "file": "synthetic/kafka-registry-binding-map-alias.json",
+        "sha256": "b5c0c96c85a773ee393fc7042baff635435ed043033a83d8b58f5fc9109ec909",
+        "successful": true,
+        "documentPresent": true,
+        "errorRules": [],
+        "diagnostics": []
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "kafka-registry-reusable-reply",
+      "file": "synthetic/kafka-registry-reusable-reply.json",
+      "sha256": "54060fa2431f2b084da78784d308df525d70bfb9db85453b85b9658b04e7d6d0",
+      "classification": "agreement",
+      "reason": "A reply component alias resolves as a reply, with its channel and messages preserved.",
+      "asyncwright": {
+        "id": "kafka-registry-reusable-reply",
+        "file": "synthetic/kafka-registry-reusable-reply.json",
+        "sha256": "54060fa2431f2b084da78784d308df525d70bfb9db85453b85b9658b04e7d6d0",
         "successful": true,
         "documentPresent": true,
         "errorRules": [],

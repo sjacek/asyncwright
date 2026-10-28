@@ -79,6 +79,11 @@ public enum BuiltinRuleId {
      */
     OPERATION_MESSAGE("operation.message"),
     /**
+     * Kafka Registry dependencies: missing URL is an error; a message usage with no Kafka
+     * server is a warning. Related locations identify affected servers and root operations.
+     */
+    KAFKA_SCHEMA_REGISTRY("kafka.schema-registry"),
+    /**
      * Project channel address pattern mismatch.
      */
     PROJECT_CHANNEL_ADDRESS("project.channel-address"),
