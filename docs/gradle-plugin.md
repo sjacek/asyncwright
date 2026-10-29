@@ -102,6 +102,10 @@ asyncwright {
 
 ## Project extensions and generators
 
+Development `0.3.0-SNAPSHOT` also supports declared local Avro inputs through
+`specs.<name>.schemaFiles`. See the [file policy, cache contract and example](avro.md#declared-local-files).
+This additive DSL is not available in public 0.2.1.
+
 Put implementations of the [public Java API](extensions.md) in a Java subproject
 or included build, compile them against the plugin artifact, and add their JAR to
 `asyncwrightExtensions`:

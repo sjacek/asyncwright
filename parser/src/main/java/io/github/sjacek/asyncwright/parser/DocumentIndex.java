@@ -1,6 +1,7 @@
 package io.github.sjacek.asyncwright.parser;
 
 import io.github.sjacek.asyncwright.api.AsyncApi30;
+import io.github.sjacek.asyncwright.api.Avro19;
 import io.github.sjacek.asyncwright.api.BuiltinRuleId;
 import static io.github.sjacek.asyncwright.api.AsyncApiFields.*;
 
@@ -23,7 +24,7 @@ final class DocumentIndex {
         SERVER_BINDINGS, CHANNEL_BINDINGS, OPERATION_BINDINGS, MESSAGE_BINDINGS,
         ROOT, COMPONENTS, CHANNEL(CHANNEL_BINDINGS), OPERATION(OPERATION_BINDINGS),
         MESSAGE(MESSAGE_BINDINGS), SERVER(SERVER_BINDINGS), SCHEMA, PARAMETER,
-        SECURITY, TAG, CORRELATION, REPLY, OTHER;
+        SECURITY, TAG, CORRELATION, REPLY, AVRO_SCHEMA, OTHER;
 
         /** Associated map kind for an owner, or null for nodes without an owned binding map. */
         private final Kind bindings;
@@ -40,6 +41,7 @@ final class DocumentIndex {
     final Map<String, List<String>> children = new LinkedHashMap<>();
     final List<Use> references = new ArrayList<>();
     final List<Diagnostic> diagnostics = new ArrayList<>();
+    final List<String> avroSchemas = new ArrayList<>();
     private final SourceDocument source;
 
     DocumentIndex(SourceDocument source) {
@@ -50,11 +52,16 @@ final class DocumentIndex {
     private void visit(JsonNode node, String pointer, Kind kind) {
         kinds.put(pointer, kind);
         children.put(pointer, new ArrayList<>());
+        // Avro names are not JSON Pointer edges. Only a wrapper's schema file reference is
+        // referenceable here; $ref in defaults or arbitrary Avro metadata remains plain data.
+        if (kind == Kind.AVRO_SCHEMA) {
+            avroSchemas.add(pointer);
+            if (node.isObject() && node.has(REF) && !node.has(TYPE)) reference(node, pointer, kind);
+            return;
+        }
         if (!node.isObject()) return;
         if (node.has(REF)) {
-            references.add(new Use(pointer, kind));
-            if (node.size() > 1) diagnostics.add(Diagnostic.at(BuiltinRuleId.REFERENCE_SIBLINGS, Severity.WARNING,
-                    "Fields beside $ref are ignored", source.location(pointer), List.of()));
+            reference(node, pointer, kind);
             return;
         }
         if (BindingSchemaPositions.isBindingMap(kind)) {
@@ -77,7 +84,9 @@ final class DocumentIndex {
         }
         if (kind == Kind.SCHEMA) {
             if (node.has(SCHEMA_FORMAT) || node.has(SCHEMA)) {
-                if (!node.has(SCHEMA_FORMAT) || AsyncApi30.supportsSchemaFormat(node.path(SCHEMA_FORMAT).asText()))
+                if (Avro19.supports(node.path(SCHEMA_FORMAT).asText()) && multiFormatPosition(pointer))
+                    child(pointer, SCHEMA, node.path(SCHEMA), Kind.AVRO_SCHEMA);
+                else if (!node.has(SCHEMA_FORMAT) || AsyncApi30.supportsSchemaFormat(node.path(SCHEMA_FORMAT).asText()))
                     child(pointer, SCHEMA, node.path(SCHEMA), Kind.SCHEMA);
                 else unsupported(pointer + "/" + SCHEMA_FORMAT, "Non-default schema formats are not supported in 0.1");
                 return;
@@ -170,6 +179,15 @@ final class DocumentIndex {
         return null;
     }
 
+    /** Avro wrappers belong to payloads/components; protocol schema fields use refs to components. */
+    private boolean multiFormatPosition(String pointer) {
+        String components = "/" + COMPONENTS + "/" + SCHEMAS + "/";
+        if (pointer.startsWith(components) && pointer.indexOf('/', components.length()) < 0) return true;
+        int slash = pointer.lastIndexOf('/');
+        return slash >= 0 && pointer.substring(slash + 1).equals(PAYLOAD)
+                && kinds.get(pointer.substring(0, slash)) == Kind.MESSAGE;
+    }
+
     private void mapChildren(JsonNode node, String pointer, String key, Kind kind) {
         for (var field : node.path(key).properties()) {
             child(pointer, key + "/" + SourceDocument.escape(field.getKey()), field.getValue(), kind);
@@ -211,5 +229,11 @@ final class DocumentIndex {
 
     private void unsupported(String pointer, String message) {
         diagnostics.add(Diagnostic.at(BuiltinRuleId.UNSUPPORTED_CONSTRUCT, Severity.ERROR, message, source.location(pointer), List.of()));
+    }
+
+    private void reference(JsonNode node, String pointer, Kind kind) {
+        references.add(new Use(pointer, kind));
+        if (node.size() > 1) diagnostics.add(Diagnostic.at(BuiltinRuleId.REFERENCE_SIBLINGS, Severity.WARNING,
+                "Fields beside $ref are ignored", source.location(pointer), List.of()));
     }
 }

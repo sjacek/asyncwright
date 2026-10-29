@@ -90,6 +90,7 @@ public final class AsyncwrightPlugin implements Plugin<Project> {
     }
     private static void configure(Project project, AsyncApiTask task, AsyncApiSpec spec, Configuration extensions) {
         task.getFile().set(spec.getFile());
+        task.getSchemaFiles().setFrom(spec.getSchemaFiles());
         task.getProjectDirectory().set(project.getLayout().getProjectDirectory());
         var root = project.getLayout().getProjectDirectory().getAsFile().toPath();
         // Capture a Path, never Project, in the provider used to fingerprint the relative source name.

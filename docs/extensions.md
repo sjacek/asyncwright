@@ -200,3 +200,10 @@ example module do not publish artifacts or modify consumer builds.
 
 The previous pre-release `parser.ResolvedReference` type now lives in `api.ResolvedReference`.
 Update explicit imports when using that record; resolver lookup behavior is unchanged.
+
+## Development Avro file snapshots
+
+In unreleased `0.3.0-SNAPSHOT`, `AsyncApiReferences.resolveSchemaFile(pointer)` exposes
+a validated local Avro file snapshot without expanding the typed document's reference.
+It is an additive default interface method. Existing extensions need no implementation
+change. See the [parser context and snapshot contract](avro.md#standalone-parser-and-extension-api).

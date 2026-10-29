@@ -2,6 +2,7 @@ package io.github.sjacek.asyncwright.generator.java;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.sjacek.asyncwright.api.AsyncApiDocumentView;
+import io.github.sjacek.asyncwright.api.Avro19;
 import io.github.sjacek.asyncwright.api.ResolvedReference;
 
 import java.io.Serial;
@@ -204,6 +205,9 @@ final class SchemaModels {
 
     /** Accepts one Java-representable type, with optional null; never guesses a union/composition. */
     private String schemaType(Target schema) {
+        if (Avro19.supports(schema.node.path("schemaFormat").asText()))
+            throw failure(UNSUPPORTED, schema.pointer + "/schemaFormat",
+                    "Avro validation is supported; Java DTO generation requires the default AsyncAPI/JSON profile");
         if (!schema.node.isObject()) throw failure(UNSUPPORTED, schema.pointer, "Boolean and scalar schemas need an explicit DTO mapping");
         for (String key : COMPOSITIONS) {
             if (schema.node.has(key)) throw failure(UNSUPPORTED, schema.pointer + "/" + key, "Schema composition is outside the Java DTO profile");

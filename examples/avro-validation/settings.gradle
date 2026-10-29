@@ -1,0 +1,6 @@
+pluginManagement {
+    // This example exercises unreleased R7 from the source build; no snapshot upload is needed.
+    includeBuild('../..')
+    repositories { gradlePluginPortal(); mavenCentral() }
+}
+rootProject.name = 'avro-validation-example'

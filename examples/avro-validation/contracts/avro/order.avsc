@@ -1,0 +1,13 @@
+{
+  "type": "record",
+  "name": "Order",
+  "namespace": "example.events",
+  "doc": "An order notification validated without connecting to a broker or Registry.",
+  "aliases": ["PreviousOrder"],
+  "fields": [
+    {"name": "id", "type": "string"},
+    {"name": "createdAt", "type": {"type": "long", "logicalType": "timestamp-millis"}},
+    {"name": "tags", "type": {"type": "map", "values": "string"}, "default": {}}
+  ],
+  "metadata": {"owner": "public-example"}
+}

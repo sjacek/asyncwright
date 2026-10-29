@@ -1,16 +1,19 @@
 package io.github.sjacek.asyncwright.parser;
 
-import io.github.sjacek.asyncwright.api.AsyncApi30;
-import io.github.sjacek.asyncwright.api.BuiltinRuleId;
-import static io.github.sjacek.asyncwright.api.AsyncApiFields.*;
-
 import com.asyncapi.v3._0_0.model.AsyncAPI;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.networknt.schema.*;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.networknt.schema.Schema;
+import com.networknt.schema.SchemaLocation;
+import com.networknt.schema.SchemaRegistry;
+import com.networknt.schema.SchemaRegistryConfig;
 import com.networknt.schema.regex.JoniRegularExpressionFactory;
+import io.github.sjacek.asyncwright.api.AsyncApi30;
+import io.github.sjacek.asyncwright.api.AsyncApiFields;
+import io.github.sjacek.asyncwright.api.BuiltinRuleId;
 import io.github.sjacek.asyncwright.api.Diagnostic;
 import io.github.sjacek.asyncwright.api.Severity;
 import io.github.sjacek.asyncwright.api.SourceLocation;
@@ -18,8 +21,27 @@ import io.github.sjacek.asyncwright.api.SourceLocation;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 import java.util.regex.Pattern;
+
+import static io.github.sjacek.asyncwright.api.AsyncApiFields.ADDRESS;
+import static io.github.sjacek.asyncwright.api.AsyncApiFields.ASYNCAPI;
+import static io.github.sjacek.asyncwright.api.AsyncApiFields.CHANNEL;
+import static io.github.sjacek.asyncwright.api.AsyncApiFields.CHANNELS;
+import static io.github.sjacek.asyncwright.api.AsyncApiFields.MESSAGES;
+import static io.github.sjacek.asyncwright.api.AsyncApiFields.OPERATIONS;
+import static io.github.sjacek.asyncwright.api.AsyncApiFields.PARAMETERS;
+import static io.github.sjacek.asyncwright.api.AsyncApiFields.REF;
+import static io.github.sjacek.asyncwright.api.AsyncApiFields.SERVERS;
+import static io.github.sjacek.asyncwright.api.AsyncApiFields.TYPE;
 
 /** Gradle-independent AsyncAPI 3.0 parser; schema retrieval never uses the network. */
 public final class AsyncApiParser {
@@ -65,6 +87,38 @@ public final class AsyncApiParser {
      * @throws IllegalArgumentException if the diagnostic file name is not a portable relative path
      */
     public ParseResult parse(String relativeFile, String input) {
+        return parseInput(relativeFile, input, null);
+    }
+
+    /**
+     * Parses text with explicit authority for declared local Avro files.
+     * @param relativeFile project-relative diagnostic file name
+     * @param input complete JSON or YAML document
+     * @param context project root and immutable schema file allowlist
+     * @return validated document and diagnostics; external failures never return a partial model
+     */
+    public ParseResult parse(String relativeFile, String input, ParseContext context) {
+        return parseInput(relativeFile, input, Objects.requireNonNull(context, "context"));
+    }
+
+    /**
+     * Reads the main document and declared local Avro files within one explicit context.
+     * @param file document path, absolute inside the root or relative to it
+     * @param context project root and allowed schema file names
+     * @return parser outcome
+     * @throws IOException if the main document cannot be read
+     * @throws IllegalArgumentException if the document is outside the context root
+     */
+    public ParseResult parse(Path file, ParseContext context) throws IOException {
+        Path root = context.projectRoot();
+        Path absolute = file.isAbsolute() ? file.normalize() : root.resolve(file).normalize();
+        if (!absolute.startsWith(root)) throw new IllegalArgumentException("Document must be inside the project root");
+        if (!absolute.toRealPath().startsWith(root.toRealPath()))
+            throw new IllegalArgumentException("Document real path must be inside the project root");
+        return parse(root.relativize(absolute).toString().replace('\\', '/'), Files.readString(absolute), context);
+    }
+
+    private ParseResult parseInput(String relativeFile, String input, ParseContext context) {
         Path path = DirectoryOutput.relativePath(relativeFile);
         String file = path.toString().replace('\\', '/');
         if (file.isBlank()) throw new IllegalArgumentException("Expected a document file name");
@@ -94,7 +148,21 @@ public final class AsyncApiParser {
         if (version.isTextual() && !version.asText().equals(AsyncApi30.VERSION))
             return failed(List.of(Diagnostic.at(BuiltinRuleId.UNSUPPORTED_VERSION, Severity.ERROR,
                     "Only AsyncAPI " + AsyncApi30.VERSION + " is supported in 0.1", source.location("/" + ASYNCAPI), List.of())));
-        for (var error : SCHEMA.validate(source.root)) {
+        JsonNode structural = source.root;
+        if (!index.avroSchemas.isEmpty()) {
+            structural = source.root.deepCopy();
+            for (String pointer : index.avroSchemas) {
+                JsonNode value = structural.at(pointer);
+                if (value.has(REF) && !value.has(TYPE)) continue;
+                // The bundled JSON Schema's Avro approximation rejects legal full names and
+                // named object references. Validate this opaque leaf with the Avro grammar;
+                // retain structural validation of its enclosing Multi Format Schema Object.
+                int slash = pointer.lastIndexOf('/');
+                ((ObjectNode) structural.at(pointer.substring(0, slash)))
+                        .put(AsyncApiFields.SCHEMA, "string");
+            }
+        }
+        for (var error : SCHEMA.validate(structural)) {
             String pointer = error.getInstanceLocation().toString();
             diagnostics.add(Diagnostic.at(BuiltinRuleId.schemaKeyword(error.getKeyword()), Severity.ERROR, error.getMessage(),
                     source.location(pointer), references.related(pointer)));
@@ -106,6 +174,7 @@ public final class AsyncApiParser {
                     source.location(diagnostic.pointer()), references.related(diagnostic.pointer())));
         if (hasErrors(diagnostics)) return failed(diagnostics);
         diagnostics.addAll(references.validate());
+        diagnostics.addAll(new AvroValidation(source, index, references, context).validate());
         semanticRules(source, index, references, diagnostics);
         // Registry checks read validated source/resolver contexts, not an expanded typed model.
         // Reference errors can coexist with findings from independent operations or replies.
@@ -135,7 +204,7 @@ public final class AsyncApiParser {
         }
     }
 
-    private static void checkPreservation(JsonNode expected, JsonNode actual, String pointer, List<String> losses) {
+    static void checkPreservation(JsonNode expected, JsonNode actual, String pointer, List<String> losses) {
         if (expected.isObject() && actual.isObject()) {
             for (var field : expected.properties()) checkPreservation(field.getValue(), actual.path(field.getKey()),
                     pointer + "/" + SourceDocument.escape(field.getKey()), losses);

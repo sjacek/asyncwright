@@ -103,7 +103,17 @@ class PublicCorpusTest {
                     blob.update(("blob " + bytes.length + "\0").getBytes(StandardCharsets.UTF_8));
                     assertEquals(entry.path("upstreamGitBlob").asText(), HexFormat.of().formatHex(blob.digest(bytes)), file);
                 }
-                ParseResult result = parser.parse(file, new String(bytes, StandardCharsets.UTF_8));
+                String input = new String(bytes, StandardCharsets.UTF_8);
+                ParseResult result;
+                Set<String> allowed = new HashSet<>();
+                if (entry.has("schemaFiles")) {
+                    Set<String> assets = new HashSet<>();
+                    MANIFEST.path("assets").forEach(asset -> assets.add(asset.path("file").asText()));
+                    entry.path("schemaFiles").forEach(schema -> allowed.add(schema.asText()));
+                    assertTrue(assets.containsAll(allowed), "Allowed schemas must be checksum-verified assets");
+                    Path root = Path.of(Objects.requireNonNull(getClass().getResource("/conformance")).toURI());
+                    result = parser.parse(file, input, new ParseContext(root, allowed));
+                } else result = parser.parse(file, input);
                 var errors = result.diagnostics().stream().filter(d -> d.severity() == Severity.ERROR).toList();
                 List<String> rules = errors.stream().map(Diagnostic::ruleId).distinct().sorted().toList();
                 Map<String, Object> report = new LinkedHashMap<>();
@@ -122,7 +132,7 @@ class PublicCorpusTest {
                 if (entry.path("asyncwright").has("firstErrorPointer"))
                     assertEquals(entry.path("asyncwright").path("firstErrorPointer").asText(), errors.get(0).pointer(), context);
                 for (var diagnostic : result.diagnostics()) {
-                    assertEquals(file, diagnostic.file());
+                    assertTrue(diagnostic.file().equals(file) || allowed.contains(diagnostic.file()), diagnostic::toString);
                     assertTrue(diagnostic.line() >= 1 && diagnostic.column() >= 1, context);
                     assertTrue(diagnostic.pointer().isEmpty() || diagnostic.pointer().startsWith("/"), context);
                 }

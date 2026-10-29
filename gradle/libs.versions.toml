@@ -1,4 +1,5 @@
 [versions]
+avro = "1.12.2"
 jackson = "2.22.4"
 json-schema-validator = "2.0.8"
 joni = "2.2.6"
@@ -8,6 +9,7 @@ jetbrains-annotations = "26.0.2"
 jasyncapi-fork = "1.0.0-RC4-asyncwright.5"
 
 [libraries]
+avro = { module = "org.apache.avro:avro", version.ref = "avro" }
 jackson-bom = { module = "com.fasterxml.jackson:jackson-bom", version.ref = "jackson" }
 jackson-yaml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml" }
 jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind" }

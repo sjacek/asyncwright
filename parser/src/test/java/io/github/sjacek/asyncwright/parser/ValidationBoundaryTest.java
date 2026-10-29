@@ -126,9 +126,9 @@ class ValidationBoundaryTest {
     }
 
     @Test
-    void nonDefaultFormatsInComponentSchemasCannotBypassTheCapabilityCheck() {
+    void newerAvroFormatsInComponentSchemasCannotBypassTheCapabilityCheck() {
         onlyError(parse("""
-                "components":{"schemas":{"Value":{"schemaFormat":"application/vnd.apache.avro+json;version=1.9.0",
+                "components":{"schemas":{"Value":{"schemaFormat":"application/vnd.apache.avro+json;version=1.10.0",
                   "schema":{"type":"record","name":"Value","fields":[{"name":"text","type":"string"}]}}}}
                 """), "unsupported.construct", "/components/schemas/Value/schemaFormat");
     }

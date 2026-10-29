@@ -174,10 +174,10 @@ class AsyncApiParserTest {
     }
 
     @Test
-    void rejectsTraitsAndNonDefaultSchemaFormats() {
+    void rejectsTraitsAndUnsupportedSchemaFormats() {
         error(parse("\"components\":{\"messages\":{\"m\":{\"traits\":[{\"summary\":\"Trait\"}]}}}"), "unsupported.construct");
         error(parse("\"components\":{\"operationTraits\":{\"base\":{\"summary\":\"Trait\"}}}"), "unsupported.construct");
-        error(parse("\"components\":{\"messages\":{\"m\":{\"payload\":{\"schemaFormat\":\"application/vnd.apache.avro+json;version=1.9.0\",\"schema\":{\"type\":\"string\"}}}}}"), "unsupported.construct");
+        error(parse("\"components\":{\"messages\":{\"m\":{\"payload\":{\"schemaFormat\":\"application/vnd.google.protobuf;version=3\",\"schema\":{\"type\":\"string\"}}}}}"), "unsupported.construct");
     }
 
     @Test

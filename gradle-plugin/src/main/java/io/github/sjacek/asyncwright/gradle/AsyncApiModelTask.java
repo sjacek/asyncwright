@@ -22,9 +22,12 @@ public abstract class AsyncApiModelTask extends AsyncApiTask {
         getParameters().convention(java.util.Map.of());
         var build = getBuildDirectory();
         var input = getFile();
+        var schemas = getSchemaFiles();
         // Gradle reads declared outputs before cache lookup. An action-only guard is bypassed on FROM-CACHE.
         validatedOutputDirectory = getOutputDirectory().map(directory -> {
             validateGeneratorOutput(directory.getAsFile(), build.get().getAsFile(), input.get().getAsFile());
+            // Protect declared Avro inputs before cache restoration as well as worker cleanup.
+            for (var schema : schemas) validateGeneratorOutput(directory.getAsFile(), build.get().getAsFile(), schema);
             return directory;
         });
     }

@@ -83,6 +83,12 @@ public enum BuiltinRuleId {
      * server is a warning. Related locations identify affected servers and root operations.
      */
     KAFKA_SCHEMA_REGISTRY("kafka.schema-registry"),
+    /** Invalid Avro syntax, names, types or default values. */
+    AVRO_SCHEMA("avro.schema"),
+    /** Avro file reference violates the project boundary, allowlist or file requirements. */
+    AVRO_REFERENCE("avro.reference"),
+    /** Invalid known logical type (error), or ignored unknown Avro 1.9 logical type (warning). */
+    AVRO_LOGICAL_TYPE("avro.logical-type"),
     /**
      * Project channel address pattern mismatch.
      */

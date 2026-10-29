@@ -3,6 +3,9 @@ package io.github.sjacek.asyncwright.parser;
 import static io.github.sjacek.asyncwright.api.AsyncApiFields.*;
 
 import com.asyncapi.schemas.asyncapi.AsyncAPISchema;
+import com.asyncapi.schemas.avro.v1._9_0.AvroSchemaMetadata;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
@@ -38,8 +41,20 @@ final class ModelMapping {
         return new ObjectMapper().enable(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS)
                 .enable(DeserializationFeature.USE_BIG_INTEGER_FOR_INTS)
                 .addMixIn(AsyncAPISchema.class, InstanceValues.class)
+                .addMixIn(AvroSchemaMetadata.class, AvroMetadataValues.class)
                 .registerModule(booleans);
     }
+
+    /**
+     * The fork's internal metadata-map property must not reserve the legal Avro attribute
+     * "metadata". Use explicit schema fields and the existing annotated any-getter/setter;
+     * suppress ordinary Lombok accessors so the backing map is never emitted as a container.
+     */
+    // Keep the annotation itself: its default empty list overrides the fork's ignore list.
+    @JsonIgnoreProperties
+    @JsonAutoDetect(getterVisibility = JsonAutoDetect.Visibility.NONE,
+            isGetterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE)
+    private abstract static class AvroMetadataValues { }
 
     private static final class BooleanDeserializer extends DelegatingDeserializer {
         @Serial private static final long serialVersionUID = 1L;

@@ -6,6 +6,13 @@ User-visible changes to Asyncwright. Versions marked **Unreleased** are not yet 
 
 ### Added
 
+- Validate Avro 1.9 payload/component schemas inline or from declared local `.avsc`
+  files, including names, defaults and logical types. Errors in shared files include
+  all affected contract usages. See the [profile and runnable example](docs/avro.md).
+- Configure `schemaFiles` for validation/generation tasks. File contents and relative
+  paths participate in the cache; project boundaries apply before cache reuse.
+  Standalone parsers opt in through `ParseContext`; extensions can read defensive
+  validated file snapshots without replacing references in the model.
 - Catch incomplete Kafka Schema Registry metadata during validation, before generation.
   Every Kafka server used by an operation or reply must provide `schemaRegistryUrl` when
   its message declares registry metadata. A vendor without a URL is an error; a usage
@@ -21,6 +28,8 @@ User-visible changes to Asyncwright. Versions marked **Unreleased** are not yet 
 - Contracts with incomplete Kafka Registry metadata that passed 0.2.1 can now fail
   validation. Supply a Registry URL on every Kafka server selected by the channel, or
   correct the operation message/server selection. No model upgrade is required.
+- Continues to use model `.5`. Avro validation adds Apache Avro 1.12.2 as a runtime
+  dependency; the supported schema language is 1.9.0. Avro DTO generation is not included.
 
 ## [0.2.1] - 2026-10-28
 

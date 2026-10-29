@@ -26,7 +26,8 @@ The [public DTO example](examples/java-dto-consumer) generates Java models and c
 a client using the released plugin, without Node.js or a sibling checkout.
 
 Development version **0.3.0-SNAPSHOT** adds
-[offline Registry dependency validation](docs/validation.md#development-kafka-registry-dependencies-030-snapshot).
+[offline Registry dependency validation](docs/validation.md#development-kafka-registry-dependencies-030-snapshot)
+and [Avro 1.9 validation with declared local files](docs/avro.md).
 This work is unreleased; the quick start continues to use public 0.2.1/.5.
 
 ## Quick start
@@ -104,11 +105,10 @@ Modules:
 
 ## Build
 
-This checkout builds released Asyncwright `0.2.1` with model
-`1.0.0-RC4-asyncwright.5` from Maven Central. Version 0.2.1 fixes intermittent
-`Stream closed` failures when isolated workers load the bundled schema. No DSL,
-extension API or generated-output migration is required. Public examples use
-released `0.2.1/.5`; see the [release status](docs/releases.md#published-021-patch-release).
+This branch builds development Asyncwright `0.3.0-SNAPSHOT` with model
+`1.0.0-RC4-asyncwright.5` from Maven Central. Registry and Avro changes are unreleased.
+Versioned public examples use released `0.2.1/.5`; the Avro validation example uses
+this source build. See the [release status](docs/releases.md#published-021-patch-release).
 Compile and package this checkout without a model checkout:
 
 ```powershell

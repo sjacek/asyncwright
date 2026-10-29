@@ -11,6 +11,7 @@ import io.github.sjacek.asyncwright.api.Severity;
 import io.github.sjacek.asyncwright.parser.AsyncApiParser;
 import io.github.sjacek.asyncwright.parser.ExtensionExecutor;
 import io.github.sjacek.asyncwright.parser.ParseResult;
+import io.github.sjacek.asyncwright.parser.ParseContext;
 import org.gradle.api.GradleException;
 import org.gradle.api.file.DirectoryProperty;
 import org.gradle.api.file.FileSystemOperations;
@@ -29,6 +30,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import static io.github.sjacek.asyncwright.gradle.DeclarativeRules.Parameter.*;
 
 /**
@@ -55,6 +57,11 @@ public abstract class AsyncApiWork implements WorkAction<AsyncApiWork.Parameters
          * @return managed worker value
          */
         Property<String> getSourcePath();
+        /**
+         * Declared portable schema names; file trees and Project objects never cross isolation.
+         * @return project-relative file allowlist
+         */
+        ListProperty<String> getSchemaFilePaths();
         /**
          * Root for clickable console locations.
          * @return managed worker value
@@ -140,7 +147,8 @@ public abstract class AsyncApiWork implements WorkAction<AsyncApiWork.Parameters
             }
             // Parse the declared source name rather than deriving locations from an absolute worker path.
             ParseResult parsed = new AsyncApiParser().parse(work.getSourcePath().get(),
-                    Files.readString(work.getFile().get().getAsFile().toPath()));
+                    Files.readString(work.getFile().get().getAsFile().toPath()),
+                    new ParseContext(work.getProjectDirectory().get().getAsFile().toPath(), Set.copyOf(work.getSchemaFilePaths().get())));
             List<ExtensionSpec> rules = new ArrayList<>();
             rules.add(new ExtensionSpec(DeclarativeRules.class.getName(), Map.of(
                     CHANNEL_ADDRESS.key(), work.getChannelAddress().get(),

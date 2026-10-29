@@ -163,6 +163,18 @@ class JavaDtoEdgeCasesTest {
                 "The source compatibility profile intentionally preserves the legacy terminal byte");
     }
 
+    @Test void avroValidationDoesNotImplyJavaDtoGenerationSupport() throws Exception {
+        var source = document("""
+                {"schemaFormat":"application/vnd.apache.avro;version=1.9.0", "schema":{
+                  "type":"record", "name":"Event", "fields":[{"name":"id","type":"string"}]}}
+                """);
+        var result = generate(source, Map.of(JavaDtoGenerator.PACKAGE_NAME, "sample.dto"));
+        assertFalse(result.successful());
+        assertEquals("java-dto.unsupported", result.diagnostics().get(0).ruleId());
+        assertEquals("/components/schemas/Event/schemaFormat", result.diagnostics().get(0).pointer());
+        assertTrue(result.generatedFiles().isEmpty());
+    }
+
     private static String simple() {
         return "{\"type\":\"object\",\"additionalProperties\":false,\"properties\":{\"value\":{\"type\":\"string\"}}}";
     }

@@ -1,0 +1,11 @@
+plugins {
+    id 'io.github.sjacek.asyncwright'
+}
+
+asyncwright.specs {
+    orders {
+        file.set(layout.projectDirectory.file('contracts/orders.yaml'))
+        // Replace the default recursive .avsc tree with an explicit file allowlist.
+        schemaFiles.setFrom(layout.projectDirectory.file('contracts/avro/order.avsc'))
+    }
+}

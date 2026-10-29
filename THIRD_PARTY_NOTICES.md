@@ -16,13 +16,19 @@ ShardPilot project; distribution checksum verification is configured in
 
 The parser dependency baseline uses:
 
-- `io.github.sjacek.jasyncapi:asyncapi-core:1.0.0-RC4-asyncwright.2`, Apache-2.0;
+- `io.github.sjacek.jasyncapi:asyncapi-core:1.0.0-RC4-asyncwright.5`, Apache-2.0;
   fork: https://github.com/sjacek/jasyncapi, model source commit
-  `05116f0d99f9e3f3c1b7d1aa8491f120364acf91`, based on upstream RC4 at
-  `ecef261084596f6a2e6cb436b03a68c1f905ed6f`. The separate distribution retains the
-  upstream LICENSE and authorship. Its jar also embeds upstream's NOTICE from
-  `master` at `6c2a325f0826f26cfe26003af208ce15e5e9bbbe` (the RC4 tag had no NOTICE),
-  with fork provenance. Local `.1` was superseded by `.2` to add that notice.
+  `6de0c02e884a9336f727a6cc797ac8eb304c0e87`, based on upstream RC4 at
+  `ecef261084596f6a2e6cb436b03a68c1f905ed6f`. The separate distribution retains
+  upstream LICENSE/authorship and NOTICE from upstream master
+  `6c2a325f0826f26cfe26003af208ce15e5e9bbbe`, with embedded fork provenance.
+- Development Avro validation resolves `org.apache.avro:avro:1.12.2`, Apache-2.0;
+  upstream: https://github.com/apache/avro/tree/release-1.12.2. No Avro source is copied.
+  Its Commons Compress 1.28.0, Commons Codec 1.19.0, Commons IO 2.20.0 and Commons
+  Lang 3.18.0 dependencies are Apache-2.0 (https://commons.apache.org/).
+  SLF4J API 2.0.18 is MIT (https://www.slf4j.org/license.html).
+  Jackson is aligned to this project's 2.22.4 BOM. These are published runtime
+  dependencies, not vendored source or a shaded copy inside the plugin JAR.
 - `com.networknt:json-schema-validator:2.0.8`, Apache-2.0;
   upstream: https://github.com/networknt/json-schema-validator/tree/2.0.8.
 - `org.jruby.joni:joni:2.2.6`, MIT, for ECMAScript regular expressions;

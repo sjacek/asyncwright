@@ -667,6 +667,240 @@ class AsyncwrightPluginTest {
                 """;
     }
 
+    /** Default file trees, worker snapshots and both caches must react to schema-only edits. */
+    @Test void avroFilesReachRulesAndGeneratorsAndInvalidateBothTasks() throws Exception {
+        Path root = avroFixture("avro-files");
+        String first = "{\"type\":\"record\",\"name\":\"Event\",\"fields\":[{\"name\":\"id\",\"type\":\"long\"}]}";
+        write(root, "contracts/avro/event.avsc", first);
+        BuildResult result = run(root, "check", "asyncApiGenerateEventsCatalog");
+        assertEquals(SUCCESS, outcome(result, ":asyncApiValidateEvents"));
+        assertEquals(SUCCESS, outcome(result, ":asyncApiGenerateEventsCatalog"));
+        assertEquals("record:id", read(root, "build/generated/asyncapi/events/catalog/schema.txt"));
+        assertEquals("[ ]\n", read(root, "build/reports/asyncapi/events.json"));
+        BuildResult reused = run(root, "check", "asyncApiGenerateEventsCatalog");
+        assertEquals(UP_TO_DATE, outcome(reused, ":asyncApiGenerateEventsCatalog"));
+        assertTrue(reused.getOutput().contains("Reusing configuration cache"), reused::getOutput);
+        write(root, "contracts/avro/event.avsc", first.replace("\"id\"", "\"key\""));
+        BuildResult changed = run(root, "check", "asyncApiGenerateEventsCatalog");
+        assertEquals(SUCCESS, outcome(changed, ":asyncApiValidateEvents"));
+        assertEquals(SUCCESS, outcome(changed, ":asyncApiGenerateEventsCatalog"));
+        assertEquals("record:key", read(root, "build/generated/asyncapi/events/catalog/schema.txt"));
+        write(root, "contracts/avro/event.avsc", first);
+        run(root, "clean");
+        BuildResult restored = run(root, "check", "asyncApiGenerateEventsCatalog");
+        assertEquals(FROM_CACHE, outcome(restored, ":asyncApiValidateEvents"));
+        assertEquals(FROM_CACHE, outcome(restored, ":asyncApiGenerateEventsCatalog"));
+        Path moved = temporary.resolve("avro-relocated");
+        copySources(root, moved);
+        BuildResult relocated = run(moved, "check", "asyncApiGenerateEventsCatalog");
+        assertEquals(FROM_CACHE, outcome(relocated, ":asyncApiValidateEvents"));
+        assertEquals(FROM_CACHE, outcome(relocated, ":asyncApiGenerateEventsCatalog"));
+        assertEquals("record:id", read(moved, "build/generated/asyncapi/events/catalog/schema.txt"));
+    }
+
+    /** A root-level contract must not claim other generators' outputs as implicit inputs. */
+    @Test void avroDiscoveryTracksNewFilesWithoutDependingOnOtherTaskOutputs() throws Exception {
+        Path root = avroFixture("avro-root-input");
+        write(root, "events.yaml", avroDocument());
+        write(root, "avro/event.avsc", "{\"type\":\"string\"}");
+        append(root, "build.gradle", """
+                asyncwright.specs.events {
+                    file.set(layout.projectDirectory.file('events.yaml'))
+                    generators { other { className = 'fixture.Catalog'; parameters.put('name', 'other-schema.txt') } }
+                }
+                """);
+        String first = "asyncApiGenerateEventsCatalog";
+        String second = "asyncApiGenerateEventsOther";
+        BuildResult initial = run(root, "check", first, second);
+        assertEquals(SUCCESS, outcome(initial, ":" + first));
+        assertEquals(SUCCESS, outcome(initial, ":" + second));
+        BuildResult unchanged = run(root, "check", first, second);
+        assertEquals(UP_TO_DATE, outcome(unchanged, ":" + first));
+        assertEquals(UP_TO_DATE, outcome(unchanged, ":" + second));
+        // Reused configuration must discover a newly added input, including an unused schema.
+        write(root, "avro/unused.avsc", "{\"type\":\"long\"}");
+        BuildResult added = run(root, "check", first, second);
+        assertTrue(added.getOutput().contains("Reusing configuration cache"), added::getOutput);
+        assertEquals(SUCCESS, outcome(added, ":asyncApiValidateEvents"));
+        assertEquals(SUCCESS, outcome(added, ":" + first));
+        assertEquals(SUCCESS, outcome(added, ":" + second));
+    }
+
+    /** Declared path names matter even when Gradle's content fingerprints see identical basenames. */
+    @Test void avroAllowlistCanOverrideTheDefaultAndTracksCompleteRelativeNames() throws Exception {
+        Path root = avroFixture("avro-allowlist");
+        write(root, "contracts/events.yaml", avroDocument().replace("avro/event.avsc", "../schemas/event.avsc"));
+        write(root, "schemas/event.avsc", "{\"type\":\"string\"}");
+        write(root, "other/event.avsc", "{\"type\":\"string\"}");
+        fail(root, "check");
+        assertTrue(read(root, "build/reports/asyncapi/events.json").contains("avro.reference"));
+        append(root, "build.gradle", "asyncwright.specs.events.schemaFiles.setFrom(layout.projectDirectory.file('schemas/event.avsc'))\n");
+        assertEquals(SUCCESS, outcome(run(root, "check"), ":asyncApiValidateEvents"));
+        String original = read(root, "build.gradle");
+        write(root, "build.gradle", original.replace("'schemas/event.avsc'", "'other/event.avsc'"));
+        assertEquals(FAILED, outcome(fail(root, "check"), ":asyncApiValidateEvents"));
+        assertTrue(read(root, "build/reports/asyncapi/events.json").contains("not declared in schemaFiles"));
+    }
+
+    /** Extending the allowlist must retain discovery under the main document's directory. */
+    @Test void avroSchemaFilesFromExtendsRatherThanReplacesTheDefault() throws Exception {
+        Path root = avroFixture("avro-extended-inputs");
+        write(root, "contracts/avro/event.avsc", "{\"type\":\"string\"}");
+        write(root, "schemas/extra.avsc", "{\"type\":\"long\"}");
+        append(root, "contracts/events.yaml", """
+                components:
+                  schemas:
+                    Extra:
+                      schemaFormat: application/vnd.apache.avro;version=1.9.0
+                      schema: {$ref: '../schemas/extra.avsc'}
+                """);
+        append(root, "build.gradle", "asyncwright.specs.events.schemaFiles.from(layout.projectDirectory.file('schemas/extra.avsc'))\n");
+        assertEquals(SUCCESS, outcome(run(root, "check"), ":asyncApiValidateEvents"));
+        assertEquals(UP_TO_DATE, outcome(run(root, "check"), ":asyncApiValidateEvents"));
+        // An edit outside the default tree is still an input when added through from(...).
+        write(root, "schemas/extra.avsc", "\"Unknown\"");
+        assertEquals(FAILED, outcome(fail(root, "check"), ":asyncApiValidateEvents"));
+        var report = new com.fasterxml.jackson.databind.ObjectMapper().readTree(read(root, "build/reports/asyncapi/events.json"));
+        assertEquals("schemas/extra.avsc", report.path(0).path("file").asText());
+        assertEquals("avro.schema", report.path(0).path("ruleId").asText());
+    }
+
+    /** Snapshotting concrete leaves must preserve dependencies carried by task-backed collections. */
+    @Test void avroSchemaFilesRunsItsProducerBeforeValidationAndGeneration() throws Exception {
+        Path root = avroFixture("avro-generated-input");
+        write(root, "contracts/events.yaml", avroDocument().replace("avro/event.avsc", "../prepared/event.avsc"));
+        append(root, "build.gradle", """
+                def schemaTarget = layout.projectDirectory.file('prepared/event.avsc')
+                def prepareAvro = tasks.register('prepareAvro') {
+                    outputs.file(schemaTarget)
+                    doLast {
+                        def target = schemaTarget.asFile
+                        target.parentFile.mkdirs()
+                        target.setText('{"type":"string"}', 'UTF-8')
+                    }
+                }
+                asyncwright.specs.events.schemaFiles.setFrom(prepareAvro)
+                """);
+        BuildResult result = run(root, "check", "asyncApiGenerateEventsCatalog");
+        assertEquals(SUCCESS, outcome(result, ":prepareAvro"));
+        assertEquals(SUCCESS, outcome(result, ":asyncApiValidateEvents"));
+        assertEquals(SUCCESS, outcome(result, ":asyncApiGenerateEventsCatalog"));
+        assertEquals("string:", read(root, "build/generated/asyncapi/events/catalog/schema.txt"));
+        BuildResult reused = run(root, "check", "asyncApiGenerateEventsCatalog");
+        assertTrue(reused.getOutput().contains("Reusing configuration cache"), reused::getOutput);
+        assertEquals(UP_TO_DATE, outcome(reused, ":prepareAvro"));
+        assertEquals(UP_TO_DATE, outcome(reused, ":asyncApiValidateEvents"));
+        assertEquals(UP_TO_DATE, outcome(reused, ":asyncApiGenerateEventsCatalog"));
+    }
+
+    /** File diagnostics use the Avro path and block generation before any old output can survive. */
+    @Test void invalidAvroFileWritesRelatedDiagnosticsAndCleansGeneratorOutput() throws Exception {
+        Path root = avroFixture("avro-invalid");
+        write(root, "contracts/avro/event.avsc", "{\"type\":\"string\"}");
+        run(root, "asyncApiGenerateEventsCatalog");
+        assertTrue(Files.isRegularFile(root.resolve("build/generated/asyncapi/events/catalog/schema.txt")));
+        write(root, "contracts/avro/event.avsc", "\"UnknownType\"");
+        assertEquals(FAILED, outcome(fail(root, "asyncApiGenerateEventsCatalog"), ":asyncApiGenerateEventsCatalog"));
+        assertFalse(Files.exists(root.resolve("build/generated/asyncapi/events/catalog/schema.txt")));
+        fail(root, "check");
+        var report = new com.fasterxml.jackson.databind.ObjectMapper().readTree(read(root, "build/reports/asyncapi/events.json"));
+        assertEquals("avro.schema", report.path(0).path("ruleId").asText());
+        assertEquals("contracts/avro/event.avsc", report.path(0).path("file").asText());
+        assertEquals("/channels/events/messages/event/payload/schema/$ref", report.path(0).path("related").path(0).path("pointer").asText());
+        assertFalse(report.toString().contains(root.toString().replace("\\", "\\\\")));
+    }
+
+    /** Cleanup and cache restoration may never overwrite a schema declared below buildDirectory. */
+    @Test void generatorOutputCannotContainDeclaredAvroFiles() throws Exception {
+        Path root = avroFixture("avro-protected");
+        write(root, "contracts/events.yaml", avroDocument().replace("avro/event.avsc", "../build/protected/event.avsc"));
+        write(root, "build/protected/event.avsc", "{\"type\":\"string\"}");
+        append(root, "build.gradle", """
+                asyncwright.specs.events.schemaFiles.setFrom(layout.projectDirectory.file('build/protected/event.avsc'))
+                tasks.named('asyncApiGenerateEventsCatalog') { outputDirectory.set(layout.buildDirectory.dir('protected')) }
+                """);
+        BuildResult result = fail(root, "asyncApiGenerateEventsCatalog");
+        assertTrue(result.getOutput().contains("must not contain the input"), result::getOutput);
+        assertEquals("{\"type\":\"string\"}", read(root, "build/protected/event.avsc"));
+    }
+
+    /** Identical contents must not let a retargeted symlink bypass the boundary on a cache hit. */
+    @Test void avroCachedValidationStillRejectsASymlinkMovedOutsideTheProject() throws Exception {
+        Path root = avroFixture("avro-link-cache");
+        String schema = "{\"type\":\"string\"}";
+        write(root, "contracts/avro/event.avsc", schema);
+        run(root, "check");
+        Path outside = temporary.resolve("outside-project.avsc");
+        Files.writeString(outside, schema);
+        Path link = root.resolve("contracts/avro/event.avsc");
+        Files.delete(link);
+        try { Files.createSymbolicLink(link, outside); }
+        catch (UnsupportedOperationException | IOException exception) {
+            org.junit.jupiter.api.Assumptions.assumeTrue(false, "Symbolic links unavailable on this host");
+        }
+        BuildResult result = fail(root, "check");
+        assertTrue(result.getOutput().contains("Input real path must remain inside the project directory"), result::getOutput);
+        assertEquals(schema, Files.readString(outside));
+    }
+
+    private Path avroFixture(String name) throws Exception {
+        Path root = fixture(name, PLUGIN + """
+                asyncwright.specs {
+                    events {
+                        file = layout.projectDirectory.file('contracts/events.yaml')
+                        rules { rule 'fixture.ProjectRule' }
+                        generators { catalog { className = 'fixture.Catalog'; parameters.put('name', 'schema.txt') } }
+                    }
+                }
+                dependencies { asyncwrightExtensions project(':extensions') }
+                """);
+        projectExtension(root);
+        write(root, "contracts/events.yaml", avroDocument());
+        write(root, "extensions/src/main/java/fixture/ProjectRule.java", """
+                package fixture;
+                import %s.*;
+                import com.fasterxml.jackson.databind.node.ObjectNode;
+                import java.util.List;
+                public class ProjectRule implements AsyncApiRule {
+                    public List<Diagnostic> validate(ExtensionContext context) {
+                        var file = context.document().references().resolveSchemaFile("/channels/events/messages/event/payload/schema").orElseThrow();
+                        if (file.node() instanceof ObjectNode object) object.removeAll();
+                        return List.of();
+                    }
+                }
+                """.formatted(API_PACKAGE));
+        write(root, "extensions/src/main/java/fixture/Catalog.java", """
+                package fixture;
+                import %s.*;
+                import java.util.List;
+                public class Catalog implements AsyncApiGenerator {
+                    public List<Diagnostic> generate(GeneratorContext context) throws Exception {
+                        var file = context.document().references().resolveSchemaFile("/channels/events/messages/event/payload/schema").orElseThrow();
+                        var schema = file.node();
+                        context.output().writeUtf8(context.requireParameter("name"),
+                            schema.path("type").asText() + ":" + schema.path("fields").path(0).path("name").asText());
+                        return List.of();
+                    }
+                }
+                """.formatted(API_PACKAGE));
+        return root;
+    }
+
+    private static String avroDocument() {
+        return """
+                asyncapi: 3.0.0
+                info: {title: Avro, version: 1.0.0}
+                channels:
+                  events:
+                    address: events
+                    messages:
+                      event:
+                        payload:
+                          schemaFormat: application/vnd.apache.avro;version=1.9.0
+                          schema: {$ref: 'avro/event.avsc'}
+                """;
+    }
+
     private Path fixture(String name, String build) throws IOException {
         Path root = temporary.resolve(name);
         write(root, "settings.gradle", settings(""));

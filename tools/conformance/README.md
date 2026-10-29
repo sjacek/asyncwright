@@ -1,8 +1,8 @@
 # Public parser comparison
 
 The public corpus is checked in under `parser/src/test/resources/conformance/`.
-It contains **166 cases**: 12 unchanged examples from `asyncapi/spec` tag `v3.0.0`
-(commit `d78dcea70c9b094a3df72f9a4e811828cec778cc`) and 154 synthetic fixtures.
+It contains **185 cases**: 12 unchanged examples from `asyncapi/spec` tag `v3.0.0`
+(commit `d78dcea70c9b094a3df72f9a4e811828cec778cc`) and 173 synthetic fixtures.
 The official files retain their original Apache-2.0 LICENSE and NOTICE; synthetic files
 use the project MIT license. No application contracts are included.
 
@@ -30,6 +30,14 @@ the editor's inspection widget or **Code | Analyze Code | Configure Current File
 This is a local preference in the Git-ignored `.idea` directory; do not disable analysis
 for Java test code. The Gradle corpus checks still validate every fixture and its outcome.
 
+The Avro fixtures have the same distinction: `avro-metadata-reference` deliberately
+stores literal `$ref` attributes as Avro metadata; `avro-file-traversal` and
+`avro-file-fragment` exercise rejected file requests. Do not add the apparent missing
+targets or change the data. `avro-kafka-key-reference` and the source-build example
+`examples/avro-validation/contracts/orders.yaml` are positive cases: the pinned IDE
+schema has overlapping alternatives and cannot express the parser's Avro profile.
+Apply the same per-file analysis setting to these affected data files if needed.
+
 ## Run
 
 Configure the local model repository as described in the root README. From the project root:
@@ -38,7 +46,7 @@ Configure the local model repository as described in the root README. From the p
 .\gradlew.bat check assemble --configuration-cache-problems=fail
 ```
 
-This includes `:parser:publicCorpusTest`, with 166 case checks and one manifest integrity check.
+This includes `:parser:publicCorpusTest`, with 185 case checks and one manifest integrity check.
 It needs no Node.js or external application contracts. With Gradle dependencies already
 cached, add `--offline`. The JVM report is `parser/build/reports/conformance/asyncwright.json`.
 
@@ -74,15 +82,15 @@ model graph equality. JavaScript dereferences and composes a document; Asyncwrig
 `$ref` values and exposes a separate resolver. Two rejecting parsers can report different
 diagnostics because Asyncwright stops after structural errors.
 
-The development result is **114 agreements and 52 reviewed differences** across **166 cases**:
+The development result is **123 agreements and 62 reviewed differences** across **185 cases**:
 
 | Classification | Cases | Meaning |
 | --- | ---: | --- |
-| Agreement | 114 | Both accept or both reject. |
-| Unsupported | 11 | Traits (including a shared definition), YAML aliases, external files, versions 2.6/3.1, component Avro format, foreign schema dialect and schema resource ID. |
+| Agreement | 123 | Both accept or both reject. |
+| Unsupported | 13 | Traits, YAML aliases, external document references, versions 2.6/3.1, foreign dialect/resource IDs, and Avro file requests without an allowed context or using fragments. |
 | Model limit | 2 | Unknown `nullable` keyword and custom binding extensions cannot be preserved by the typed Java model. |
-| Reference parser difference | 34 | The original 11 differences, 14 wrong-kind binding schema references, two invalid component names and seven Registry dependency cases accepted by JavaScript. |
-| Policy difference | 5 | Asyncwright rejects pure schema and binding-map alias cycles that JavaScript accepts. |
+| Reference parser difference | 41 | Binding/schema semantics, component names, Registry dependencies and Avro names/defaults/file semantics; also a legal Avro metadata attribute rejected by JS. |
+| Policy difference | 6 | Pure alias cycles and strict validation of an invalid known Avro logical type, accepted by JavaScript. |
 | Implementation gap | 0 | The three identified semantic validation gaps below are fixed. |
 
 Fixed F1 regression cases, rejected by both parsers:
@@ -184,3 +192,22 @@ dependencies and accepts five; the no-Kafka-server case emits a warning while su
 These seven semantic differences are reviewed under `reference-parser-difference`,
 not hidden as implementation gaps or evidence of complete Kafka support.
 The versioned comparison records **166 cases, 114 agreements and 52 differences**.
+
+
+## Development Avro regressions (R7)
+
+Nineteen new fixtures plus two checksummed `.avsc` assets cover records, recursion,
+unions, named types, metadata, defaults, logical types, Kafka key references and
+controlled local file access. The old `component-avro-format` bytes are unchanged;
+its JVM expectation is now acceptance, making it an agreement. Other pre-R7 outcomes
+are unchanged. The current total is **185 cases, 123 agreements and 62 reviewed differences**.
+
+JS core validation 3.6.6 accepts unknown/forward Avro names, invalid defaults and an
+invalid decimal annotation in these fixtures. This run uses no additional JS Avro
+plugin; acceptance does not prove Avro semantic validation. Asyncwright's invalid
+known-logical-type rejection is an authoring policy, stricter than reader fallback.
+Both reject the traversal fixture for different reasons (JVM project boundary;
+JS missing target), so that agreement does not establish equivalent filesystem policy.
+Uncontextualized or undeclared Avro files and fragments remain explicit capability
+exclusions. Literal `$ref` metadata on an actual Avro type is retained as data.
+See the [profile](../../docs/avro.md) for boundaries and diagnostics.

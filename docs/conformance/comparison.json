@@ -10,18 +10,18 @@
     "recommended": false
   },
   "network": "disabled",
-  "manifestSha256": "cc3dcc9d1f764b6e446d1d94984f220c69440e009ea9c312e36cdd1d0309af9d",
+  "manifestSha256": "142f145c970b56de5b2d36f77ee7ccb08b5b5e2af9fc6ef6c1d8c7060bd4bbcb",
   "lockSha256": "af3b18e8950cc7280793e8b2abacbd2891b6c888850b7eabac2de782eff8236a",
   "summary": {
-    "cases": 166,
-    "agreements": 114,
-    "differences": 52,
+    "cases": 185,
+    "agreements": 123,
+    "differences": 62,
     "classifications": {
-      "agreement": 114,
-      "unsupported": 11,
-      "reference-parser-difference": 34,
+      "agreement": 123,
+      "unsupported": 13,
+      "reference-parser-difference": 41,
       "model-limit": 2,
-      "policy-difference": 5
+      "policy-difference": 6
     },
     "openImplementationGaps": 0,
     "knownSharedLimitations": 0,
@@ -3127,29 +3127,16 @@
       "id": "component-avro-format",
       "file": "synthetic/component-avro-format.json",
       "sha256": "b543a65add76b37b122fb0692975f9aa8eff590bffa5fc3bc12e82e5cbc84515",
-      "classification": "unsupported",
-      "reason": "Non-default formats are outside 0.1 in component schemas as well as message payloads.",
+      "classification": "agreement",
+      "reason": "R7 validates Avro 1.9 component wrappers; both parsers accept this schema.",
       "asyncwright": {
         "id": "component-avro-format",
         "file": "synthetic/component-avro-format.json",
         "sha256": "b543a65add76b37b122fb0692975f9aa8eff590bffa5fc3bc12e82e5cbc84515",
-        "successful": false,
-        "documentPresent": false,
-        "errorRules": [
-          "unsupported.construct"
-        ],
-        "diagnostics": [
-          {
-            "ruleId": "unsupported.construct",
-            "severity": "error",
-            "message": "Non-default schema formats are not supported in 0.1",
-            "file": "synthetic/component-avro-format.json",
-            "line": 10,
-            "column": 9,
-            "pointer": "/components/schemas/Value/schemaFormat",
-            "related": []
-          }
-        ]
+        "successful": true,
+        "documentPresent": true,
+        "errorRules": [],
+        "diagnostics": []
       },
       "javascript": {
         "successful": true,
@@ -7846,6 +7833,777 @@
         "documentPresent": true,
         "errorRules": [],
         "diagnostics": []
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "avro-record",
+      "file": "synthetic/avro-record.json",
+      "sha256": "da318e8e911f553f11f43b03235de8b3da2323f8dbfdf8710760cec0a1e096cb",
+      "classification": "agreement",
+      "reason": "Both parsers agree on acceptance; Avro 1.9 is validated by R7.",
+      "asyncwright": {
+        "id": "avro-record",
+        "file": "synthetic/avro-record.json",
+        "sha256": "da318e8e911f553f11f43b03235de8b3da2323f8dbfdf8710760cec0a1e096cb",
+        "successful": true,
+        "documentPresent": true,
+        "errorRules": [],
+        "diagnostics": []
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "avro-union",
+      "file": "synthetic/avro-union.json",
+      "sha256": "5b4a5e89e4468157d2ea6d530b5949c225ee85845305038834e69071b500f6ea",
+      "classification": "agreement",
+      "reason": "Both parsers agree on acceptance; Avro 1.9 is validated by R7.",
+      "asyncwright": {
+        "id": "avro-union",
+        "file": "synthetic/avro-union.json",
+        "sha256": "5b4a5e89e4468157d2ea6d530b5949c225ee85845305038834e69071b500f6ea",
+        "successful": true,
+        "documentPresent": true,
+        "errorRules": [],
+        "diagnostics": []
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "avro-recursive",
+      "file": "synthetic/avro-recursive.json",
+      "sha256": "df458d70f969df7b5bde914fe9a45da32e23b6c495c503317dc20b7d572ce3f6",
+      "classification": "agreement",
+      "reason": "Both parsers agree on acceptance; Avro 1.9 is validated by R7.",
+      "asyncwright": {
+        "id": "avro-recursive",
+        "file": "synthetic/avro-recursive.json",
+        "sha256": "df458d70f969df7b5bde914fe9a45da32e23b6c495c503317dc20b7d572ce3f6",
+        "successful": true,
+        "documentPresent": true,
+        "errorRules": [],
+        "diagnostics": []
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "avro-metadata-reference",
+      "file": "synthetic/avro-metadata-reference.json",
+      "sha256": "bc47ce85b59049685bdac5b4ec6bc805bcd8e0f87fa21b0b43d4a18a863b68e7",
+      "classification": "reference-parser-difference",
+      "reason": "A $ref attribute on an actual Avro schema is metadata; JS attempts to dereference it.",
+      "asyncwright": {
+        "id": "avro-metadata-reference",
+        "file": "synthetic/avro-metadata-reference.json",
+        "sha256": "bc47ce85b59049685bdac5b4ec6bc805bcd8e0f87fa21b0b43d4a18a863b68e7",
+        "successful": true,
+        "documentPresent": true,
+        "errorRules": [],
+        "diagnostics": []
+      },
+      "javascript": {
+        "successful": false,
+        "documentPresent": false,
+        "errorCodes": [
+          "asyncapi-document-resolved",
+          "invalid-ref"
+        ],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          },
+          {
+            "code": "asyncapi-document-resolved",
+            "severity": 0,
+            "message": "\"Value\" property must match \"then\" schema",
+            "pointer": "/components/schemas/Value"
+          },
+          {
+            "code": "asyncapi-document-resolved",
+            "severity": 0,
+            "message": "\"schema\" property must match exactly one schema in oneOf",
+            "pointer": "/components/schemas/Value/schema"
+          },
+          {
+            "code": "invalid-ref",
+            "severity": 0,
+            "message": "ENOENT: no such file or directory, open '<project>\\parser\\src\\test\\resources\\conformance\\synthetic\\literal.json'",
+            "pointer": "/components/schemas/Value/schema/$ref"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "avro-unknown-name",
+      "file": "synthetic/avro-unknown-name.json",
+      "sha256": "9c35f0c20474bb05697411e8e8ed6bb52b5c815e24075f89ef16339ce5dc4ddc",
+      "classification": "reference-parser-difference",
+      "reason": "R7 enforces Avro 1.9 name/default semantics; the pinned JS core parser accepts this invalid schema.",
+      "asyncwright": {
+        "id": "avro-unknown-name",
+        "file": "synthetic/avro-unknown-name.json",
+        "sha256": "9c35f0c20474bb05697411e8e8ed6bb52b5c815e24075f89ef16339ce5dc4ddc",
+        "successful": false,
+        "documentPresent": false,
+        "errorRules": [
+          "avro.schema"
+        ],
+        "diagnostics": [
+          {
+            "ruleId": "avro.schema",
+            "severity": "error",
+            "message": "Invalid Avro schema: Avro 1.9 type name must be defined before use: Unknown",
+            "file": "synthetic/avro-unknown-name.json",
+            "line": 11,
+            "column": 9,
+            "pointer": "/components/schemas/Value/schema",
+            "related": []
+          }
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "avro-union-default-first",
+      "file": "synthetic/avro-union-default-first.json",
+      "sha256": "c584003dcaf56e3bfd187daaecf7f3ebef20477865c20e40be297613e789563a",
+      "classification": "reference-parser-difference",
+      "reason": "R7 enforces Avro 1.9 name/default semantics; the pinned JS core parser accepts this invalid schema.",
+      "asyncwright": {
+        "id": "avro-union-default-first",
+        "file": "synthetic/avro-union-default-first.json",
+        "sha256": "c584003dcaf56e3bfd187daaecf7f3ebef20477865c20e40be297613e789563a",
+        "successful": false,
+        "documentPresent": false,
+        "errorRules": [
+          "avro.schema"
+        ],
+        "diagnostics": [
+          {
+            "ruleId": "avro.schema",
+            "severity": "error",
+            "message": "Default must match its Avro 1.9 type, including the first branch of every union",
+            "file": "synthetic/avro-union-default-first.json",
+            "line": 21,
+            "column": 15,
+            "pointer": "/components/schemas/Value/schema/fields/0/default",
+            "related": []
+          }
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "avro-int-default-range",
+      "file": "synthetic/avro-int-default-range.json",
+      "sha256": "0e2552697271ec3454a5ce31d9c0bdce3d003945c632d3d3b18e1cc6c70f8f7b",
+      "classification": "reference-parser-difference",
+      "reason": "R7 enforces Avro 1.9 name/default semantics; the pinned JS core parser accepts this invalid schema.",
+      "asyncwright": {
+        "id": "avro-int-default-range",
+        "file": "synthetic/avro-int-default-range.json",
+        "sha256": "0e2552697271ec3454a5ce31d9c0bdce3d003945c632d3d3b18e1cc6c70f8f7b",
+        "successful": false,
+        "documentPresent": false,
+        "errorRules": [
+          "avro.schema"
+        ],
+        "diagnostics": [
+          {
+            "ruleId": "avro.schema",
+            "severity": "error",
+            "message": "Invalid Avro schema: Invalid default for field id: 2147483648 not a \"int\"",
+            "file": "synthetic/avro-int-default-range.json",
+            "line": 11,
+            "column": 9,
+            "pointer": "/components/schemas/Value/schema",
+            "related": []
+          }
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "avro-enum-default",
+      "file": "synthetic/avro-enum-default.json",
+      "sha256": "db2b85e7de7c091c5ef36349c93c243ddb8df3d9005a44545180d04a47b06bb0",
+      "classification": "reference-parser-difference",
+      "reason": "R7 enforces Avro 1.9 name/default semantics; the pinned JS core parser accepts this invalid schema.",
+      "asyncwright": {
+        "id": "avro-enum-default",
+        "file": "synthetic/avro-enum-default.json",
+        "sha256": "db2b85e7de7c091c5ef36349c93c243ddb8df3d9005a44545180d04a47b06bb0",
+        "successful": false,
+        "documentPresent": false,
+        "errorRules": [
+          "avro.schema"
+        ],
+        "diagnostics": [
+          {
+            "ruleId": "avro.schema",
+            "severity": "error",
+            "message": "Default must match its Avro 1.9 type, including the first branch of every union",
+            "file": "synthetic/avro-enum-default.json",
+            "line": 24,
+            "column": 15,
+            "pointer": "/components/schemas/Value/schema/fields/0/default",
+            "related": []
+          }
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "avro-invalid-decimal",
+      "file": "synthetic/avro-invalid-decimal.json",
+      "sha256": "5989ba1699c7e546be27e27c64aa0a06a543fd2e66e94f3b76d6ad9b7a45309e",
+      "classification": "policy-difference",
+      "reason": "R7 treats invalid known logical types as validation errors; Avro readers may fall back to the underlying type.",
+      "asyncwright": {
+        "id": "avro-invalid-decimal",
+        "file": "synthetic/avro-invalid-decimal.json",
+        "sha256": "5989ba1699c7e546be27e27c64aa0a06a543fd2e66e94f3b76d6ad9b7a45309e",
+        "successful": false,
+        "documentPresent": false,
+        "errorRules": [
+          "avro.logical-type"
+        ],
+        "diagnostics": [
+          {
+            "ruleId": "avro.logical-type",
+            "severity": "error",
+            "message": "Invalid Avro 1.9 logical type: Invalid decimal scale: 3 (greater than precision: 2)",
+            "file": "synthetic/avro-invalid-decimal.json",
+            "line": 13,
+            "column": 11,
+            "pointer": "/components/schemas/Value/schema/logicalType",
+            "related": []
+          }
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "avro-unknown-logical",
+      "file": "synthetic/avro-unknown-logical.json",
+      "sha256": "7fb72e8f72fbf80970fbd763cd767b7a41f35eac7529488b8b0dc7b7ca60e2d8",
+      "classification": "agreement",
+      "reason": "Both parsers agree on acceptance; Avro 1.9 is validated by R7.",
+      "asyncwright": {
+        "id": "avro-unknown-logical",
+        "file": "synthetic/avro-unknown-logical.json",
+        "sha256": "7fb72e8f72fbf80970fbd763cd767b7a41f35eac7529488b8b0dc7b7ca60e2d8",
+        "successful": true,
+        "documentPresent": true,
+        "errorRules": [],
+        "diagnostics": [
+          {
+            "ruleId": "avro.logical-type",
+            "severity": "warning",
+            "message": "Unknown Avro 1.9 logical type is treated as its underlying type",
+            "file": "synthetic/avro-unknown-logical.json",
+            "line": 13,
+            "column": 11,
+            "pointer": "/components/schemas/Value/schema/logicalType",
+            "related": []
+          }
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "avro-newer-logical",
+      "file": "synthetic/avro-newer-logical.json",
+      "sha256": "f7aa73749bed6670a394c84f5ab69d6e69beb58cfcdcd891bf4d324978200a3c",
+      "classification": "agreement",
+      "reason": "Both parsers agree on acceptance; Avro 1.9 is validated by R7.",
+      "asyncwright": {
+        "id": "avro-newer-logical",
+        "file": "synthetic/avro-newer-logical.json",
+        "sha256": "f7aa73749bed6670a394c84f5ab69d6e69beb58cfcdcd891bf4d324978200a3c",
+        "successful": true,
+        "documentPresent": true,
+        "errorRules": [],
+        "diagnostics": [
+          {
+            "ruleId": "avro.logical-type",
+            "severity": "warning",
+            "message": "Unknown Avro 1.9 logical type is treated as its underlying type",
+            "file": "synthetic/avro-newer-logical.json",
+            "line": 13,
+            "column": 11,
+            "pointer": "/components/schemas/Value/schema/logicalType",
+            "related": []
+          }
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "avro-forward-name",
+      "file": "synthetic/avro-forward-name.json",
+      "sha256": "26e1cd205f100eb583b7e61c46fe3192e0c9dfe8207c73e8a61eff43b67e9434",
+      "classification": "reference-parser-difference",
+      "reason": "R7 enforces Avro 1.9 name/default semantics; the pinned JS core parser accepts this invalid schema.",
+      "asyncwright": {
+        "id": "avro-forward-name",
+        "file": "synthetic/avro-forward-name.json",
+        "sha256": "26e1cd205f100eb583b7e61c46fe3192e0c9dfe8207c73e8a61eff43b67e9434",
+        "successful": false,
+        "documentPresent": false,
+        "errorRules": [
+          "avro.schema"
+        ],
+        "diagnostics": [
+          {
+            "ruleId": "avro.schema",
+            "severity": "error",
+            "message": "Invalid Avro schema: Avro 1.9 type name must be defined before use: Later",
+            "file": "synthetic/avro-forward-name.json",
+            "line": 11,
+            "column": 9,
+            "pointer": "/components/schemas/Value/schema",
+            "related": []
+          }
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "avro-kafka-key-reference",
+      "file": "synthetic/avro-kafka-key-reference.json",
+      "sha256": "0c043c2e9f8a5802f0f2c0b4dded2a5c71a45ef259a12999555e863ac36dac44",
+      "classification": "agreement",
+      "reason": "Both parsers agree on acceptance; Avro 1.9 is validated by R7.",
+      "asyncwright": {
+        "id": "avro-kafka-key-reference",
+        "file": "synthetic/avro-kafka-key-reference.json",
+        "sha256": "0c043c2e9f8a5802f0f2c0b4dded2a5c71a45ef259a12999555e863ac36dac44",
+        "successful": true,
+        "documentPresent": true,
+        "errorRules": [],
+        "diagnostics": []
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "avro-file-declared",
+      "file": "synthetic/avro-file-declared.json",
+      "sha256": "793d9072d66e486ad4cc0ee2f1bb4634b1687c4848a6841086df513c5f34c74a",
+      "classification": "agreement",
+      "reason": "Both parsers agree on acceptance; Avro 1.9 is validated by R7.",
+      "asyncwright": {
+        "id": "avro-file-declared",
+        "file": "synthetic/avro-file-declared.json",
+        "sha256": "793d9072d66e486ad4cc0ee2f1bb4634b1687c4848a6841086df513c5f34c74a",
+        "successful": true,
+        "documentPresent": true,
+        "errorRules": [],
+        "diagnostics": []
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "avro-file-no-context",
+      "file": "synthetic/avro-file-no-context.json",
+      "sha256": "793d9072d66e486ad4cc0ee2f1bb4634b1687c4848a6841086df513c5f34c74a",
+      "classification": "unsupported",
+      "reason": "The JVM file profile requires an explicit ParseContext allowlist and whole local .avsc files; JS has broader reference behavior.",
+      "asyncwright": {
+        "id": "avro-file-no-context",
+        "file": "synthetic/avro-file-no-context.json",
+        "sha256": "793d9072d66e486ad4cc0ee2f1bb4634b1687c4848a6841086df513c5f34c74a",
+        "successful": false,
+        "documentPresent": false,
+        "errorRules": [
+          "unsupported.reference"
+        ],
+        "diagnostics": [
+          {
+            "ruleId": "unsupported.reference",
+            "severity": "error",
+            "message": "Local Avro files require parse(relativeFile, input, ParseContext) with declared schemaFiles",
+            "file": "synthetic/avro-file-no-context.json",
+            "line": 12,
+            "column": 11,
+            "pointer": "/components/schemas/Value/schema/$ref",
+            "related": []
+          }
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "avro-file-invalid",
+      "file": "synthetic/avro-file-invalid.json",
+      "sha256": "6a6b42c0a5852912590a7caa2799d42cf773c93199a364a519d8c8ad081d09fa",
+      "classification": "reference-parser-difference",
+      "reason": "R7 enforces Avro 1.9 name/default semantics; the pinned JS core parser accepts this invalid schema.",
+      "asyncwright": {
+        "id": "avro-file-invalid",
+        "file": "synthetic/avro-file-invalid.json",
+        "sha256": "6a6b42c0a5852912590a7caa2799d42cf773c93199a364a519d8c8ad081d09fa",
+        "successful": false,
+        "documentPresent": false,
+        "errorRules": [
+          "avro.schema"
+        ],
+        "diagnostics": [
+          {
+            "ruleId": "avro.schema",
+            "severity": "error",
+            "message": "Invalid Avro schema: Avro 1.9 type name must be defined before use: UnknownType",
+            "file": "synthetic/avro-invalid.avsc",
+            "line": 1,
+            "column": 1,
+            "pointer": "",
+            "related": [
+              {
+                "file": "synthetic/avro-file-invalid.json",
+                "line": 12,
+                "column": 11,
+                "pointer": "/components/schemas/Value/schema/$ref"
+              }
+            ]
+          }
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "avro-file-undeclared",
+      "file": "synthetic/avro-file-undeclared.json",
+      "sha256": "793d9072d66e486ad4cc0ee2f1bb4634b1687c4848a6841086df513c5f34c74a",
+      "classification": "unsupported",
+      "reason": "The JVM file profile requires an explicit ParseContext allowlist and whole local .avsc files; JS has broader reference behavior.",
+      "asyncwright": {
+        "id": "avro-file-undeclared",
+        "file": "synthetic/avro-file-undeclared.json",
+        "sha256": "793d9072d66e486ad4cc0ee2f1bb4634b1687c4848a6841086df513c5f34c74a",
+        "successful": false,
+        "documentPresent": false,
+        "errorRules": [
+          "avro.reference"
+        ],
+        "diagnostics": [
+          {
+            "ruleId": "avro.reference",
+            "severity": "error",
+            "message": "Avro file is not declared in schemaFiles: synthetic/avro-event.avsc",
+            "file": "synthetic/avro-file-undeclared.json",
+            "line": 12,
+            "column": 11,
+            "pointer": "/components/schemas/Value/schema/$ref",
+            "related": []
+          }
+        ]
+      },
+      "javascript": {
+        "successful": true,
+        "documentPresent": true,
+        "errorCodes": [],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "avro-file-traversal",
+      "file": "synthetic/avro-file-traversal.json",
+      "sha256": "26acc49438e125216d999d21f66e55563450cb45efd0bc7a2b1a32e4eb485c1d",
+      "classification": "agreement",
+      "reason": "JVM blocks project escape; JS rejects a missing target. Agreement is on rejection, not on filesystem policy.",
+      "asyncwright": {
+        "id": "avro-file-traversal",
+        "file": "synthetic/avro-file-traversal.json",
+        "sha256": "26acc49438e125216d999d21f66e55563450cb45efd0bc7a2b1a32e4eb485c1d",
+        "successful": false,
+        "documentPresent": false,
+        "errorRules": [
+          "avro.reference"
+        ],
+        "diagnostics": [
+          {
+            "ruleId": "avro.reference",
+            "severity": "error",
+            "message": "Avro file reference escapes the project root",
+            "file": "synthetic/avro-file-traversal.json",
+            "line": 12,
+            "column": 11,
+            "pointer": "/components/schemas/Value/schema/$ref",
+            "related": []
+          }
+        ]
+      },
+      "javascript": {
+        "successful": false,
+        "documentPresent": false,
+        "errorCodes": [
+          "invalid-ref"
+        ],
+        "diagnostics": [
+          {
+            "code": "asyncapi-latest-version",
+            "severity": 2,
+            "message": "The latest version of AsyncAPi is not used. It is recommended update to the \"3.1.0\" version.",
+            "pointer": "/asyncapi"
+          },
+          {
+            "code": "invalid-ref",
+            "severity": 0,
+            "message": "ENOENT: no such file or directory, open '<project>\\parser\\src\\test\\resources\\escape.avsc'",
+            "pointer": "/components/schemas/Value/schema/$ref"
+          }
+        ]
+      },
+      "matchesBaseline": true
+    },
+    {
+      "id": "avro-file-fragment",
+      "file": "synthetic/avro-file-fragment.json",
+      "sha256": "1c7a02b9ae9d7d7a79e382640ec2561e08fab0d1b045c58e0150a79d94dfc65e",
+      "classification": "unsupported",
+      "reason": "The JVM file profile requires an explicit ParseContext allowlist and whole local .avsc files; JS has broader reference behavior.",
+      "asyncwright": {
+        "id": "avro-file-fragment",
+        "file": "synthetic/avro-file-fragment.json",
+        "sha256": "1c7a02b9ae9d7d7a79e382640ec2561e08fab0d1b045c58e0150a79d94dfc65e",
+        "successful": false,
+        "documentPresent": false,
+        "errorRules": [
+          "unsupported.reference"
+        ],
+        "diagnostics": [
+          {
+            "ruleId": "unsupported.reference",
+            "severity": "error",
+            "message": "Expected a relative Avro .avsc file reference without URI scheme, query or fragment",
+            "file": "synthetic/avro-file-fragment.json",
+            "line": 12,
+            "column": 11,
+            "pointer": "/components/schemas/Value/schema/$ref",
+            "related": []
+          }
+        ]
       },
       "javascript": {
         "successful": true,

@@ -27,7 +27,8 @@ payload property names and extension data are unaffected.
 
 These changes were introduced in **0.2.0** and remain in published **0.2.1**;
 they were absent from 0.1.1. Full Kafka acceptance, Registry
-dependencies, Avro, local `.avsc` references and the Kafka example are still pending.
+dependencies, Avro and local `.avsc` references are addressed in development below;
+the Kafka example and broker tests are still pending.
 
 ## Development: Kafka Registry dependencies (0.3.0-SNAPSHOT)
 
@@ -64,8 +65,9 @@ one binding definition with its server definitions and reference usages.
 
 No HTTP, DNS, Registry schema retrieval, broker connection or credential lookup is
 performed. URLs remain metadata and are not copied into the diagnostic message.
-No Kafka client dependency is added. Avro, `.avsc` access, the Kafka SPI example and
-broker tests remain pending; this check is not full acceptance of the Kafka profile.
+No Kafka client dependency is added. The Kafka SPI example and broker tests remain
+pending; this check is not full acceptance of the Kafka profile.
+[Development Avro validation](avro.md) adds an independent schema/file profile.
 The dependency follows the [Kafka binding specification](https://github.com/asyncapi/bindings/blob/master/kafka/README.md#message-binding-object);
 the context and dynamic-reply policy above make its offline interpretation explicit.
 
@@ -80,11 +82,12 @@ the context and dynamic-reply policy above make its offline interpretation expli
 | Local JSON Pointer references and aliases | Supported, including URI percent encoding and `~0`/`~1` escapes. |
 | Whole binding-map references (since 0.1.1) | Server/channel/operation/message maps and aliases in `components.*Bindings` are supported with published model `.5` (introduced in `.4`); cross-kind targets and alias-only cycles reject. Public `0.1.0` / model `.3` still reject these maps. |
 | Recursive schemas with concrete schema content | Supported without expanding references in the model. Pure reference cycles reject. |
-| External references and named anchors | Outside the resolver scope; rejected, without fetching remote resources. |
+| External references and named anchors | Outside the document resolver scope; rejected without fetching remote resources. Development Avro file references require a separate explicit context/allowlist. |
 | Traits | Rejected with `unsupported.construct`; no trait merge occurs. |
 | Default schema format, implicit or explicit | Supported in payloads and component schemas, including references within wrappers. |
 | Boolean schemas `true`/`false` | Supported in components, payloads, headers, nested schema positions and default-format wrappers; boolean reference targets retain their values. |
-| Other `schemaFormat` values | Rejected with `unsupported.construct`, including Avro and explicit `application/schema+json;version=draft-07`. |
+| Avro `schemaFormat` 1.9.0 (development only) | Supported in payloads/components, inline or controlled local `.avsc`; see the [profile](avro.md). Released 0.2.1 rejects Avro. |
+| Other `schemaFormat` values | Rejected with `unsupported.construct`, including other Avro versions and explicit `application/schema+json;version=draft-07`. |
 | Explicit `$schema` | Only HTTP/HTTPS draft-07 schema URIs, with or without trailing `#`, are accepted. Other dialects reject with `unsupported.schema-dialect`. |
 | Schema resource identifiers `$id` | Rejected with `unsupported.schema-id`; resource scopes and named identifiers are not implemented in 0.1. |
 | `const`, `default`, `examples` JSON values | Preserved as instance data, including nested objects, arrays, null and reference-like keys. They are not traversed as document schemas/references. |
@@ -142,10 +145,10 @@ are indexed as schemas; a reference to an arbitrary boolean instance value is st
   mapping. Use the supported draft-07 null union for nullable types. This is a model limit,
   not support for OpenAPI's nullable semantics.
 
-The development [recorded comparison](conformance/comparison.json) contains **166 cases: 114 agreements
-and 52 reviewed differences**, with **zero known shared limitations** in this selected corpus.
-The differences comprise 11 capability exclusions, 2 model limits, 34 reference parser
-differences (including seven Registry dependency cases) and 5 pure-cycle policy differences.
+The development [recorded comparison](conformance/comparison.json) contains **185 cases: 123 agreements
+and 62 reviewed differences**, with **zero known shared limitations** in this selected corpus.
+The differences comprise 13 capability exclusions, 2 model limits, 41 reference parser
+differences and 6 policy differences (pure cycles and strict Avro logical-type validation).
 No unreviewed outcome changes remain.
 
 The former `schema-boolean` limitation is now a valid JVM case and a JS difference. The

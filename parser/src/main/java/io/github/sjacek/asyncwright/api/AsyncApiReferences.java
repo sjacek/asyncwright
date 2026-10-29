@@ -7,6 +7,14 @@ import java.util.Optional;
 /** Resolves the position of an object or reference, without expanding the document graph. */
 public interface AsyncApiReferences {
     /**
+     * Reads the snapshot of a validated local Avro file reference at a wrapper's schema position.
+     * Resolve document aliases to the wrapper first, then append {@code /schema}. No file is read
+     * by this method and the typed model retains the original URI.
+     * @param pointer document position of the Avro file Reference Object
+     * @return validated file target, or empty for inline/invalid/not-authorized references
+     */
+    default Optional<ResolvedSchemaFile> resolveSchemaFile(String pointer) { return Optional.empty(); }
+    /**
      * Follows validated reference aliases to a concrete source value. Nested references stay intact.
      * For whole binding-map references, resolve the map position before selecting its protocol.
      * @param pointer document position of an object or Reference Object, not the literal {@code $ref} URI

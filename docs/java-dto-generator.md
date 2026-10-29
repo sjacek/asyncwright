@@ -14,6 +14,10 @@ It does not generate application services, broker clients or runtime schema vali
 Headers and unused component schemas are not model roots. References are followed
 through the public resolver; source trees and reference URIs remain unchanged.
 
+Development `0.3.0-SNAPSHOT` can [validate Avro schemas](avro.md), but this DTO backend
+continues to require its AsyncAPI/JSON schema profile. Avro payloads produce
+`java-dto.unsupported` before output is written.
+
 ## Configure generation
 
 Use the public repositories from the [quick start](../README.md#quick-start).

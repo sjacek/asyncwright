@@ -11,6 +11,7 @@ import io.github.sjacek.asyncwright.api.Severity;
 import io.github.sjacek.asyncwright.api.SourceLocation;
 import io.github.sjacek.asyncwright.api.AsyncApiReferences;
 import io.github.sjacek.asyncwright.api.ResolvedReference;
+import io.github.sjacek.asyncwright.api.ResolvedSchemaFile;
 
 import java.io.IOException;
 import java.net.URI;
@@ -28,6 +29,7 @@ public final class ReferenceResolver implements AsyncApiReferences {
     private final DocumentIndex index;
     private final Map<String, String> targets = new LinkedHashMap<>();
     private final Set<String> invalid = new HashSet<>();
+    private final Map<String, ResolvedSchemaFile> schemaFiles = new LinkedHashMap<>();
 
     ReferenceResolver(SourceDocument source, DocumentIndex index) {
         this.source = source;
@@ -38,6 +40,9 @@ public final class ReferenceResolver implements AsyncApiReferences {
     List<Diagnostic> validate() {
         List<Diagnostic> errors = new ArrayList<>();
         for (var use : index.references) {
+            // Avro file edges are validated separately against the explicit ParseContext.
+            // They must never become local document edges or expose external reads via resolve().
+            if (use.kind() == DocumentIndex.Kind.AVRO_SCHEMA) continue;
             String ref = source.root.at(use.pointer()).path(REF).asText();
             try {
                 String target = pointerOf(ref);
@@ -120,7 +125,8 @@ public final class ReferenceResolver implements AsyncApiReferences {
             current = targets.get(current);
         }
         JsonNode value = source.root.at(current);
-        if (invalid.contains(current) || value.isMissingNode() || value.has(REF)) return Optional.empty();
+        boolean avroData = index.kinds.get(current) == DocumentIndex.Kind.AVRO_SCHEMA && value.has(TYPE);
+        if (invalid.contains(current) || value.isMissingNode() || (value.has(REF) && !avroData)) return Optional.empty();
         return Optional.of(new ResolvedReference(current, value));
     }
 
@@ -137,6 +143,13 @@ public final class ReferenceResolver implements AsyncApiReferences {
         Optional<ResolvedReference> target = resolve(pointer);
         return target.isPresent() ? Optional.of(MAPPER.treeToValue(
                 mappingTree(target.get().pointer(), target.get().node()), type)) : Optional.empty();
+    }
+
+    void schemaFile(String pointer, ResolvedSchemaFile file) { schemaFiles.put(pointer, file); }
+
+    @Override public Optional<ResolvedSchemaFile> resolveSchemaFile(String pointer) {
+        com.fasterxml.jackson.core.JsonPointer.compile(pointer);
+        return Optional.ofNullable(schemaFiles.get(pointer));
     }
 
     JsonNode mappingTree(String base, JsonNode tree) {

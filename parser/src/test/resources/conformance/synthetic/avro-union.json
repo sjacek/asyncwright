@@ -1,0 +1,18 @@
+{
+  "asyncapi": "3.0.0",
+  "info": {
+    "title": "Avro R7",
+    "version": "1"
+  },
+  "components": {
+    "schemas": {
+      "Value": {
+        "schemaFormat": "application/vnd.apache.avro;version=1.9.0",
+        "schema": [
+          "null",
+          "long"
+        ]
+      }
+    }
+  }
+}
