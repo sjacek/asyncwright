@@ -65,9 +65,11 @@ class BindingSchemaPositionsTest {
     }
 
     private static ParseResult parse(JsonNode root) { return new AsyncApiParser().parse("bindings.json", root.toPrettyString()); }
+
     private static ObjectNode ref(String target) { return MAPPER.createObjectNode().put("$ref", target); }
 
-    @ParameterizedTest @MethodSource("positions")
+    @ParameterizedTest
+    @MethodSource("positions")
     void keepsReferencesInTheModelAndResolvesAliasesIndependently(BindingSchemaPositions.Position position) throws Exception {
         ObjectNode root = fixture(position, ref("#/components/schemas/Alias"));
         var result = parse(root);
@@ -87,7 +89,8 @@ class BindingSchemaPositionsTest {
                 .anyMatch(location -> location.pointer().equals(pointer(position) + "/$ref")));
     }
 
-    @ParameterizedTest @MethodSource("positions")
+    @ParameterizedTest
+    @MethodSource("positions")
     void inlineAndAliasedBindingMapsShareTheSameSchemaRules(BindingSchemaPositions.Position position) {
         for (boolean alias : new boolean[]{false, true}) {
             ObjectNode root = fixture(position, ref("#/components/schemas/Value"));
@@ -134,7 +137,8 @@ class BindingSchemaPositionsTest {
         assertTrue(result.diagnostics().stream().anyMatch(d -> d.ruleId().startsWith("schema.")), result.diagnostics()::toString);
     }
 
-    @ParameterizedTest @MethodSource("positions")
+    @ParameterizedTest
+    @MethodSource("positions")
     void rejectsWrongKindsMissingTargetsAndExternalReferences(BindingSchemaPositions.Position position) {
         for (String target : new String[]{"#/components/servers/Broker", "#/components/schemas/Missing", "key.json", "#/Bad~2"}) {
             ObjectNode root = fixture(position, ref(target));
@@ -150,7 +154,8 @@ class BindingSchemaPositionsTest {
         }
     }
 
-    @ParameterizedTest @MethodSource("positions")
+    @ParameterizedTest
+    @MethodSource("positions")
     void permitsConcreteRecursionButRejectsCyclesOfAliases(BindingSchemaPositions.Position position) {
         ObjectNode recursive = MAPPER.createObjectNode().put("type", "object");
         recursive.putObject("properties").set("next", ref("#" + pointer(position)));
@@ -164,7 +169,8 @@ class BindingSchemaPositionsTest {
                 rejected.diagnostics()::toString);
     }
 
-    @ParameterizedTest @MethodSource("positions")
+    @ParameterizedTest
+    @MethodSource("positions")
     void literalsInsideSchemasAreDataRatherThanReferenceEdges(BindingSchemaPositions.Position position) {
         ObjectNode schema = MAPPER.createObjectNode().put("type", "object");
         schema.set("default", ref("not-a-reference.json"));
@@ -176,7 +182,8 @@ class BindingSchemaPositionsTest {
     }
 
     /** URI fragment decoding and JSON Pointer escaping remain separate from component-name validation. */
-    @ParameterizedTest @MethodSource("positions")
+    @ParameterizedTest
+    @MethodSource("positions")
     void encodedReferencesReachNestedSchemaPropertiesAndResolverViewsAreIndependent(
             BindingSchemaPositions.Position position) {
         String uri = "#/components/schemas/Value/properties/a~1b~0%20c+d";
@@ -197,7 +204,8 @@ class BindingSchemaPositionsTest {
     }
 
     /** Capability checks must also run in protocol schemas instead of falling through to model.mapping. */
-    @ParameterizedTest @MethodSource("positions")
+    @ParameterizedTest
+    @MethodSource("positions")
     void protocolSchemasKeepTheSameDialectAndResourceBoundariesAsPayloadSchemas(
             BindingSchemaPositions.Position position) {
         for (String keyword : List.of("$schema", "$id", "schemaFormat")) {
@@ -222,7 +230,8 @@ class BindingSchemaPositionsTest {
     }
 
     /** Ignored siblings stay in source, but never introduce schema IDs or external reference edges. */
-    @ParameterizedTest @MethodSource("positions")
+    @ParameterizedTest
+    @MethodSource("positions")
     void referenceSiblingsProduceOneWarningAndAreNotInterpretedAsSchemas(BindingSchemaPositions.Position position) {
         ObjectNode reference = ref("#/components/schemas/Value");
         reference.put("$id", "urn:ignored");
@@ -243,7 +252,8 @@ class BindingSchemaPositionsTest {
     }
 
     /** A false target is a concrete schema, not a missing node or an unresolvable alias. */
-    @ParameterizedTest @MethodSource("positions")
+    @ParameterizedTest
+    @MethodSource("positions")
     void bindingReferencesCanResolveBooleanSchemasWithoutChangingTheReferenceModel(
             BindingSchemaPositions.Position position) throws Exception {
         for (boolean value : List.of(true, false)) {

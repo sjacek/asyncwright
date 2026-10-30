@@ -32,8 +32,10 @@ final class ModelMapping {
     static ObjectMapper mapper() {
         SimpleModule booleans = new SimpleModule(BooleanDeserializer.class.getName());
         booleans.setDeserializerModifier(new BeanDeserializerModifier() {
-            @Serial private static final long serialVersionUID = 1L;
-            @Override public JsonDeserializer<?> modifyDeserializer(DeserializationConfig config, BeanDescription bean,
+            @Serial
+            private static final long serialVersionUID = 1L;
+            @Override
+            public JsonDeserializer<?> modifyDeserializer(DeserializationConfig config, BeanDescription bean,
                                                                      JsonDeserializer<?> deserializer) {
                 return bean.getBeanClass() == AsyncAPISchema.class ? new BooleanDeserializer(deserializer) : deserializer;
             }
@@ -57,12 +59,17 @@ final class ModelMapping {
     private abstract static class AvroMetadataValues { }
 
     private static final class BooleanDeserializer extends DelegatingDeserializer {
-        @Serial private static final long serialVersionUID = 1L;
+        @Serial
+        private static final long serialVersionUID = 1L;
         BooleanDeserializer(JsonDeserializer<?> delegate) { super(delegate); }
-        @Override protected JsonDeserializer<?> newDelegatingInstance(JsonDeserializer<?> delegate) {
+
+        @Override
+        protected JsonDeserializer<?> newDelegatingInstance(JsonDeserializer<?> delegate) {
             return new BooleanDeserializer(delegate);
         }
-        @Override public Object deserialize(JsonParser parser, DeserializationContext context) throws IOException {
+
+        @Override
+        public Object deserialize(JsonParser parser, DeserializationContext context) throws IOException {
             if (parser.currentToken() == JsonToken.VALUE_TRUE || parser.currentToken() == JsonToken.VALUE_FALSE)
                 return new BooleanSchema(parser.getBooleanValue());
             return super.deserialize(parser, context);
@@ -71,11 +78,16 @@ final class ModelMapping {
 
     private abstract static class InstanceValues {
         // Upstream's generated setters also carry deserializer annotations.
-        @JsonProperty(CONST) @JsonDeserialize(using = InstanceValueDeserializer.class)
+        @JsonProperty(CONST)
+        @JsonDeserialize(using = InstanceValueDeserializer.class)
         abstract void setConstValue(Object value);
-        @JsonProperty(DEFAULT) @JsonDeserialize(using = InstanceValueDeserializer.class)
+
+        @JsonProperty(DEFAULT)
+        @JsonDeserialize(using = InstanceValueDeserializer.class)
         abstract void setDefaultValue(Object value);
-        @JsonProperty(EXAMPLES) @JsonDeserialize(contentUsing = InstanceValueDeserializer.class)
+
+        @JsonProperty(EXAMPLES)
+        @JsonDeserialize(contentUsing = InstanceValueDeserializer.class)
         abstract void setExamples(List<Object> value);
     }
 

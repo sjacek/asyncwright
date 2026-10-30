@@ -24,7 +24,8 @@ public abstract class AsyncApiSpec implements Named {
      * @param name container identity used in task and output names
      * @param objects factory for nested rule and generator options
      */
-    @Inject public AsyncApiSpec(String name, ObjectFactory objects) {
+    @Inject
+    public AsyncApiSpec(String name, ObjectFactory objects) {
         this.name = name;
         rules = objects.newInstance(AsyncApiRules.class);
         var schemas = objects.fileCollection().from(getFile().map(file -> file.getAsFile().getParentFile()))
@@ -33,12 +34,16 @@ public abstract class AsyncApiSpec implements Named {
         generators = objects.domainObjectContainer(GeneratorOptions.class,
                 id -> objects.newInstance(GeneratorOptions.class, id));
     }
-    @Override public String getName() { return name; }
+
+    @Override
+    public String getName() { return name; }
+
     /**
      * Returns the JSON or YAML document to validate.
      * @return required input file located inside the project directory
      */
     public abstract RegularFileProperty getFile();
+
     /**
      * Returns declared local Avro file inputs. Defaults lazily to .avsc files below the document directory.
      * Use setFrom(files/fileTree) to replace the default allowlist, or from(...) to extend it.
@@ -47,21 +52,25 @@ public abstract class AsyncApiSpec implements Named {
      * @return configurable files/file trees; every referenced file must be inside the project
      */
     public abstract ConfigurableFileCollection getSchemaFiles();
+
     /**
      * Returns this document's validation policy.
      * @return managed rule options shared by its validation and generation tasks
      */
     public AsyncApiRules getRules() { return rules; }
+
     /**
      * Configures validation policy.
      * @param action configuration action executed during build configuration
      */
     public void rules(Action<? super AsyncApiRules> action) { action.execute(rules); }
+
     /**
      * Returns named generators, each producing a separate task and output directory.
      * @return generator declarations; generator names follow the specification naming pattern
      */
     public NamedDomainObjectContainer<GeneratorOptions> getGenerators() { return generators; }
+
     /**
      * Configures named generators.
      * @param action configuration action executed during build configuration

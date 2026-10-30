@@ -18,16 +18,21 @@ public abstract class AsyncApiValidate extends AsyncApiTask {
      * Returns the JSON diagnostic array destination.
      * @return required report file
      */
-    @OutputFile public abstract RegularFileProperty getJsonReport();
+    @OutputFile
+    public abstract RegularFileProperty getJsonReport();
+
     /**
      * Returns the human-readable diagnostic report destination.
      * @return required report file; an error-free document produces an empty file
      */
-    @OutputFile public abstract RegularFileProperty getTextReport();
+    @OutputFile
+    public abstract RegularFileProperty getTextReport();
+
     /**
      * Runs built-in and project validation in an isolated worker.
      */
-    @TaskAction public void validate() {
+    @TaskAction
+    public void validate() {
         submit(getJsonReport().get().getAsFile(), getTextReport().get().getAsFile(), null, null, java.util.Map.of());
     }
 }

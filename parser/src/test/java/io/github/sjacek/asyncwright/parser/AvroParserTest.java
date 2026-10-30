@@ -27,7 +27,8 @@ class AvroParserTest {
     private static final String USE = "/components/schemas/Value/schema";
     private static final String RECORD = "{\"type\":\"record\",\"name\":\"Event\",\"fields\":[{\"name\":\"id\",\"type\":\"long\"}]}";
     private final AsyncApiParser parser = new AsyncApiParser();
-    @TempDir Path root;
+    @TempDir
+    Path root;
 
     private static String document(String schema) {
         return """

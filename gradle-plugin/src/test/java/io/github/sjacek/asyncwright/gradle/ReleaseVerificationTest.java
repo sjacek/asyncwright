@@ -13,7 +13,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ReleaseVerificationTest {
-    @TempDir Path root;
+    @TempDir
+    Path root;
 
     @ParameterizedTest
     @CsvSource({"0.1.0,v0.1.0,true", "0.1.1,v0.1.1,true", "0.1.0-SNAPSHOT,v0.1.0,false",

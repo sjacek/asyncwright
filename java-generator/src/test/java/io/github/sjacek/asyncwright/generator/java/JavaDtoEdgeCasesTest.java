@@ -21,10 +21,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /** Negative profile boundaries and Java/JSON behavior, independent of application contracts. */
 class JavaDtoEdgeCasesTest {
-    @TempDir Path directory;
+    @TempDir
+    Path directory;
     private static final ObjectMapper JSON = new ObjectMapper();
 
-    @Test void preservesWireEnumsExplicitNullAndReadOnlyConstantsInCompiledModels() throws Exception {
+    @Test
+    void preservesWireEnumsExplicitNullAndReadOnlyConstantsInCompiledModels() throws Exception {
         ObjectNode source = document("""
                 {"type":"object","additionalProperties":false,"required":["count","enabled","source"],
                  "properties":{
@@ -61,14 +63,16 @@ class JavaDtoEdgeCasesTest {
         }
     }
 
-    @ParameterizedTest @ValueSource(strings = {"", "../outside", "a..b", "sample.class", "sample/dto", "bad;package"})
+    @ParameterizedTest
+    @ValueSource(strings = {"", "../outside", "a..b", "sample.class", "sample/dto", "bad;package"})
     void rejectsInvalidPackageParametersAsConfigurationFailures(String name) {
         var exception = assertThrows(ExtensionExecutionException.class,
                 () -> generate(document(simple()), Map.of(JavaDtoGenerator.PACKAGE_NAME, name)));
         assertInstanceOf(IllegalArgumentException.class, exception.getCause());
     }
 
-    @Test void rejectsUnknownAndInvalidCollectionParametersInsteadOfIgnoringTypos() throws Exception {
+    @Test
+    void rejectsUnknownAndInvalidCollectionParametersInsteadOfIgnoringTypos() throws Exception {
         ObjectNode source = document(simple());
         for (Map<String, String> options : List.of(Map.of("packagName", "sample.dto"),
                 Map.of(JavaDtoGenerator.PACKAGE_NAME, "sample.dto", JavaDtoGenerator.COLLECTION_TYPE, "list"))) {
@@ -77,7 +81,8 @@ class JavaDtoEdgeCasesTest {
         }
     }
 
-    @ParameterizedTest @ValueSource(strings = {
+    @ParameterizedTest
+    @ValueSource(strings = {
             "{\"type\":[\"integer\",\"string\"]}",
             "{\"type\":\"string\",\"allOf\":[{\"type\":\"string\"}]}",
             "{\"type\":\"array\",\"items\":[{\"type\":\"string\"}]}",
@@ -96,7 +101,8 @@ class JavaDtoEdgeCasesTest {
         assertTrue(generated.diagnostics().get(0).line() > 0);
     }
 
-    @Test void detectsEnumSymbolCollisionsAfterCaseNormalization() throws Exception {
+    @Test
+    void detectsEnumSymbolCollisionsAfterCaseNormalization() throws Exception {
         ObjectNode source = document(simple());
         ((ObjectNode) schemas(source).path("Event").path("properties")).set("state",
                 JSON.readTree("{\"$ref\":\"#/components/schemas/State\"}"));
@@ -106,7 +112,8 @@ class JavaDtoEdgeCasesTest {
         assertTrue(result.generatedFiles().isEmpty());
     }
 
-    @ParameterizedTest @ValueSource(strings = {
+    @ParameterizedTest
+    @ValueSource(strings = {
             "{\"type\":\"array\",\"items\":{\"$ref\":\"#/components/schemas/Container\"}}",
             "{\"type\":\"object\",\"additionalProperties\":{\"$ref\":\"#/components/schemas/Container\"}}"
     })
@@ -122,7 +129,8 @@ class JavaDtoEdgeCasesTest {
         assertTrue(result.generatedFiles().isEmpty());
     }
 
-    @Test void detectsCaseInsensitiveFileNameCollisionsBeforeOutput() throws Exception {
+    @Test
+    void detectsCaseInsensitiveFileNameCollisionsBeforeOutput() throws Exception {
         ObjectNode source = document(simple());
         ObjectNode properties = (ObjectNode) schemas(source).path("Event").path("properties");
         properties.set("first", JSON.readTree("{\"$ref\":\"#/components/schemas/Other\"}"));
@@ -134,7 +142,8 @@ class JavaDtoEdgeCasesTest {
         assertTrue(result.generatedFiles().isEmpty());
     }
 
-    @Test void detectsReservedAdditionalPropertyMapNameButAllowsItOnClosedObjects() throws Exception {
+    @Test
+    void detectsReservedAdditionalPropertyMapNameButAllowsItOnClosedObjects() throws Exception {
         ObjectNode source = document("{\"type\":\"object\",\"properties\":{\"additionalProperties\":{\"type\":\"string\"}}}");
         var invalid = generate(source, Map.of(JavaDtoGenerator.PACKAGE_NAME, "sample.dto"));
         assertEquals("java-dto.collision", invalid.diagnostics().get(0).ruleId());
@@ -146,7 +155,8 @@ class JavaDtoEdgeCasesTest {
         }
     }
 
-    @Test void appliesCollectionChoiceWithoutWeakeningUniqueItems() throws Exception {
+    @Test
+    void appliesCollectionChoiceWithoutWeakeningUniqueItems() throws Exception {
         ObjectNode source = document("""
                 {"type":"object","additionalProperties":false,"properties":{
                   "values":{"type":"array","items":{"type":"integer"}},
@@ -163,7 +173,8 @@ class JavaDtoEdgeCasesTest {
                 "The source compatibility profile intentionally preserves the legacy terminal byte");
     }
 
-    @Test void avroValidationDoesNotImplyJavaDtoGenerationSupport() throws Exception {
+    @Test
+    void avroValidationDoesNotImplyJavaDtoGenerationSupport() throws Exception {
         var source = document("""
                 {"schemaFormat":"application/vnd.apache.avro;version=1.9.0", "schema":{
                   "type":"record", "name":"Event", "fields":[{"name":"id","type":"string"}]}}
@@ -178,9 +189,11 @@ class JavaDtoEdgeCasesTest {
     private static String simple() {
         return "{\"type\":\"object\",\"additionalProperties\":false,\"properties\":{\"value\":{\"type\":\"string\"}}}";
     }
+
     private static ObjectNode schemas(ObjectNode document) {
         return (ObjectNode) document.path("components").path("schemas");
     }
+
     private static ObjectNode document(String schema) throws Exception {
         ObjectNode root = (ObjectNode) JSON.readTree("""
                 {"asyncapi":"3.0.0","info":{"title":"DTO boundaries","version":"1"},
@@ -189,6 +202,7 @@ class JavaDtoEdgeCasesTest {
         schemas(root).set("Event", JSON.readTree(schema));
         return root;
     }
+
     private io.github.sjacek.asyncwright.api.ExtensionResult generate(ObjectNode document, Map<String, String> options) throws Exception {
         var parsed = new AsyncApiParser().parse("document.json", document.toString());
         assertTrue(parsed.successful(), parsed.diagnostics()::toString);

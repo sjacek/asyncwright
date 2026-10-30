@@ -20,6 +20,7 @@ public final class Avro19 {
 
         private final String mediaType;
         Format(String prefix) { mediaType = prefix + ";version=" + VERSION; }
+
         /**
          * Returns the complete, versioned wire value.
          * @return supported media type
@@ -28,6 +29,7 @@ public final class Avro19 {
     }
 
     private Avro19() { }
+
     /**
      * Checks the exact supported media types.
      * Matching does not trim, normalize case or infer a version; null is unsupported.

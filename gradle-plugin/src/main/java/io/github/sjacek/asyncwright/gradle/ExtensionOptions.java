@@ -10,12 +10,16 @@ public abstract class ExtensionOptions {
      * Returns the extension identity retained across the worker boundary.
      * @return binary Java name of a public extension class with a public no-argument constructor
      */
-    @Input public abstract Property<String> getClassName();
+    @Input
+    public abstract Property<String> getClassName();
+
     /**
      * Returns explicitly declared, cache-tracked text parameters.
      * @return parameter map, empty by default
      */
-    @Input public abstract MapProperty<String, String> getParameters();
+    @Input
+    public abstract MapProperty<String, String> getParameters();
+
     /**
      * Creates options with no parameters and no default implementation class.
      */

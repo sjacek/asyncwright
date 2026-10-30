@@ -14,7 +14,8 @@ import static org.gradle.testkit.runner.TaskOutcome.*;
 
 class AsyncwrightPluginTest {
     private static final String API_PACKAGE = AsyncApiRule.class.getPackageName();
-    @TempDir Path temporary;
+    @TempDir
+    Path temporary;
     private static final String DOCUMENT = """
             asyncapi: 3.0.0
             info:
@@ -59,7 +60,8 @@ class AsyncwrightPluginTest {
             }
             """;
 
-    @Test void registersLazyTasksAndConnectsValidationToCheck() throws Exception {
+    @Test
+    void registersLazyTasksAndConnectsValidationToCheck() throws Exception {
         Path root = fixture("consumer", PLUGIN + SPEC);
         assertEquals(SUCCESS, outcome(run(root, "check"), ":asyncApiValidateEvents"));
         assertEquals("[ ]\n", read(root, "build/reports/asyncapi/events.json"));
@@ -69,7 +71,8 @@ class AsyncwrightPluginTest {
         assertEquals(FAILED, outcome(fail(root, "check"), ":asyncApiValidateEvents"));
     }
 
-    @Test void reportsAllDeclarativeFailuresAtResolvedDefinitionsWithRelatedUses() throws Exception {
+    @Test
+    void reportsAllDeclarativeFailuresAtResolvedDefinitionsWithRelatedUses() throws Exception {
         Path root = fixture("invalid", PLUGIN + SPEC);
         write(root, "contracts/events.yaml", DOCUMENT.replace("application/json", "text/plain")
                 .replace("protocol: amqp", "protocol: mqtt").replace("address: events.created", "address: bad"));
@@ -85,7 +88,8 @@ class AsyncwrightPluginTest {
         assertTrue(result.getOutput().contains(root.resolve("contracts/events.yaml").toString()));
     }
 
-    @Test void schemaMetadataDoesNotWarnWhileProjectDiagnosticsRemainVisible() throws Exception {
+    @Test
+    void schemaMetadataDoesNotWarnWhileProjectDiagnosticsRemainVisible() throws Exception {
         Path root = fixture("schema-metadata", PLUGIN + SPEC);
         projectExtension(root);
         append(root, "build.gradle", REGISTRATION);
@@ -101,7 +105,8 @@ class AsyncwrightPluginTest {
         assertEquals("events.created", read(root, "build/generated/asyncapi/events/catalog/channels.txt"));
     }
 
-    @Test void parserErrorsSkipProjectRulesAndKeepStructuralReports() throws Exception {
+    @Test
+    void parserErrorsSkipProjectRulesAndKeepStructuralReports() throws Exception {
         Path root = fixture("syntax", PLUGIN + SPEC + "asyncwright.specs.events.rules { rule 'does.not.Exist' }\n");
         write(root, "contracts/events.yaml", "asyncapi: 3.0.0\ninfo: [\n");
         BuildResult result = fail(root, "check");
@@ -109,7 +114,8 @@ class AsyncwrightPluginTest {
         assertFalse(result.getOutput().contains("ClassNotFoundException"));
     }
 
-    @Test void reusesConfigurationAndBuildCachesAndRelocatesReportsByteForByte() throws Exception {
+    @Test
+    void reusesConfigurationAndBuildCachesAndRelocatesReportsByteForByte() throws Exception {
         Path root = fixture("A", PLUGIN + SPEC);
         projectExtension(root);
         append(root, "build.gradle", REGISTRATION);
@@ -129,7 +135,8 @@ class AsyncwrightPluginTest {
         assertArrayEquals(text, Files.readAllBytes(relocated.resolve("build/reports/asyncapi/events.txt")));
     }
 
-    @Test void changingTheRelativeSourceDirectoryInvalidatesTheReport() throws Exception {
+    @Test
+    void changingTheRelativeSourceDirectoryInvalidatesTheReport() throws Exception {
         Path root = fixture("rename", PLUGIN + SPEC);
         projectExtension(root);
         append(root, "build.gradle", REGISTRATION);
@@ -140,7 +147,8 @@ class AsyncwrightPluginTest {
         assertTrue(read(root, "build/reports/asyncapi/events.json").contains("other/events.yaml"));
     }
 
-    @Test void extensionsGenerateInWorkersAndClasspathAndParametersInvalidateCache() throws Exception {
+    @Test
+    void extensionsGenerateInWorkersAndClasspathAndParametersInvalidateCache() throws Exception {
         Path root = fixture("extensions", PLUGIN + SPEC);
         projectExtension(root);
         append(root, "build.gradle", REGISTRATION);
@@ -164,7 +172,8 @@ class AsyncwrightPluginTest {
         assertEquals("events.created", read(root, "build/generated/asyncapi/events/catalog/renamed.txt"));
     }
 
-    @Test void jackson3AndBuildScriptOnlyClassesAreHiddenFromWorker() throws Exception {
+    @Test
+    void jackson3AndBuildScriptOnlyClassesAreHiddenFromWorker() throws Exception {
         String hostJars = files(List.of(location(JsonMapper.class),
                 location(tools.jackson.core.JsonToken.class), location(com.fasterxml.jackson.annotation.JsonProperty.class)));
         Path root = fixture("isolation", "buildscript { dependencies { classpath files(" + hostJars + ") } }\n"
@@ -184,7 +193,8 @@ class AsyncwrightPluginTest {
         assertEquals(SUCCESS, outcome(run(root, "check"), ":asyncApiValidateEvents"));
     }
 
-    @Test void failedGeneratorPreservesCauseAndPublishesNoPartialOrStaleFiles() throws Exception {
+    @Test
+    void failedGeneratorPreservesCauseAndPublishesNoPartialOrStaleFiles() throws Exception {
         Path root = fixture("generator-failure", PLUGIN + SPEC);
         projectExtension(root);
         append(root, "build.gradle", REGISTRATION);
@@ -197,7 +207,8 @@ class AsyncwrightPluginTest {
         assertFalse(Files.exists(root.resolve("build/tmp/asyncApiGenerateEventsCatalog/staging")));
     }
 
-    @Test void validationFailurePreventsGenerationAndDeletesPreviousOutput() throws Exception {
+    @Test
+    void validationFailurePreventsGenerationAndDeletesPreviousOutput() throws Exception {
         Path root = fixture("rules-failure", PLUGIN + SPEC);
         projectExtension(root);
         append(root, "build.gradle", REGISTRATION);
@@ -207,7 +218,8 @@ class AsyncwrightPluginTest {
         assertFalse(Files.exists(root.resolve("build/generated/asyncapi/events/catalog")));
     }
 
-    @Test void includedBuildCanSupplyExtensions() throws Exception {
+    @Test
+    void includedBuildCanSupplyExtensions() throws Exception {
         Path root = fixture("composite", PLUGIN + SPEC);
         projectExtension(root);
         write(root, "settings.gradle", settings("includeBuild('extensions')\n"));
@@ -218,7 +230,8 @@ class AsyncwrightPluginTest {
         assertEquals("events.created", read(root, "build/generated/asyncapi/events/catalog/channels.txt"));
     }
 
-    @Test void modelTaskApiCanBeRegisteredDirectly() throws Exception {
+    @Test
+    void modelTaskApiCanBeRegisteredDirectly() throws Exception {
         Path root = fixture("model-task", PLUGIN);
         projectExtension(root);
         append(root, "build.gradle", """
@@ -235,12 +248,14 @@ class AsyncwrightPluginTest {
         assertEquals("events.created", read(root, "build/direct/direct.txt"));
     }
 
-    @Test void missingExtensionClassFailsExplicitly() throws Exception {
+    @Test
+    void missingExtensionClassFailsExplicitly() throws Exception {
         Path root = fixture("missing-class", PLUGIN + SPEC + "asyncwright.specs.events.rules { rule 'does.not.Exist' }\n");
         assertTrue(fail(root, "check").getOutput().contains("ClassNotFoundException: does.not.Exist"));
     }
 
-    @Test void registersRuleClassesWithAndWithoutParametersIncludingNestedBinaryNames() throws Exception {
+    @Test
+    void registersRuleClassesWithAndWithoutParametersIncludingNestedBinaryNames() throws Exception {
         Path root = fixture("typed-rules", PLUGIN + SPEC);
         projectExtension(root);
         write(root, "extensions/src/main/java/fixture/ProjectRule.java", """
@@ -276,12 +291,14 @@ class AsyncwrightPluginTest {
         assertTrue(repeated.getOutput().contains("Reusing configuration cache"));
     }
 
-    @Test void rejectsCollidingSpecTaskNames() throws Exception {
+    @Test
+    void rejectsCollidingSpecTaskNames() throws Exception {
         Path root = fixture("colliding", PLUGIN + "asyncwright.specs { events {}; Events {} }\n");
         assertTrue(fail(root, "help").getOutput().contains("Colliding AsyncAPI task name"));
     }
 
-    @Test void packagedPluginContainsParserApiAndSchemasWithoutASeparateParserArtifact() throws Exception {
+    @Test
+    void packagedPluginContainsParserApiAndSchemasWithoutASeparateParserArtifact() throws Exception {
         Path root = fixture("packaged", PLUGIN + SPEC);
         List<File> classpath = new ArrayList<>(pluginClasspath().stream().filter(path -> path.toString().endsWith(".jar"))
                 .map(Path::toFile).toList());
@@ -300,7 +317,8 @@ class AsyncwrightPluginTest {
         }
     }
 
-    @Test void kotlinDslCanConfigureSpecsAndRules() throws Exception {
+    @Test
+    void kotlinDslCanConfigureSpecsAndRules() throws Exception {
         Path root = fixture("kotlin", "");
         Files.delete(root.resolve("build.gradle"));
         write(root, "build.gradle.kts", """
@@ -320,7 +338,8 @@ class AsyncwrightPluginTest {
         assertEquals(SUCCESS, outcome(run(root, "check"), ":asyncApiValidateEvents"));
     }
 
-    @Test void groovyProtocolListCrossesTheWorkerBoundaryAndInvalidatesCachedValidationAndGeneration() throws Exception {
+    @Test
+    void groovyProtocolListCrossesTheWorkerBoundaryAndInvalidatesCachedValidationAndGeneration() throws Exception {
         String policy = SPEC.replace("requireProtocol 'amqp'", "requireProtocol 'kafka', 'kafka-secure'");
         Path root = fixture("protocol-list", PLUGIN + policy);
         projectExtension(root);
@@ -347,7 +366,8 @@ class AsyncwrightPluginTest {
         assertEquals("events.created", read(root, output));
     }
 
-    @Test void kotlinDslAcceptsMultipleProtocols() throws Exception {
+    @Test
+    void kotlinDslAcceptsMultipleProtocols() throws Exception {
         Path root = fixture("kotlin-protocol-list", "");
         Files.delete(root.resolve("build.gradle"));
         write(root, "contracts/events.yaml", DOCUMENT.replace("protocol: amqp", "protocol: kafka-secure"));
@@ -371,7 +391,8 @@ class AsyncwrightPluginTest {
     }
 
     /** A deliberately empty policy crosses the worker boundary as [], rather than falling back to a scalar. */
-    @Test void clearingTheProtocolListDisablesValidationAndKeepsTheConfigurationCacheUsable() throws Exception {
+    @Test
+    void clearingTheProtocolListDisablesValidationAndKeepsTheConfigurationCacheUsable() throws Exception {
         Path root = fixture("empty-protocol-list", PLUGIN + SPEC
                 + "asyncwright.specs.events.rules { requireProtocol 'kafka', 'kafka-secure' }\n");
         assertEquals(FAILED, outcome(fail(root, "check"), ":asyncApiValidateEvents"));
@@ -384,7 +405,8 @@ class AsyncwrightPluginTest {
         assertTrue(repeated.getOutput().contains("Reusing configuration cache"));
     }
 
-    @Test void builtinRuleConfigurationAndInputContentsInvalidateCache() throws Exception {
+    @Test
+    void builtinRuleConfigurationAndInputContentsInvalidateCache() throws Exception {
         Path root = fixture("rule-inputs", PLUGIN + SPEC);
         run(root, "check");
         write(root, "build.gradle", read(root, "build.gradle").replace("'amqp'", "'mqtt'"));
@@ -393,7 +415,8 @@ class AsyncwrightPluginTest {
         assertEquals(SUCCESS, outcome(run(root, "check"), ":asyncApiValidateEvents"));
     }
 
-    @Test void patternFlagsSurviveWorkerIsolationAndTheirChangeInvalidatesTheCache() throws Exception {
+    @Test
+    void patternFlagsSurviveWorkerIsolationAndTheirChangeInvalidatesTheCache() throws Exception {
         String policy = "asyncwright.specs.events.rules.channelAddress(java.util.regex.Pattern.compile('EVENTS[.].+', java.util.regex.Pattern.CASE_INSENSITIVE))\n";
         Path root = fixture("pattern-flags", PLUGIN + SPEC + policy);
         assertEquals(SUCCESS, outcome(run(root, "check"), ":asyncApiValidateEvents"));
@@ -405,7 +428,8 @@ class AsyncwrightPluginTest {
         assertTrue(read(root, "build/reports/asyncapi/events.json").contains("project.channel-address"));
     }
 
-    @Test void successfulEmptyGenerationRemovesObsoleteOutputsAndRemainsCacheable() throws Exception {
+    @Test
+    void successfulEmptyGenerationRemovesObsoleteOutputsAndRemainsCacheable() throws Exception {
         Path root = fixture("empty-generation", PLUGIN + SPEC);
         projectExtension(root);
         append(root, "build.gradle", REGISTRATION);
@@ -421,7 +445,8 @@ class AsyncwrightPluginTest {
         assertFalse(Files.exists(destination.resolve("channels.txt")));
     }
 
-    @Test void generatorOutputCannotOwnTheBuildDirectoryOrContainItsInput() throws Exception {
+    @Test
+    void generatorOutputCannotOwnTheBuildDirectoryOrContainItsInput() throws Exception {
         Path root = fixture("output-boundaries", PLUGIN + SPEC);
         projectExtension(root);
         append(root, "build.gradle", REGISTRATION);
@@ -438,7 +463,8 @@ class AsyncwrightPluginTest {
         assertEquals(DOCUMENT, read(root, "build/owned/input.yaml"));
     }
 
-    @Test void customRuleFailureKeepsItsOriginalCauseAndRemovesStaleReports() throws Exception {
+    @Test
+    void customRuleFailureKeepsItsOriginalCauseAndRemovesStaleReports() throws Exception {
         Path root = fixture("rule-exception", PLUGIN + SPEC);
         projectExtension(root);
         append(root, "build.gradle", REGISTRATION);
@@ -457,7 +483,8 @@ class AsyncwrightPluginTest {
         assertFalse(Files.exists(root.resolve("build/reports/asyncapi/events.json")));
     }
 
-    @Test void rejectsGeneratorOutputOutsideBuildEvenOnCacheRestore() throws Exception {
+    @Test
+    void rejectsGeneratorOutputOutsideBuildEvenOnCacheRestore() throws Exception {
         Path root = fixture("unsafe-output", PLUGIN + SPEC);
         projectExtension(root);
         append(root, "build.gradle", REGISTRATION);
@@ -475,7 +502,8 @@ class AsyncwrightPluginTest {
     }
 
     /** Covers the public whole-map resolver flow, both caches and stale-output cleanup on invalid input. */
-    @Test void bindingMapAliasesReachTypedGeneratorsAcrossWorkerIsolationAndCacheReuse() throws Exception {
+    @Test
+    void bindingMapAliasesReachTypedGeneratorsAcrossWorkerIsolationAndCacheReuse() throws Exception {
         Path root = fixture("binding-maps", PLUGIN + SPEC);
         projectExtension(root);
         append(root, "build.gradle", REGISTRATION);
@@ -517,7 +545,8 @@ class AsyncwrightPluginTest {
     }
 
     /** Registry semantics cross the real isolated worker boundary and invalidate cached generation. */
-    @Test void kafkaRegistryErrorsWriteReportsAndRemovePreviousGeneratorOutput() throws Exception {
+    @Test
+    void kafkaRegistryErrorsWriteReportsAndRemovePreviousGeneratorOutput() throws Exception {
         Path root = fixture("kafka-registry", PLUGIN + """
                 asyncwright.specs { events { file = layout.projectDirectory.file('contracts/events.yaml') } }
                 """);
@@ -546,7 +575,8 @@ class AsyncwrightPluginTest {
     }
 
     /** Warnings permit generation and survive restoring both reports and generator output from cache. */
-    @Test void kafkaRegistryWithoutKafkaServersWarnsAndAllowsGeneration() throws Exception {
+    @Test
+    void kafkaRegistryWithoutKafkaServersWarnsAndAllowsGeneration() throws Exception {
         Path root = fixture("kafka-registry-warning", PLUGIN + """
                 asyncwright.specs { events { file = layout.projectDirectory.file('contracts/events.yaml') } }
                 """);
@@ -575,7 +605,8 @@ class AsyncwrightPluginTest {
     }
 
     /** Shared binding aliases report once with every operation and stop extension loading on failure. */
-    @Test void kafkaRegistryAliasesAggregateRelatedLocationsAndBlockProjectRules() throws Exception {
+    @Test
+    void kafkaRegistryAliasesAggregateRelatedLocationsAndBlockProjectRules() throws Exception {
         Path root = fixture("kafka-registry-shared", PLUGIN + """
                 asyncwright.specs {
                     events {
@@ -668,7 +699,8 @@ class AsyncwrightPluginTest {
     }
 
     /** Default file trees, worker snapshots and both caches must react to schema-only edits. */
-    @Test void avroFilesReachRulesAndGeneratorsAndInvalidateBothTasks() throws Exception {
+    @Test
+    void avroFilesReachRulesAndGeneratorsAndInvalidateBothTasks() throws Exception {
         Path root = avroFixture("avro-files");
         String first = "{\"type\":\"record\",\"name\":\"Event\",\"fields\":[{\"name\":\"id\",\"type\":\"long\"}]}";
         write(root, "contracts/avro/event.avsc", first);
@@ -699,7 +731,8 @@ class AsyncwrightPluginTest {
     }
 
     /** A root-level contract must not claim other generators' outputs as implicit inputs. */
-    @Test void avroDiscoveryTracksNewFilesWithoutDependingOnOtherTaskOutputs() throws Exception {
+    @Test
+    void avroDiscoveryTracksNewFilesWithoutDependingOnOtherTaskOutputs() throws Exception {
         Path root = avroFixture("avro-root-input");
         write(root, "events.yaml", avroDocument());
         write(root, "avro/event.avsc", "{\"type\":\"string\"}");
@@ -727,7 +760,8 @@ class AsyncwrightPluginTest {
     }
 
     /** Declared path names matter even when Gradle's content fingerprints see identical basenames. */
-    @Test void avroAllowlistCanOverrideTheDefaultAndTracksCompleteRelativeNames() throws Exception {
+    @Test
+    void avroAllowlistCanOverrideTheDefaultAndTracksCompleteRelativeNames() throws Exception {
         Path root = avroFixture("avro-allowlist");
         write(root, "contracts/events.yaml", avroDocument().replace("avro/event.avsc", "../schemas/event.avsc"));
         write(root, "schemas/event.avsc", "{\"type\":\"string\"}");
@@ -743,7 +777,8 @@ class AsyncwrightPluginTest {
     }
 
     /** Extending the allowlist must retain discovery under the main document's directory. */
-    @Test void avroSchemaFilesFromExtendsRatherThanReplacesTheDefault() throws Exception {
+    @Test
+    void avroSchemaFilesFromExtendsRatherThanReplacesTheDefault() throws Exception {
         Path root = avroFixture("avro-extended-inputs");
         write(root, "contracts/avro/event.avsc", "{\"type\":\"string\"}");
         write(root, "schemas/extra.avsc", "{\"type\":\"long\"}");
@@ -766,7 +801,8 @@ class AsyncwrightPluginTest {
     }
 
     /** Snapshotting concrete leaves must preserve dependencies carried by task-backed collections. */
-    @Test void avroSchemaFilesRunsItsProducerBeforeValidationAndGeneration() throws Exception {
+    @Test
+    void avroSchemaFilesRunsItsProducerBeforeValidationAndGeneration() throws Exception {
         Path root = avroFixture("avro-generated-input");
         write(root, "contracts/events.yaml", avroDocument().replace("avro/event.avsc", "../prepared/event.avsc"));
         append(root, "build.gradle", """
@@ -794,7 +830,8 @@ class AsyncwrightPluginTest {
     }
 
     /** File diagnostics use the Avro path and block generation before any old output can survive. */
-    @Test void invalidAvroFileWritesRelatedDiagnosticsAndCleansGeneratorOutput() throws Exception {
+    @Test
+    void invalidAvroFileWritesRelatedDiagnosticsAndCleansGeneratorOutput() throws Exception {
         Path root = avroFixture("avro-invalid");
         write(root, "contracts/avro/event.avsc", "{\"type\":\"string\"}");
         run(root, "asyncApiGenerateEventsCatalog");
@@ -811,7 +848,8 @@ class AsyncwrightPluginTest {
     }
 
     /** Cleanup and cache restoration may never overwrite a schema declared below buildDirectory. */
-    @Test void generatorOutputCannotContainDeclaredAvroFiles() throws Exception {
+    @Test
+    void generatorOutputCannotContainDeclaredAvroFiles() throws Exception {
         Path root = avroFixture("avro-protected");
         write(root, "contracts/events.yaml", avroDocument().replace("avro/event.avsc", "../build/protected/event.avsc"));
         write(root, "build/protected/event.avsc", "{\"type\":\"string\"}");
@@ -825,7 +863,8 @@ class AsyncwrightPluginTest {
     }
 
     /** Identical contents must not let a retargeted symlink bypass the boundary on a cache hit. */
-    @Test void avroCachedValidationStillRejectsASymlinkMovedOutsideTheProject() throws Exception {
+    @Test
+    void avroCachedValidationStillRejectsASymlinkMovedOutsideTheProject() throws Exception {
         Path root = avroFixture("avro-link-cache");
         String schema = "{\"type\":\"string\"}";
         write(root, "contracts/avro/event.avsc", schema);
@@ -909,10 +948,12 @@ class AsyncwrightPluginTest {
         write(root, "contracts/events.yaml", DOCUMENT);
         return root;
     }
+
     private String settings(String extra) {
         return "rootProject.name = 'fixture'\n" + extra + "buildCache { local { directory = '"
                 + slash(temporary.resolve("shared-cache")) + "' } }\n";
     }
+
     private void projectExtension(Path root) throws Exception {
         append(root, "settings.gradle", "include 'extensions'\n");
         write(root, "extensions/build.gradle", "plugins { id 'java-library' }\njava { sourceCompatibility = JavaVersion.VERSION_17; targetCompatibility = JavaVersion.VERSION_17 }\n"
@@ -920,6 +961,7 @@ class AsyncwrightPluginTest {
         write(root, "extensions/src/main/java/fixture/ProjectRule.java", rule());
         write(root, "extensions/src/main/java/fixture/Catalog.java", generator());
     }
+
     private static String rule() {
         return """
                 package fixture;
@@ -933,6 +975,7 @@ class AsyncwrightPluginTest {
                 }
                 """.formatted(API_PACKAGE);
     }
+
     private static String generator() {
         return """
                 package fixture;
@@ -948,6 +991,7 @@ class AsyncwrightPluginTest {
                 }
                 """.formatted(API_PACKAGE, Channel.class.getName());
     }
+
     private GradleRunner runner(Path root, String... arguments) {
         List<String> args = new ArrayList<>(List.of(arguments));
         args.addAll(List.of("--offline", "--build-cache", "--configuration-cache", "--configuration-cache-problems=fail", "--stacktrace"));
@@ -957,13 +1001,17 @@ class AsyncwrightPluginTest {
         return version.isEmpty() ? runner.withGradleInstallation(new File(System.getProperty("asyncwright.testGradleHome")))
                 : runner.withGradleVersion(version);
     }
+
     private BuildResult run(Path root, String... arguments) { return runner(root, arguments).build(); }
+
     private BuildResult fail(Path root, String... arguments) { return runner(root, arguments).buildAndFail(); }
+
     private static TaskOutcome outcome(BuildResult result, String taskPath) {
         BuildTask task = result.task(taskPath);
         assertNotNull(task, () -> "Expected task " + taskPath + " in build result:\n" + result.getOutput());
         return task.getOutcome();
     }
+
     private static List<Path> pluginClasspath() throws IOException {
         Properties properties = new Properties();
         try (InputStream input = AsyncwrightPluginTest.class.getClassLoader().getResourceAsStream("plugin-under-test-metadata.properties")) {
@@ -972,16 +1020,23 @@ class AsyncwrightPluginTest {
         return Arrays.stream(properties.getProperty("implementation-classpath").split(java.util.regex.Pattern.quote(File.pathSeparator)))
                 .map(Path::of).toList();
     }
+
     private static Path location(Class<?> type) throws Exception { return Path.of(type.getProtectionDomain().getCodeSource().getLocation().toURI()); }
+
     private static String files(List<Path> paths) { return String.join(",", paths.stream().map(path -> "'" + slash(path).replace("'", "\\'") + "'").toList()); }
+
     private static String slash(Path path) { return path.toAbsolutePath().toString().replace('\\', '/'); }
+
     private static void write(Path root, String file, String text) throws IOException {
         Path path = root.resolve(file);
         Files.createDirectories(path.getParent());
         Files.writeString(path, text);
     }
+
     private static void append(Path root, String file, String text) throws IOException { Files.writeString(root.resolve(file), text, StandardOpenOption.APPEND); }
+
     private static String read(Path root, String file) throws IOException { return Files.readString(root.resolve(file)); }
+
     private static void copySources(Path source, Path destination) throws IOException {
         try (var files = Files.walk(source)) {
             for (Path file : files.filter(Files::isRegularFile).toList()) {

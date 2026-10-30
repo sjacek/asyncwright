@@ -36,7 +36,8 @@ class ComponentNamesTest {
         }
     }
 
-    @ParameterizedTest @ValueSource(strings = {"a", "0", "A.b_9-z", ".", "_", "-"})
+    @ParameterizedTest
+    @ValueSource(strings = {"a", "0", "A.b_9-z", ".", "_", "-"})
     void validNamesAndArbitrarySchemaPropertyNamesArePreserved(String name) {
         var result = new AsyncApiParser().parse("names.yaml", """
                 asyncapi: 3.0.0

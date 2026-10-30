@@ -104,11 +104,13 @@ public enum BuiltinRuleId {
 
     private final String id;
     BuiltinRuleId(String id) { this.id = id; }
+
     /**
      * Returns the stable identifier emitted in reports.
      * @return wire identifier independent of the Java enum name
      */
     public String id() { return id; }
+
     /**
      * Builds an identifier for a structural schema validator finding.
      * @param keyword validator keyword, for example {@code required}

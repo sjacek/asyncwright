@@ -206,7 +206,8 @@ class ValidationBoundaryTest {
     }
 
     public static class InstanceRule implements AsyncApiRule {
-        @Override public List<Diagnostic> validate(ExtensionContext context) throws Exception {
+        @Override
+        public List<Diagnostic> validate(ExtensionContext context) throws Exception {
             ObjectMapper mapper = new ObjectMapper();
             JsonNode model = mapper.valueToTree(context.document().model());
             JsonNode expected = new ObjectMapper().enable(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS)

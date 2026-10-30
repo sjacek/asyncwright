@@ -24,6 +24,7 @@ public final class ExtensionExecutor {
      * @throws NullPointerException if the loader is null
      */
     public ExtensionExecutor(ClassLoader loader) { this.loader = Objects.requireNonNull(loader, "loader"); }
+
     /**
      * Creates an executor using the classloader that loaded Asyncwright.
      */
@@ -80,10 +81,17 @@ public final class ExtensionExecutor {
         // Recreate from validated input: a model round-trip can change numeric representations.
         AsyncAPI model = MAPPER.treeToValue(document.references().mappingTree("", document.source()), AsyncAPI.class);
         return new AsyncApiDocumentView() {
-            @Override public AsyncAPI model() { return model; }
-            @Override public JsonNode source() { return document.source(); }
-            @Override public SourceLocation location(String pointer) { return document.location(pointer); }
-            @Override public AsyncApiReferences references() { return document.references(); }
+            @Override
+            public AsyncAPI model() { return model; }
+
+            @Override
+            public JsonNode source() { return document.source(); }
+
+            @Override
+            public SourceLocation location(String pointer) { return document.location(pointer); }
+
+            @Override
+            public AsyncApiReferences references() { return document.references(); }
         };
     }
 

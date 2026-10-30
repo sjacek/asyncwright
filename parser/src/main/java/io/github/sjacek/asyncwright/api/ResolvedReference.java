@@ -15,9 +15,11 @@ public record ResolvedReference(String pointer, JsonNode node) {
      * @param node source value to copy
      */
     public ResolvedReference { node = node.deepCopy(); }
+
     /**
      * Returns an independent copy of the target.
      * @return source tree that callers may mutate safely
      */
-    @Override public JsonNode node() { return node.deepCopy(); }
+    @Override
+    public JsonNode node() { return node.deepCopy(); }
 }

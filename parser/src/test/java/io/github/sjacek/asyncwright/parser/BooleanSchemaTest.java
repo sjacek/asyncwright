@@ -225,7 +225,8 @@ class BooleanSchemaTest {
     }
 
     public static class BooleanRule implements AsyncApiRule {
-        @Override public List<Diagnostic> validate(ExtensionContext context) {
+        @Override
+        public List<Diagnostic> validate(ExtensionContext context) {
             JsonNode model = MAPPER.valueToTree(context.document().model());
             assertEquals(context.document().source().at("/components/schemas/None"), model.at("/components/schemas/None"));
             var components = Objects.requireNonNull(context.document().model().getComponents());
@@ -239,7 +240,8 @@ class BooleanSchemaTest {
     }
 
     public static class BooleanGenerator implements AsyncApiGenerator {
-        @Override public List<Diagnostic> generate(GeneratorContext context) throws Exception {
+        @Override
+        public List<Diagnostic> generate(GeneratorContext context) throws Exception {
             context.output().writeUtf8("schema.json", MAPPER.writeValueAsString(
                     context.document().references().resolve("/components/schemas/None", AsyncAPISchema.class).orElseThrow()));
             return List.of();

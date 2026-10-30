@@ -22,7 +22,8 @@ import java.util.Map;
 /** Reads a single document while retaining source coordinates independently of model deserialization. */
 final class SourceDocument {
     static final class UnsupportedAlias extends IOException {
-        @Serial private static final long serialVersionUID = 1L;
+        @Serial
+        private static final long serialVersionUID = 1L;
         final SourceLocation location;
 
         UnsupportedAlias(SourceLocation location) {

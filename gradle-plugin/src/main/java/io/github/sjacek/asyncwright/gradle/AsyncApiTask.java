@@ -51,18 +51,24 @@ public abstract class AsyncApiTask extends DefaultTask {
             return base.relativize(path).toString().replace('\\', '/');
         }));
     }
+
     /**
      * Returns the single input specification.
      * @return required JSON or YAML file inside the project directory
      */
-    @InputFile @PathSensitive(PathSensitivity.RELATIVE) public abstract RegularFileProperty getFile();
+    @InputFile
+    @PathSensitive(PathSensitivity.RELATIVE)
+    public abstract RegularFileProperty getFile();
+
     /**
      * Returns the declared Avro files, tracked before workers run, including when no file is referenced.
      * This configuration collection is internal because the concrete leaves and portable names
      * are exposed as separate inputs below. Its producer tasks are explicit dependencies.
      * @return schema input files/file trees, defaulting to .avsc files below the document directory
      */
-    @Internal public abstract ConfigurableFileCollection getSchemaFiles();
+    @Internal
+    public abstract ConfigurableFileCollection getSchemaFiles();
+
     /**
      * Discovers concrete files on every input snapshot, including configuration-cache reuse.
      * Tracking a tree rooted at the project itself would claim unrelated generator outputs
@@ -70,14 +76,17 @@ public abstract class AsyncApiTask extends DefaultTask {
      * in configuration cache. Keep the configured tree live and expose its current leaves.
      * @return current declared files; producer dependencies are retained by schemaFiles
      */
-    @InputFiles @PathSensitive(PathSensitivity.RELATIVE)
+    @InputFiles
+    @PathSensitive(PathSensitivity.RELATIVE)
     public java.util.Set<File> getSchemaFileInputs() { return getSchemaFiles().getFiles(); }
+
     /**
      * Returns complete relative input names in addition to content fingerprints. Moving two identical
      * same-named files between directories must invalidate allowlist and diagnostic output correctly.
      * @return sorted project-relative schema file names
      */
-    @Input public List<String> getSchemaFilePaths() {
+    @Input
+    public List<String> getSchemaFilePaths() {
         var base = getProjectDirectory().get().getAsFile().toPath().toAbsolutePath().normalize();
         // Input validation must run before UP-TO-DATE/FROM-CACHE, not just inside the worker.
         // A symlink retargeted outside the project can otherwise retain identical content hashes.
@@ -102,47 +111,62 @@ public abstract class AsyncApiTask extends DefaultTask {
         }
         return base.relativize(path).toString().replace('\\', '/');
     }
+
     // @InputFile alone fingerprints just the basename of a single file; diagnostics need its complete relative name.
     /**
      * Returns the diagnostic file name, tracked separately for relocatable cache correctness.
      * @return project-relative path with forward slashes
      */
-    @Input public abstract Property<String> getSourcePath();
+    @Input
+    public abstract Property<String> getSourcePath();
+
     /**
      * Returns the requested bundled specification schema.
      * @return version; only {@code 3.0.0} is supported
      */
-    @Input public abstract Property<String> getSchemaVersion();
+    @Input
+    public abstract Property<String> getSchemaVersion();
+
     /**
      * Returns nested, cache-tracked validation options.
      * @return declarative and custom rule configuration
      */
-    @Nested public AsyncApiRules getRules() { return rules; }
+    @Nested
+    public AsyncApiRules getRules() { return rules; }
+
     /**
      * Configures nested validation options.
      * @param action action executed during configuration
      */
     public void rules(Action<? super AsyncApiRules> action) { action.execute(rules); }
+
     /**
      * Returns additional worker dependencies; build-script classpaths are not passed automatically.
      * @return rule and generator runtime classpath, fingerprinted by Gradle
      */
-    @Classpath public abstract ConfigurableFileCollection getExtensionClasspath();
+    @Classpath
+    public abstract ConfigurableFileCollection getExtensionClasspath();
+
     /**
      * Returns the root used to derive portable source names and clickable console locations.
      * @return project directory, defaulting to the owning project
      */
-    @Internal public abstract DirectoryProperty getProjectDirectory();
+    @Internal
+    public abstract DirectoryProperty getProjectDirectory();
+
     /**
      * Returns the boundary within which task-owned generator output must reside.
      * @return owning project's build directory by default
      */
-    @Internal public abstract DirectoryProperty getBuildDirectory();
+    @Internal
+    public abstract DirectoryProperty getBuildDirectory();
+
     /**
      * Returns the Gradle service creating isolated worker classloaders.
      * @return injected worker executor
      */
-    @Inject protected abstract WorkerExecutor getWorkerExecutor();
+    @Inject
+    protected abstract WorkerExecutor getWorkerExecutor();
 
     /**
      * Submits one isolated worker and waits for its outcome. Models and extension instances

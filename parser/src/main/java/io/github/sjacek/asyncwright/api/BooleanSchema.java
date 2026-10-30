@@ -26,11 +26,17 @@ public final class BooleanSchema extends AsyncAPISchema {
     @JsonValue
     public boolean value() { return value; }
 
-    @Override public boolean equals(Object other) {
+    @Override
+    public boolean equals(Object other) {
         return other instanceof BooleanSchema candidate && value == candidate.value;
     }
 
-    @Override protected boolean canEqual(Object other) { return other instanceof BooleanSchema; }
-    @Override public int hashCode() { return Boolean.hashCode(value); }
-    @Override public String toString() { return "BooleanSchema[value=" + value + "]"; }
+    @Override
+    protected boolean canEqual(Object other) { return other instanceof BooleanSchema; }
+
+    @Override
+    public int hashCode() { return Boolean.hashCode(value); }
+
+    @Override
+    public String toString() { return "BooleanSchema[value=" + value + "]"; }
 }

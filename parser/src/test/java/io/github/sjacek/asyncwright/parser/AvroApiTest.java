@@ -17,7 +17,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /** Public value-object boundaries, independent of a successful parser invocation. */
 class AvroApiTest {
-    @TempDir Path directory;
+    @TempDir
+    Path directory;
 
     @ParameterizedTest
     @NullSource

@@ -7,7 +7,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class SchemaMetadataTest {
     private final AsyncApiParser parser = new AsyncApiParser();
 
-    @Test void exampleAnnotationsDoNotRestrictExtensionValues() {
+    @Test
+    void exampleAnnotationsDoNotRestrictExtensionValues() {
         var result = parser.parse("events.json", """
                 {"asyncapi":"3.0.0","info":{"title":"Events","version":"1.0.0",
                  "x-x":"another-team","x-linkedin":"https://www.linkedin.com/company/another-team/"}}
@@ -20,7 +21,8 @@ class SchemaMetadataTest {
                 document.source().at("/info/x-linkedin").asText());
     }
 
-    @Test void annotationRegistrationPreservesTypePatternAndUnknownPropertyValidation() {
+    @Test
+    void annotationRegistrationPreservesTypePatternAndUnknownPropertyValidation() {
         var result = parser.parse("events.json", """
                 {"asyncapi":"3.0.0","info":{"title":"Events","version":"1.0.0",
                  "x-x":42,"x-linkedin":"https://example.org/team","example":"unexpected field"}}

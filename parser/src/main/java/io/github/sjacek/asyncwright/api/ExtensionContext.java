@@ -9,6 +9,7 @@ public interface ExtensionContext {
      * @return a view with an isolated mutable typed model
      */
     AsyncApiDocumentView document();
+
     /**
      * Returns explicitly configured parameters; environment variables are not added.
      * @return immutable text parameter map

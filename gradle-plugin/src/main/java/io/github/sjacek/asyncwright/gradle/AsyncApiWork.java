@@ -52,77 +52,92 @@ public abstract class AsyncApiWork implements WorkAction<AsyncApiWork.Parameters
          * @return managed worker value
          */
         RegularFileProperty getFile();
+
         /**
          * Portable project-relative diagnostic name.
          * @return managed worker value
          */
         Property<String> getSourcePath();
+
         /**
          * Declared portable schema names; file trees and Project objects never cross isolation.
          * @return project-relative file allowlist
          */
         ListProperty<String> getSchemaFilePaths();
+
         /**
          * Root for clickable console locations.
          * @return managed worker value
          */
         DirectoryProperty getProjectDirectory();
+
         /**
          * Channel full-match regex, empty when disabled.
          * @return managed worker value
          */
         Property<String> getChannelAddress();
+
         /**
          * Flags retained from the configured Java Pattern.
          * @return managed worker value
          */
         Property<Integer> getChannelAddressFlags();
+
         /**
          * Required root content type, empty when disabled.
          * @return managed worker value
          */
         Property<String> getContentType();
+
         /**
          * Effective allowed declared-server protocols, empty when disabled. The task has already
          * resolved legacy/list precedence; no live Gradle rule object crosses the classloader boundary.
          * @return managed worker value
          */
         ListProperty<String> getProtocols();
+
         /**
          * Ordered binary rule class names.
          * @return managed worker value
          */
         ListProperty<String> getRuleClasses();
+
         /**
          * Parameter maps aligned by index with rule class names.
          * @return managed worker value
          */
         ListProperty<Map<String, String>> getRuleParameters();
+
         /**
          * Optional JSON report destination, absent during generation.
          * @return managed worker value
          */
         RegularFileProperty getJsonReport();
+
         /**
          * Optional text report destination, present with the JSON report.
          * @return managed worker value
          */
         RegularFileProperty getTextReport();
+
         /**
          * Optional generation destination; its presence selects generation mode.
          * @return managed worker value
          */
         DirectoryProperty getOutputDirectory();
+
         /**
          * Fresh temporary output used during generation.
          * @return managed worker value
          */
         DirectoryProperty getStagingDirectory();
+
         /**
          * Generator binary class name, required only in generation mode.
          * @return managed worker value
          */
         Property<String> getGeneratorClass();
+
         /**
          * Explicit generator parameters.
          * @return managed worker value
@@ -133,9 +148,11 @@ public abstract class AsyncApiWork implements WorkAction<AsyncApiWork.Parameters
      * Returns Gradle's file service for replacing task-owned output.
      * @return injected filesystem operations
      */
-    @Inject protected abstract FileSystemOperations getFiles();
+    @Inject
+    protected abstract FileSystemOperations getFiles();
 
-    @Override public void execute() {
+    @Override
+    public void execute() {
         Parameters work = getParameters();
         boolean generation = work.getOutputDirectory().isPresent();
         boolean published = false;
@@ -201,12 +218,14 @@ public abstract class AsyncApiWork implements WorkAction<AsyncApiWork.Parameters
         Files.createDirectories(file.getParent());
         Files.writeString(file, contents);
     }
+
     private static String text(List<Diagnostic> diagnostics) {
         StringBuilder result = new StringBuilder();
         for (Diagnostic diagnostic : diagnostics)
             result.append(format(diagnostic, diagnostic.file())).append('\n');
         return result.toString();
     }
+
     private static String format(Diagnostic diagnostic, String file) {
         return file + ":" + diagnostic.line() + ":" + diagnostic.column()
                 + ": [" + diagnostic.ruleId() + "] " + diagnostic.message();

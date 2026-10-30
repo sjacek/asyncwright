@@ -35,7 +35,8 @@ import static org.junit.jupiter.api.Assertions.*;
  * parser has fresh Asyncwright classes and static schema initialization.
  */
 class SchemaClassLoaderLifecycleTest {
-    @TempDir Path directory;
+    @TempDir
+    Path directory;
     // ClassLoader resource names omit the leading slash accepted by Class.getResource.
     private static final String RESOURCE = AsyncApi30.SCHEMA_RESOURCE.substring(1);
     // Isolate the API and parser together so a parent-loaded helper cannot hide a cold initialization.
@@ -188,7 +189,8 @@ class SchemaClassLoaderLifecycleTest {
          * Defines Asyncwright classes locally so parser statics cannot be reused from the host.
          * Jackson and validator classes retain the parent loader's identity for tree comparisons.
          */
-        @Override protected Class<?> loadClass(@NotNull String name, boolean resolve) throws ClassNotFoundException {
+        @Override
+        protected Class<?> loadClass(@NotNull String name, boolean resolve) throws ClassNotFoundException {
             if (!name.startsWith(OWN_PACKAGE)) return super.loadClass(name, resolve);
             synchronized (getClassLoadingLock(name)) {
                 Class<?> type = findLoadedClass(name);
@@ -203,17 +205,21 @@ class SchemaClassLoaderLifecycleTest {
          * would bypass the JAR cache and make the broken production implementation appear correct.
          * All other resource lookups retain normal delegation.
          */
-        @Override public URL getResource(String name) {
+        @Override
+        public URL getResource(String name) {
             if (!RESOURCE.equals(name)) return super.getResource(name);
             URL actual = Objects.requireNonNull(findResource(name), "Packaged schema missing");
             try {
                 return new URL(null, actual.toExternalForm(), new URLStreamHandler() {
-                    @Override protected URLConnection openConnection(URL url) {
+                    @Override
+                    protected URLConnection openConnection(URL url) {
                         return new URLConnection(url) {
                             // Open lazily so production code can first select its cache policy.
-                            @Override public void connect() { }
+                            @Override
+                            public void connect() { }
 
-                            @Override public InputStream getInputStream() throws IOException {
+                            @Override
+                            public InputStream getInputStream() throws IOException {
                                 var connection = actual.openConnection();
                                 // Forward the caller's setting to the real JAR connection, including the old default.
                                 cacheSettings.add(getUseCaches());
@@ -223,18 +229,24 @@ class SchemaClassLoaderLifecycleTest {
                                     private void closeSibling() throws IOException {
                                         if (siblingClosed.compareAndSet(false, true)) sibling.close();
                                     }
+
                                     /** Covers scalar reads without relying on a particular buffering strategy. */
-                                    @Override public int read() throws IOException {
+                                    @Override
+                                    public int read() throws IOException {
                                         closeSibling();
                                         return in.read();
                                     }
+
                                     /** Covers the bulk reads normally used while detecting and parsing JSON encoding. */
-                                    @Override public int read(byte @NotNull [] buffer, int offset, int length) throws IOException {
+                                    @Override
+                                    public int read(byte @NotNull [] buffer, int offset, int length) throws IOException {
                                         closeSibling();
                                         return in.read(buffer, offset, length);
                                     }
+
                                     /** Observe caller cleanup while preserving the delegate's close behavior and errors. */
-                                    @Override public void close() throws IOException {
+                                    @Override
+                                    public void close() throws IOException {
                                         streamClosed.set(true);
                                         super.close();
                                     }

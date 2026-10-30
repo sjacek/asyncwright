@@ -12,7 +12,8 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ExamplesTest {
-    @TempDir Path directory;
+    @TempDir
+    Path directory;
 
     private static final String INPUT = """
             asyncapi: 3.0.0

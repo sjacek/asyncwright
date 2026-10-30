@@ -14,7 +14,8 @@ public final class ChannelCatalogGenerator implements AsyncApiGenerator {
     /** Public no-argument constructor required by the extension loader. */
     public ChannelCatalogGenerator() { }
 
-    @Override public List<Diagnostic> generate(GeneratorContext context) throws Exception {
+    @Override
+    public List<Diagnostic> generate(GeneratorContext context) throws Exception {
         List<String> addresses = new ArrayList<>();
         for (var entry : context.document().source().path(CHANNELS).properties()) {
             Channel channel = context.document().references()

@@ -44,7 +44,8 @@ public final class AsyncwrightPlugin implements Plugin<Project> {
     private static final String GENERATION_GROUP = "code generation";
     private static final String NAME_PATTERN = "[a-zA-Z][a-zA-Z0-9]*";
 
-    @Override public void apply(Project project) {
+    @Override
+    public void apply(Project project) {
         project.getPluginManager().apply(BasePlugin.class);
         Configuration extensions = project.getConfigurations().create(EXTENSIONS_CONFIGURATION_NAME, configuration -> {
             configuration.setCanBeConsumed(false);
@@ -88,6 +89,7 @@ public final class AsyncwrightPlugin implements Plugin<Project> {
                     }));
         });
     }
+
     private static void configure(Project project, AsyncApiTask task, AsyncApiSpec spec, Configuration extensions) {
         task.getFile().set(spec.getFile());
         task.getSchemaFiles().setFrom(spec.getSchemaFiles());
@@ -107,6 +109,7 @@ public final class AsyncwrightPlugin implements Plugin<Project> {
         task.getRules().getCustomRules().set(spec.getRules().getCustomRules());
         task.getExtensionClasspath().from(extensions);
     }
+
     private static String suffix(String name) {
         if (!name.matches(NAME_PATTERN))
             throw new IllegalArgumentException("Asyncwright names must match " + NAME_PATTERN + ": " + name);

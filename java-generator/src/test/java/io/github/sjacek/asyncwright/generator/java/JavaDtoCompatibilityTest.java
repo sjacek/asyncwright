@@ -32,7 +32,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class JavaDtoCompatibilityTest {
     private static final ObjectMapper JSON = new ObjectMapper();
     private static final String PACKAGE = "sample.dto";
-    @TempDir Path output;
+    @TempDir
+    Path output;
 
     @ParameterizedTest(name = "{0}/{1}: required, optional, nullable and generic positions")
     @MethodSource("scalarTypes")
@@ -76,7 +77,8 @@ class JavaDtoCompatibilityTest {
                 Arguments.of("boolean", "", boolean.class, Boolean.class));
     }
 
-    @Test void compilesConcreteRecursionThroughListsAndTypedAdditionalProperties() throws Exception {
+    @Test
+    void compilesConcreteRecursionThroughListsAndTypedAdditionalProperties() throws Exception {
         ObjectNode root = document(JSON.readTree("""
                 {"type":"object","additionalProperties":false,"properties":{
                   "root":{"$ref":"#/components/schemas/Node"},
@@ -100,7 +102,8 @@ class JavaDtoCompatibilityTest {
         }
     }
 
-    @Test void findsInlineChannelMessagesAndDeduplicatesAliasesWithoutGeneratingHeaders() throws Exception {
+    @Test
+    void findsInlineChannelMessagesAndDeduplicatesAliasesWithoutGeneratingHeaders() throws Exception {
         ObjectNode root = (ObjectNode) JSON.readTree("""
                 {"asyncapi":"3.0.0","info":{"title":"Message roots","version":"1"},
                  "channels":{"a/b~c":{"$ref":"#/components/channels/shared"},
@@ -129,7 +132,8 @@ class JavaDtoCompatibilityTest {
         }
     }
 
-    @Test void preservesUnicodeAndEscapedConstantValuesInCompiledJava() throws Exception {
+    @Test
+    void preservesUnicodeAndEscapedConstantValuesInCompiledJava() throws Exception {
         String literal = "zażółć \"quoted\" \\u000a\n\r\t\b\f" + (char) 1 + "7" + (char) 127;
         ObjectNode schema = bean();
         ObjectNode properties = schema.withObject("/properties");
@@ -174,7 +178,8 @@ class JavaDtoCompatibilityTest {
                 Arguments.of("int64", Long.MAX_VALUE, long.class));
     }
 
-    @ParameterizedTest @ValueSource(strings = {"String", "Map", "record", "var", "1Event", "Bad-Name"})
+    @ParameterizedTest
+    @ValueSource(strings = {"String", "Map", "record", "var", "1Event", "Bad-Name"})
     void rejectsUnrepresentableNamedTypesBeforeOutput(String name) throws Exception {
         ObjectNode root = document(bean());
         root.withObject("/components/schemas").set(name, root.at("/components/schemas/Event").deepCopy());
@@ -186,7 +191,8 @@ class JavaDtoCompatibilityTest {
         assertTrue(result.generatedFiles().isEmpty());
     }
 
-    @Test @ResourceLock(Resources.LOCALE)
+    @Test
+    @ResourceLock(Resources.LOCALE)
     void usesLocaleIndependentEnumSymbols() throws Exception {
         ObjectNode root = document(bean());
         root.withObject("/components/schemas/Event/properties").putObject("state")
@@ -209,7 +215,8 @@ class JavaDtoCompatibilityTest {
         }
     }
 
-    @Test void preservesFilesystemFailuresAsInfrastructureErrors() throws Exception {
+    @Test
+    void preservesFilesystemFailuresAsInfrastructureErrors() throws Exception {
         // A deterministic obstruction works on Windows too, without relying on chmod/ACL behavior.
         Files.writeString(output.resolve("sample"), "ordinary file, not a package directory");
         var error = assertThrows(ExtensionExecutionException.class, () -> generate(document(bean())));

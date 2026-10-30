@@ -44,6 +44,7 @@ public final class AsyncApi30 {
 
         private final String mediaType;
         SchemaFormat(String mediaType) { this.mediaType = mediaType + ";version=" + VERSION; }
+
         /**
          * Returns the complete media type including the version parameter.
          * @return exact supported wire value
@@ -52,6 +53,7 @@ public final class AsyncApi30 {
     }
 
     private AsyncApi30() { }
+
     /**
      * Checks an explicitly supplied schema format without normalization.
      * @param value complete media type, including its version
@@ -60,6 +62,7 @@ public final class AsyncApi30 {
     public static boolean supportsSchemaFormat(String value) {
         return Arrays.stream(SchemaFormat.values()).anyMatch(format -> format.mediaType().equals(value));
     }
+
     /**
      * Checks the supported draft-07 dialect URI spellings.
      * @param value dialect URI, with an optional trailing fragment marker

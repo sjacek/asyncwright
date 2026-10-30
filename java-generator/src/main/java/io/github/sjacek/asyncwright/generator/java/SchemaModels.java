@@ -256,12 +256,17 @@ final class SchemaModels {
     /** Captures type dependencies without inlining referenced classes, including recursive ones. */
     record Type(String text, Set<String> imports, Set<String> modelPointers) {
         static Type scalar(String text) { return new Type(text, Set.of(), Set.of()); }
+
         static Type nativeType(String text, String imported) { return new Type(text, Set.of(imported), Set.of()); }
+
         static Type reference(Model model) { return new Type(model.name, Set.of(), Set.of(model.pointer)); }
+
         static Type map(Type value) { return container("Map<String, " + value.text + ">", "java.util.Map", value); }
+
         static Type collection(String collection, Type item) {
             return container(collection + "<" + item.text + ">", "java.util." + collection, item);
         }
+
         private static Type container(String text, String imported, Type item) {
             Set<String> imports = new LinkedHashSet<>(item.imports);
             imports.add(imported);

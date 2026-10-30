@@ -20,7 +20,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class AvroBoundaryRegressionTest {
     private static final ObjectMapper JSON = new ObjectMapper();
     private static final String USE = "/components/schemas/Value/schema";
-    @TempDir Path root;
+    @TempDir
+    Path root;
 
     private static ObjectNode document(String schema) throws Exception {
         return (ObjectNode) JSON.readTree("""

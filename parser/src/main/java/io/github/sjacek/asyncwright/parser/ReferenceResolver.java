@@ -147,7 +147,8 @@ public final class ReferenceResolver implements AsyncApiReferences {
 
     void schemaFile(String pointer, ResolvedSchemaFile file) { schemaFiles.put(pointer, file); }
 
-    @Override public Optional<ResolvedSchemaFile> resolveSchemaFile(String pointer) {
+    @Override
+    public Optional<ResolvedSchemaFile> resolveSchemaFile(String pointer) {
         com.fasterxml.jackson.core.JsonPointer.compile(pointer);
         return Optional.ofNullable(schemaFiles.get(pointer));
     }

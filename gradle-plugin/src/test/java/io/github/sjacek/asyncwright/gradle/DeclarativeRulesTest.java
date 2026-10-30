@@ -92,7 +92,8 @@ class DeclarativeRulesTest {
         assertTrue(validateProtocols("", "[\"kafka\"]").successful());
     }
 
-    @ParameterizedTest @ValueSource(strings = {"{}", "null", "[1]", "[null]", "[\"\"]", "[\" \"]", "[",
+    @ParameterizedTest
+    @ValueSource(strings = {"{}", "null", "[1]", "[null]", "[\"\"]", "[\" \"]", "[",
             "", "  ", "false", "\"kafka\"", "[[]]", "[\"kafka\"] true", "[\"kafka\"] {}"})
     void malformedProtocolListsAreExecutionFailures(String encoded) {
         var failure = assertThrows(ExtensionExecutionException.class, () -> validateProtocols("", encoded));

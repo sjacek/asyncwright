@@ -30,6 +30,7 @@ final class DocumentIndex {
         private final Kind bindings;
 
         Kind() { this.bindings = null; }
+
         Kind(Kind bindings) { this.bindings = bindings; }
 
         /** Returns the owned binding-map kind, or OTHER when this kind does not own bindings. */

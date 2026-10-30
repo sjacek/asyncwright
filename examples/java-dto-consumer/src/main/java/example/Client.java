@@ -6,6 +6,7 @@ import example.generated.State;
 /** Uses generated types as ordinary Java classes; generation adds no runtime dependency. */
 public final class Client {
     private Client() { }
+
     /**
      * Runs the fixed example using the standard Java 17 launcher signature.
      * @param args unused command-line arguments

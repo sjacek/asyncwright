@@ -24,7 +24,8 @@ public abstract class AsyncApiRules {
      * Creates managed rule options with all declarative requirements disabled.
      * @param objects Gradle factory for nested extension declarations
      */
-    @Inject public AsyncApiRules(ObjectFactory objects) {
+    @Inject
+    public AsyncApiRules(ObjectFactory objects) {
         this.objects = objects;
         getChannelAddress().convention("");
         getChannelAddressFlags().convention(0);
@@ -34,39 +35,52 @@ public abstract class AsyncApiRules {
         getProtocols().convention(getProtocol().map(value -> value.isEmpty() ? List.of() : List.of(value)));
         getCustomRules().convention(List.of());
     }
+
     /**
      * Returns the full-match channel address expression.
      * @return regex source; empty disables the requirement
      */
-    @Input public abstract Property<String> getChannelAddress();
+    @Input
+    public abstract Property<String> getChannelAddress();
+
     /**
      * Returns flags serialized with the channel address expression.
      * @return bitwise combination of {@link Pattern} flags; defaults to zero
      */
-    @Input public abstract Property<Integer> getChannelAddressFlags();
+    @Input
+    public abstract Property<Integer> getChannelAddressFlags();
+
     /**
      * Returns the required root default content type.
      * @return exact required value; empty disables the requirement
      */
-    @Input public abstract Property<String> getDefaultContentType();
+    @Input
+    public abstract Property<String> getDefaultContentType();
+
     /**
      * Returns the legacy single-protocol requirement, still usable by existing build scripts.
      * The effective list follows this provider unless {@link #getProtocols()} is explicitly set.
      * @return exact required protocol; empty disables the requirement; no server is required to exist
      */
-    @Input public abstract Property<String> getProtocol();
+    @Input
+    public abstract Property<String> getProtocol();
+
     /**
      * Returns the allowed protocols for every declared root server. An explicit list
      * takes precedence over the legacy single-value property; otherwise it follows that property.
      * Values are not trimmed or case-folded. Protocol configuration does not require a server to exist.
      * @return exact protocol names; an empty list disables the requirement
      */
-    @Input public abstract ListProperty<String> getProtocols();
+    @Input
+    public abstract ListProperty<String> getProtocols();
+
     /**
      * Returns ordered declarations of additional rules.
      * @return rule classes and their explicit parameters
      */
-    @Nested public abstract ListProperty<ExtensionOptions> getCustomRules();
+    @Nested
+    public abstract ListProperty<ExtensionOptions> getCustomRules();
+
     /**
      * Requires each channel address to match the entire expression.
      * @param expression Java regular expression
@@ -74,6 +88,7 @@ public abstract class AsyncApiRules {
      */
     @SuppressWarnings("unused") // Public DSL overload invoked by Gradle build scripts.
     public void channelAddress(String expression) { channelAddress(Pattern.compile(expression)); }
+
     /**
      * Stores a compiled expression as its source and flags for worker isolation and caching.
      * @param expression full-match expression, including flags
@@ -82,12 +97,14 @@ public abstract class AsyncApiRules {
         getChannelAddress().set(expression.pattern());
         getChannelAddressFlags().set(expression.flags());
     }
+
     /**
      * Requires the document root to declare an exact content type.
      * @param value required content type, or empty to disable the rule
      */
     @SuppressWarnings("unused") // Public DSL entry point invoked by Gradle build scripts.
     public void requireDefaultContentType(String value) { getDefaultContentType().set(value); }
+
     /**
      * Requires every declared root server to use the given protocol. Resets an explicit list
      * to the convention backed by {@link #getProtocol()}, so a later call replaces prior policy.
@@ -99,6 +116,7 @@ public abstract class AsyncApiRules {
         getProtocol().set(Objects.requireNonNull(value, "protocol"));
         getProtocols().unset();
     }
+
     /**
      * Requires every declared root server to use one of the given protocols.
      * Replaces a previous requirement; no arguments disable it. A server is not required to exist.
@@ -118,6 +136,7 @@ public abstract class AsyncApiRules {
         getProtocol().set("");
         getProtocols().set(protocols);
     }
+
     /**
      * Appends a rule whose class may be supplied later by an extension dependency.
      * @param className binary Java name of a public {@code AsyncApiRule} with a public no-argument constructor
@@ -129,6 +148,7 @@ public abstract class AsyncApiRules {
         configure.execute(options);
         getCustomRules().add(options);
     }
+
     /**
      * Appends a rule with no parameters.
      * @param className binary name resolved from the worker extension classpath
@@ -148,6 +168,7 @@ public abstract class AsyncApiRules {
     public void rule(Class<? extends AsyncApiRule> ruleType, Action<? super ExtensionOptions> configure) {
         rule(ruleType.getName(), configure);
     }
+
     /**
      * Appends a build-script-visible rule with no parameters. Its JAR must also be available to the worker.
      * @param ruleType rule class whose binary name is retained

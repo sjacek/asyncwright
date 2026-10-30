@@ -18,7 +18,8 @@ public final class ChannelAddressRule implements AsyncApiRule {
     public static final String PREFIX_PARAMETER = "prefix";
     /** Stable project rule identifier emitted in reports. */
     public static final String RULE_ID = "sample.channel-prefix";
-    @Override public List<Diagnostic> validate(ExtensionContext context) {
+    @Override
+    public List<Diagnostic> validate(ExtensionContext context) {
         List<Diagnostic> diagnostics = new ArrayList<>();
         String prefix = context.requireParameter(PREFIX_PARAMETER);
         context.document().source().path(CHANNELS).fieldNames().forEachRemaining(name -> {

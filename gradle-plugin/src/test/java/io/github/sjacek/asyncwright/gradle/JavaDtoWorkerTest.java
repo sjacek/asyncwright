@@ -19,7 +19,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /** Exercises the bundled backend inside the real isolated worker, with both Gradle DSLs. */
 class JavaDtoWorkerTest {
-    @TempDir Path directory;
+    @TempDir
+    Path directory;
     private static final String TASK = ":asyncApiGenerateEventsDto";
     private static final String INPUT = """
             {"asyncapi":"3.0.0","info":{"title":"Worker DTO","version":"1"},
@@ -75,7 +76,8 @@ class JavaDtoWorkerTest {
         assertTrue(Files.isRegularFile(generated));
     }
 
-    @Test void restoresRelocatedOutputsAndInvalidatesPackageParameters() throws Exception {
+    @Test
+    void restoresRelocatedOutputsAndInvalidatesPackageParameters() throws Exception {
         Path first = directory.resolve("first");
         Path relocated = directory.resolve("relocated");
         Path cache = directory.resolve("shared-cache");

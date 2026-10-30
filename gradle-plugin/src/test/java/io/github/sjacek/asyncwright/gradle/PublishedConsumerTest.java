@@ -22,9 +22,11 @@ import static org.gradle.testkit.runner.TaskOutcome.SUCCESS;
 import static org.junit.jupiter.api.Assertions.*;
 
 class PublishedConsumerTest {
-    @TempDir Path temporary;
+    @TempDir
+    Path temporary;
 
-    @Test void resolvesMarkerPluginAndModelOverHttpAndRunsBundledAndProjectGenerators() throws Exception {
+    @Test
+    void resolvesMarkerPluginAndModelOverHttpAndRunsBundledAndProjectGenerators() throws Exception {
         Path plugins = Path.of(System.getProperty("asyncwright.stagingRepository"));
         Path model = Path.of(System.getProperty("asyncwright.modelRepository")).toAbsolutePath();
         String modelVersion = System.getProperty("asyncwright.modelVersion");
@@ -80,7 +82,8 @@ class PublishedConsumerTest {
         }
     }
 
-    @Test void publicationIncludesSourcesJavadocAndBothLicenses() throws Exception {
+    @Test
+    void publicationIncludesSourcesJavadocAndBothLicenses() throws Exception {
         Path repository = Path.of(System.getProperty("asyncwright.stagingRepository"));
         String version = System.getProperty("asyncwright.version");
         Path directory = repository.resolve("io/github/sjacek/asyncwright/asyncwright-gradle-plugin").resolve(version);

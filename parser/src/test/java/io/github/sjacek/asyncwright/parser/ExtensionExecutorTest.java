@@ -30,7 +30,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 class ExtensionExecutorTest {
-    @TempDir Path directory;
+    @TempDir
+    Path directory;
     private final AsyncApiParser parser = new AsyncApiParser();
     private final ExtensionExecutor executor = new ExtensionExecutor();
     private static final String VALID = """
@@ -41,6 +42,7 @@ class ExtensionExecutorTest {
             """;
 
     private static ExtensionSpec spec(Class<?> type) { return new ExtensionSpec(type.getName(), Map.of()); }
+
     private ParseResult valid() { return parser.parse("specs/events.yaml", VALID); }
 
     @Test
@@ -270,10 +272,12 @@ class ExtensionExecutorTest {
     }
     public static class NoPublicConstructorRule implements AsyncApiRule {
         private NoPublicConstructorRule() { }
+
         public List<Diagnostic> validate(ExtensionContext c) { return List.of(); }
     }
     public static class FailingConstructorRule implements AsyncApiRule {
         public FailingConstructorRule() throws IOException { throw new IOException("constructor failed"); }
+
         public List<Diagnostic> validate(ExtensionContext c) { return List.of(); }
     }
     public static class NullRule implements AsyncApiRule {

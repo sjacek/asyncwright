@@ -19,7 +19,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /** Compile and exercise the generated public API instead of testing only renderer substrings. */
 class JavaDtoGeneratorTest {
-    @TempDir Path directory;
+    @TempDir
+    Path directory;
     private static final String HEADER = """
             asyncapi: 3.0.0
             info: {title: DTO generator, version: 1.0.0}
@@ -60,7 +61,8 @@ class JavaDtoGeneratorTest {
                     header: {type: string}
             """;
 
-    @Test void emitsCompilableBeansWithNullableEnumsCollectionsAndConcreteRecursion() throws Exception {
+    @Test
+    void emitsCompilableBeansWithNullableEnumsCollectionsAndConcreteRecursion() throws Exception {
         var result = generate(HEADER + SCHEMAS, directory);
         assertTrue(result.successful(), result.diagnostics()::toString);
         assertEquals(3, result.generatedFiles().size());
@@ -88,7 +90,8 @@ class JavaDtoGeneratorTest {
         }
     }
 
-    @Test void followsRootAliasesWithoutChangingSourceOrGeneratingAliasClasses() throws Exception {
+    @Test
+    void followsRootAliasesWithoutChangingSourceOrGeneratingAliasClasses() throws Exception {
         String input = (HEADER + SCHEMAS).replace(
                 "payload: {$ref: '#/components/schemas/Event'}",
                 "payload: {$ref: '#/components/schemas/Alias'}")
@@ -104,7 +107,8 @@ class JavaDtoGeneratorTest {
         assertFalse(Files.exists(directory.resolve("sample/dto/Alias.java")));
     }
 
-    @ParameterizedTest @ValueSource(strings = {"class", "a-b", "uRL", "a/b"})
+    @ParameterizedTest
+    @ValueSource(strings = {"class", "a-b", "uRL", "a/b"})
     void rejectsNamesThatWouldChangeWirePropertiesBeforeWritingAnyFiles(String name) throws Exception {
         String input = HEADER + SCHEMAS.replace("    note:", "    " + name + ":");
         var result = generate(input, directory);
@@ -114,7 +118,8 @@ class JavaDtoGeneratorTest {
         assertTrue(result.diagnostics().get(0).pointer().contains("/properties/"));
     }
 
-    @Test void rejectsCompositionsWithAProfileDiagnosticAndNoPartialModels() throws Exception {
+    @Test
+    void rejectsCompositionsWithAProfileDiagnosticAndNoPartialModels() throws Exception {
         String input = HEADER + SCHEMAS.replace("type: [string, 'null']\n      enum:",
                 "type: [string, 'null']\n      oneOf: [{type: string}, {type: 'null'}]\n      enum:");
         var result = generate(input, directory);
@@ -124,7 +129,8 @@ class JavaDtoGeneratorTest {
         assertTrue(result.generatedFiles().isEmpty());
     }
 
-    @Test void producesIdenticalBytesForRepeatedInvocations() throws Exception {
+    @Test
+    void producesIdenticalBytesForRepeatedInvocations() throws Exception {
         var first = generate(HEADER + SCHEMAS, directory.resolve("first"));
         var second = generate(HEADER + SCHEMAS, directory.resolve("second"));
         assertTrue(first.successful(), first.diagnostics()::toString);

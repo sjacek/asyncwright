@@ -44,6 +44,7 @@ public final class ExtensionExecutionException extends Exception {
      * @return binary Java class name
      */
     public String extensionClass() { return extensionClass; }
+
     /**
      * Returns the failing callback category.
      * @return rule or generator

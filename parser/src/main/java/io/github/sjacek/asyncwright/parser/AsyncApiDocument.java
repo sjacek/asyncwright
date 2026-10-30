@@ -18,7 +18,10 @@ public final class AsyncApiDocument implements AsyncApiDocumentView {
     }
 
     public AsyncAPI model() { return model; }
+
     public JsonNode source() { return source.root.deepCopy(); }
+
     public SourceLocation location(String pointer) { return source.location(pointer); }
+
     public ReferenceResolver references() { return references; }
 }

@@ -39,7 +39,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * requirements; tests assert observable model values and locations rather than index internals.
  */
 class BindingMapReferencesTest {
-    @TempDir Path output;
+    @TempDir
+    Path output;
 
     enum Kind {
         SERVER("/servers/broker", "serverBindings", AMQPServerBinding.class),
@@ -110,7 +111,8 @@ class BindingMapReferencesTest {
         return new AsyncApiParser().parse("binding-map.json", source.toPrettyString());
     }
 
-    @ParameterizedTest @EnumSource(Kind.class)
+    @ParameterizedTest
+    @EnumSource(Kind.class)
     void keepsTypedProtocolMapsAndAliasesWithoutExpandingTheSource(Kind kind) throws Exception {
         for (String variant : List.of("direct", "aliases")) {
             var result = parse(kind, variant);
@@ -138,7 +140,8 @@ class BindingMapReferencesTest {
         }
     }
 
-    @ParameterizedTest @EnumSource(Kind.class)
+    @ParameterizedTest
+    @EnumSource(Kind.class)
     void diagnosesTheUseAndDefinitionWithoutReturningAPartialModel(Kind kind) throws Exception {
         for (var invalid : Map.of("missing", "reference.missing", "wrong-kind", "reference.type",
                 "cycle", "reference.cycle", "bad-pointer", "reference.pointer", "bad-definition",
@@ -160,7 +163,8 @@ class BindingMapReferencesTest {
         }
     }
 
-    @ParameterizedTest @EnumSource(Kind.class)
+    @ParameterizedTest
+    @EnumSource(Kind.class)
     void extensionsReceiveIndependentReferenceModelsAndUseTheSameResolver(Kind kind) throws Exception {
         var parsed = parse(kind, "aliases");
         var original = parsed.document().orElseThrow().source();
@@ -176,7 +180,8 @@ class BindingMapReferencesTest {
     }
 
     /** Full-document acceptance uses names permitted by the Components Object name pattern. */
-    @ParameterizedTest @EnumSource(Kind.class)
+    @ParameterizedTest
+    @EnumSource(Kind.class)
     void resolvesPercentEncodedValidComponentNamesWithoutRewritingAliases(Kind kind) throws Exception {
         var source = aliasSource(kind);
         var entries = object(source, "/components/" + kind.field);
@@ -197,7 +202,8 @@ class BindingMapReferencesTest {
      * Resolver-only grammar check: arbitrary JSON Pointer tokens are independent of component-name
      * validity. This bypasses structural validation deliberately and makes no document acceptance claim.
      */
-    @ParameterizedTest @EnumSource(Kind.class)
+    @ParameterizedTest
+    @EnumSource(Kind.class)
     void decodesEscapedPointerTokensAndPreservesLiteralPlusSigns(Kind kind) throws Exception {
         var tree = aliasSource(kind);
         var entries = object(tree, "/components/" + kind.field);
@@ -216,7 +222,8 @@ class BindingMapReferencesTest {
     }
 
     /** Ignored siblings must neither reach protocol mapping nor introduce external reference edges. */
-    @ParameterizedTest @EnumSource(Kind.class)
+    @ParameterizedTest
+    @EnumSource(Kind.class)
     void warnsAboutBindingReferenceSiblingsButPreservesTheirSource(Kind kind) throws Exception {
         var source = aliasSource(kind);
         var binding = object(source, kind.owner + "/bindings");
@@ -232,7 +239,8 @@ class BindingMapReferencesTest {
         assertEquals(kind.target(), document.references().resolve(kind.owner + "/bindings").orElseThrow().pointer());
     }
 
-    @ParameterizedTest @EnumSource(Kind.class)
+    @ParameterizedTest
+    @EnumSource(Kind.class)
     void diagnosesAWrongKindAtTheComponentAliasRatherThanItsValidOwnerUse(Kind kind) throws Exception {
         var source = aliasSource(kind);
         Kind other = Kind.values()[(kind.ordinal() + 1) % Kind.values().length];
@@ -244,7 +252,8 @@ class BindingMapReferencesTest {
         assertEquals("/components/" + kind.field + "/Alias/$ref", result.diagnostics().get(0).pointer());
     }
 
-    @ParameterizedTest @EnumSource(Kind.class)
+    @ParameterizedTest
+    @EnumSource(Kind.class)
     void rejectsSelfReferentialBindingMapsWithoutAConcreteDefinition(Kind kind) throws Exception {
         var source = aliasSource(kind);
         var shared = object(source, kind.target());
@@ -258,7 +267,8 @@ class BindingMapReferencesTest {
         assertTrue(cycle.related().stream().anyMatch(location -> location.pointer().equals(kind.target())));
     }
 
-    @ParameterizedTest @EnumSource(Kind.class)
+    @ParameterizedTest
+    @EnumSource(Kind.class)
     void rejectsExternalBindingMapReferencesAtTheUsePosition(Kind kind) throws Exception {
         var source = aliasSource(kind);
         object(source, kind.owner + "/bindings").put("$ref", "https://example.invalid/maps.json#/Shared");
@@ -271,7 +281,8 @@ class BindingMapReferencesTest {
 
     /** Deliberately damages its own model; subsequent callbacks must receive independent maps. */
     public static final class MutatingBindingRule implements AsyncApiRule {
-        @Override public List<Diagnostic> validate(ExtensionContext context) {
+        @Override
+        public List<Diagnostic> validate(ExtensionContext context) {
             Kind kind = Kind.valueOf(context.requireParameter("kind"));
             kind.modelBindings(context.document()).clear();
             kind.components(context.document()).clear();
@@ -283,7 +294,8 @@ class BindingMapReferencesTest {
 
     /** Uses only the public extension API, as a consumer's generator would. */
     public static final class BindingGenerator implements AsyncApiGenerator {
-        @Override public List<Diagnostic> generate(GeneratorContext context) throws Exception {
+        @Override
+        public List<Diagnostic> generate(GeneratorContext context) throws Exception {
             Kind kind = Kind.valueOf(context.requireParameter("kind"));
             assertTrue(kind.modelBindings(context.document()).containsKey("$ref"));
             assertInstanceOf(Map.class, kind.components(context.document()).get("Shared"));

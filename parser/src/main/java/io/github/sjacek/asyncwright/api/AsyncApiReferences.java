@@ -14,6 +14,7 @@ public interface AsyncApiReferences {
      * @return validated file target, or empty for inline/invalid/not-authorized references
      */
     default Optional<ResolvedSchemaFile> resolveSchemaFile(String pointer) { return Optional.empty(); }
+
     /**
      * Follows validated reference aliases to a concrete source value. Nested references stay intact.
      * For whole binding-map references, resolve the map position before selecting its protocol.
@@ -22,6 +23,7 @@ public interface AsyncApiReferences {
      * @throws IllegalArgumentException if the pointer is not a JSON Pointer
      */
     Optional<ResolvedReference> resolve(String pointer);
+
     /**
      * Maps a resolved target to a fresh typed value without expanding its nested references.
      * An owner's bindings getter retains a whole-map reference; resolving that owner does not
@@ -33,6 +35,7 @@ public interface AsyncApiReferences {
      * @throws IOException if the target cannot be mapped to the requested type
      */
     <T> Optional<T> resolve(String pointer, Class<T> type) throws IOException;
+
     /**
      * Finds reference usages of a definition or one of its descendants, including aliases.
      * @param definitionPointer document position of the definition or its property

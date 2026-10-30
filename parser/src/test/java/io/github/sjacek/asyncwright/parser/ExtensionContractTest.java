@@ -15,7 +15,8 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ExtensionContractTest {
-    @TempDir Path output;
+    @TempDir
+    Path output;
     private final ExtensionExecutor executor = new ExtensionExecutor();
 
     private static ParseResult valid() {
@@ -75,8 +76,11 @@ class ExtensionContractTest {
     }
 
     public static class InvalidFindings implements AsyncApiRule, AsyncApiGenerator {
-        @Override public List<Diagnostic> validate(ExtensionContext context) { return findings(context); }
-        @Override public List<Diagnostic> generate(GeneratorContext context) { return findings(context); }
+        @Override
+        public List<Diagnostic> validate(ExtensionContext context) { return findings(context); }
+
+        @Override
+        public List<Diagnostic> generate(GeneratorContext context) { return findings(context); }
 
         private static List<Diagnostic> findings(ExtensionContext context) {
             String invalid = context.requireParameter("invalid");
@@ -102,7 +106,8 @@ class ExtensionContractTest {
     }
 
     public static class LinkageFailure implements AsyncApiRule {
-        @Override public List<Diagnostic> validate(ExtensionContext context) {
+        @Override
+        public List<Diagnostic> validate(ExtensionContext context) {
             throw new NoClassDefFoundError("missing/Dependency");
         }
     }

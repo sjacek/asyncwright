@@ -16,9 +16,11 @@ public record ResolvedSchemaFile(String file, JsonNode node) {
      * @param node schema tree
      */
     public ResolvedSchemaFile { node = node.deepCopy(); }
+
     /**
      * Returns a defensive schema copy.
      * @return complete Avro tree
      */
-    @Override public JsonNode node() { return node.deepCopy(); }
+    @Override
+    public JsonNode node() { return node.deepCopy(); }
 }

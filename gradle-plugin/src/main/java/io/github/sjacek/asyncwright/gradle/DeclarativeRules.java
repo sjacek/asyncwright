@@ -42,11 +42,14 @@ public final class DeclarativeRules implements AsyncApiRule {
 
         private final String key;
         Parameter(String key) { this.key = key; }
+
         String key() { return key; }
+
         String read(ExtensionContext context) { return context.requireParameter(key); }
     }
 
-    @Override public List<Diagnostic> validate(ExtensionContext context) {
+    @Override
+    public List<Diagnostic> validate(ExtensionContext context) {
         List<Diagnostic> diagnostics = new ArrayList<>();
         String contentType = Parameter.CONTENT_TYPE.read(context);
         if (!contentType.isEmpty() && !contentType.equals(context.document().source().path(DEFAULT_CONTENT_TYPE).asText()))

@@ -11,7 +11,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class DirectoryOutputTest {
-    @TempDir Path directory;
+    @TempDir
+    Path directory;
 
     @Test
     void aFailedWriteDoesNotReserveThePathOrReportAFileThatWasNotWritten() throws Exception {

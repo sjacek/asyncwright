@@ -44,7 +44,8 @@ public final class JavaDtoGenerator implements AsyncApiGenerator {
      * @throws IllegalArgumentException if a parameter is absent, unknown or invalid
      * @throws Exception if output fails; the host preserves the underlying infrastructure failure
      */
-    @Override public List<Diagnostic> generate(GeneratorContext context) throws Exception {
+    @Override
+    public List<Diagnostic> generate(GeneratorContext context) throws Exception {
         Settings settings = Settings.from(context.parameters());
         final List<JavaSource.File> files;
         try {
@@ -77,6 +78,7 @@ public final class JavaDtoGenerator implements AsyncApiGenerator {
         LIST("List"), SET("Set");
         final String spelling;
         CollectionType(String spelling) { this.spelling = spelling; }
+
         static CollectionType parse(String value) {
             for (CollectionType type : values()) if (type.spelling.equals(value)) return type;
             throw new IllegalArgumentException("collectionType must be List or Set");
